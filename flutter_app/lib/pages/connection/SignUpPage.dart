@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/services/AuthService.dart';
+import 'package:flutter_app/services/AccountService.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key key}) : super(key: key);
@@ -12,7 +13,7 @@ class SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   String email, login, password, name, familyName;
 
-  AuthService authService = AuthService();
+  AccountService accountService = AccountService();
 
   @override
   Widget build(BuildContext context) {
@@ -137,9 +138,18 @@ class SignUpPageState extends State<SignUpPage> {
 
   Future<void> signUp() async {
     final formState = formkey.currentState;
+    String errorMessage;
     if (formState.validate()) {
       formState.save();
-      authService.createAccount(email, login, password, familyName, name);
+      errorMessage = await AccountService.signUp(email, login, password, familyName, name);
+    }
+    if (errorMessage != null) {
+      Alert(
+          context: context,
+          title: "Inscription",
+          desc: errorMessage
+      ).show();
+    } else {
       if (Navigator.canPop(context)) {
         Navigator.pop(context);
       }

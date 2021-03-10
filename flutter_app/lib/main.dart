@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/Home.dart';
-import 'package:flutter_app/pages/connection/SignIn.dart';
-import 'package:flutter_app/services/AuthService.dart';
+import 'package:flutter_app/pages/HomePage.dart';
+import 'package:flutter_app/pages/UserPage.dart';
+import 'package:flutter_app/pages/connection/SignInPage.dart';
+import 'package:flutter_app/services/AccountService.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<User>.value(
-        value: AuthService().user,
+        value: AccountService.user,
         child: MaterialApp(
             title: 'ILA ISTIC M2 2021 PROJET',
             theme: ThemeData(
@@ -60,6 +61,8 @@ class AppHomePageState extends State<AppHomePage> {
         return HomePage();
       case 3 :
         return HomePage();
+      case 4 :
+        return UserPage();
       default:
         return SignInPage();
     }
@@ -87,12 +90,16 @@ class AppHomePageState extends State<AppHomePage> {
               label: 'SITAC'
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.pan_tool),
+              icon: Icon(Icons.article),
               label: 'Moyens'
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.move_to_inbox),
+              icon: Icon(Icons.satellite),
               label: 'Drone'
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_box),
+              label: 'Utilisateur'
           ),
         ],
         currentIndex: selectedIndex,
@@ -100,6 +107,14 @@ class AppHomePageState extends State<AppHomePage> {
         unselectedItemColor: Colors.grey,
         selectedItemColor: Colors.blueGrey,
       ),
+      floatingActionButton : FloatingActionButton (
+        onPressed: () {
+          AccountService.signOut();
+        },
+        child: Icon(Icons.logout),
+        backgroundColor: Colors.red,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
   }
 }

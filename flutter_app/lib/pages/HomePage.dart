@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/services/AuthService.dart';
+import 'package:flutter_app/services/AccountService.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -13,7 +13,7 @@ class HomePageState extends State<HomePage> {
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   String email, password;
 
-  AuthService authService = AuthService();
+  AccountService authService = AccountService();
 
   @override
   Widget build(BuildContext context) {
