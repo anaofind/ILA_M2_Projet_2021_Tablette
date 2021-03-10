@@ -3,8 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Database{
   final CollectionReference users = FirebaseFirestore.instance.collection("users");
 
-  Future<void> uploadUser(String name, String firstName, String userID){
+  Future<void> uploadUser(String login, String name, String firstName, String userID){
     return users.add({
+      'login' : login,
       'name' : name,
       'firstName' : firstName,
       'userID' : userID

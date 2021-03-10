@@ -15,13 +15,11 @@ class AuthService {
     return auth.authStateChanges();
   }
 
-  Future<void> createAccount(
-      String email, String password, String nom, String prenom) async {
+  Future<void> createAccount(String email, String login, String password, String nom, String prenom) async {
     String errorMessage;
     try {
-      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      database.uploadUser(nom, prenom, userCredential.user.uid);
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(email: email, password: password);
+      database.uploadUser(login, nom, prenom, userCredential.user.uid);
     } catch (error) {
       switch (error.code) {
         case "email-already-in-use":

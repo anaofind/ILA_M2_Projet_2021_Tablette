@@ -9,8 +9,8 @@ class SignUpPage extends StatefulWidget {
 }
 
 class SignUpPageState extends State<SignUpPage> {
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  String _email, _password, _name, _familyName;
+  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  String email, login, password, name, familyName;
 
   AuthService authService = AuthService();
 
@@ -25,7 +25,7 @@ class SignUpPageState extends State<SignUpPage> {
           title: Text('Inscription'),
         ),
         body: Form(
-            key: _formkey,
+            key: formkey,
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
               child: Column(
@@ -42,10 +42,24 @@ class SignUpPageState extends State<SignUpPage> {
                     onFieldSubmitted: (_) {
                       TextEditingController().clear();
                     },
-                    onSaved: (input) => _email = input,
+                    onSaved: (input) => email = input,
                     decoration: InputDecoration(
                         icon: Icon(Icons.email),
                         labelText: 'Email'
+                    ),
+                  ),
+                  TextFormField(
+                    textInputAction: TextInputAction.next,
+                    validator: (input) {
+                      if(input.isEmpty){
+                        return 'Il n\'y a pas de login';
+                      }
+                    },
+                    onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                    onSaved: (input) => login = input,
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.login),
+                        labelText: 'Identifiant'
                     ),
                   ),
                   TextFormField(
@@ -62,7 +76,7 @@ class SignUpPageState extends State<SignUpPage> {
                     onFieldSubmitted: (_) {
                       TextEditingController().clear();
                     },
-                    onSaved: (input) => _password = input,
+                    onSaved: (input) => password = input,
                     decoration: InputDecoration(
                         icon: Icon(Icons.lock),
                         labelText: 'Mot de passe'
@@ -78,7 +92,7 @@ class SignUpPageState extends State<SignUpPage> {
                       }
                     },
                     onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
-                    onSaved: (input) => _name = input,
+                    onSaved: (input) => name = input,
                     decoration: InputDecoration(
                         icon: Icon(Icons.account_circle),
                         labelText: 'Prénom'
@@ -98,7 +112,7 @@ class SignUpPageState extends State<SignUpPage> {
                       TextEditingController().clear();
                       signUp();
                     },
-                    onSaved: (input) => _familyName = input,
+                    onSaved: (input) => familyName = input,
                     decoration: InputDecoration(
                         icon: Icon(Icons.account_circle),
                         labelText: 'Nom de famille'
@@ -122,10 +136,10 @@ class SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> signUp() async {
-    final formState = _formkey.currentState;
+    final formState = formkey.currentState;
     if (formState.validate()) {
       formState.save();
-      authService.createAccount(_email, _password, _familyName, _name);
+      authService.createAccount(email, login, password, familyName, name);
       if (Navigator.canPop(context)) {
         Navigator.pop(context);
       }

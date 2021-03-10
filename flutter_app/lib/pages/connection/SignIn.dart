@@ -11,8 +11,8 @@ class SignInPage extends StatefulWidget {
 }
 
 class SignInPageState extends State<SignInPage> {
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  String _email, _password;
+  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  String email, password;
 
   AuthService authService = AuthService();
 
@@ -26,7 +26,7 @@ class SignInPageState extends State<SignInPage> {
           title: Text('Connexion'),
         ),
         body: Form(
-            key: _formkey,
+            key: formkey,
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
               child: Column(
@@ -43,7 +43,7 @@ class SignInPageState extends State<SignInPage> {
                     onFieldSubmitted: (_) {
                       TextEditingController().clear();
                     },
-                    onSaved: (input) => _email = input,
+                    onSaved: (input) => email = input,
                     decoration: InputDecoration(
                         icon: Icon(Icons.email), labelText: 'Email'),
                   ),
@@ -60,7 +60,7 @@ class SignInPageState extends State<SignInPage> {
                       TextEditingController().clear();
                       signIn();
                     },
-                    onSaved: (input) => _password = input,
+                    onSaved: (input) => password = input,
                     decoration: InputDecoration(
                         icon: Icon(Icons.lock), labelText: 'Mot de passe'),
                     obscureText: true,
@@ -98,10 +98,11 @@ class SignInPageState extends State<SignInPage> {
   }
 
   Future<void> signIn() async {
-    final formState = _formkey.currentState;
+    final formState = formkey.currentState;
     if (formState.validate()) {
       formState.save();
-      await authService.signInAccount(_email, _password);
+      await authService.signInAccount(email, password);
+      Navigator.of(context).pop();
       if (Navigator.canPop(context)) {
         Navigator.pop(context);
       }
