@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/model/UserData.dart';
 import 'package:flutter_app/services/AccountService.dart';
 
+import '../services/AccountService.dart';
+
 
 class UserPage extends StatefulWidget {
   UserPage({Key key}) : super(key: key);
@@ -11,14 +13,12 @@ class UserPage extends StatefulWidget {
 }
 
 class UserPageState extends State<UserPage> {
-  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
-
   AccountService authService = AccountService();
 
   @override
   Widget build(BuildContext context) {
-    final FocusNode passwordNode = FocusNode();
-    UserData user = AccountService.getCurrentUserData();
+    print ("GET USER");
+    UserData user =  AccountService.currentUserData;
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(

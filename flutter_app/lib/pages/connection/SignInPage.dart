@@ -97,7 +97,9 @@ class SignInPageState extends State<SignInPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       RaisedButton(
-                        onPressed: signIn,
+                        onPressed: () async {
+                          await signIn();
+                        },
                         child: Text('Se connecter'),
                       ),
                       SizedBox(

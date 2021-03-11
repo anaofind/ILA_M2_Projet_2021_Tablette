@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/UserData.dart';
 import 'package:flutter_app/pages/HomePage.dart';
 import 'package:flutter_app/pages/UserPage.dart';
 import 'package:flutter_app/pages/connection/SignInPage.dart';
 import 'package:flutter_app/services/AccountService.dart';
 import 'package:provider/provider.dart';
+
+import 'services/AccountService.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,10 +47,7 @@ class AppHomePageState extends State<AppHomePage> {
   int selectedIndex = 0;
   onNavTap(int index) => setState(()=> selectedIndex = index);
 
-  AppHomePageState() {
-  }
-
-  Widget loadPage(bool isAuth){
+  Widget loadPage(bool isAuth) {
     // print(isAuth);
     if (! isAuth) {
       return SignInPage();
@@ -68,16 +68,13 @@ class AppHomePageState extends State<AppHomePage> {
     }
   }
 
-  void dirtyBuild(){
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     final isAuth = user != null;
+    Widget body = loadPage(isAuth);
     return Scaffold(
-      body: loadPage(isAuth),
+      body: body,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.blueGrey,
         items: [
