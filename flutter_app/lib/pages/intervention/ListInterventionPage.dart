@@ -24,6 +24,7 @@ class _ListInterventionPage extends State<ListInterventionPage> {
   int selectedIndex = 0;
   List<Intervention> _laListe = []; //retieve list on firebase
   BuildContext _context;
+  bool _isAdmin = true;
   DataRow getRow(int numLigne) {
     return DataRow(
       selected: selectedIndex == numLigne,
@@ -58,16 +59,40 @@ class _ListInterventionPage extends State<ListInterventionPage> {
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: DataTable(
-          columns: [
-            DataColumn(label: Text("Nom")),
-            DataColumn(label: Text("Code sinistre")),
-            DataColumn(label: Text("Adresse")),
-            DataColumn(label: Text("Date")),
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: DataTable(
+                columns: [
+                  DataColumn(label: Text("Nom")),
+                  DataColumn(label: Text("Code sinistre")),
+                  DataColumn(label: Text("Adresse")),
+                  DataColumn(label: Text("Date")),
+                ],
+                rows: List.generate(_laListe.length, (index) => getRow(index)),
+              ),
+            ),
+            _showAddButton()
           ],
-          rows: List.generate(_laListe.length, (index) => getRow(index)),
-        ),
+        )
       )
     );
+  }
+
+  Container _showAddButton() {
+    if(_isAdmin) {
+      return Container(
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            // Add your onPressed code here!
+          },
+          label: Text('Add'),
+          icon: Icon(Icons.add),
+          backgroundColor: Colors.blue,
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 }
