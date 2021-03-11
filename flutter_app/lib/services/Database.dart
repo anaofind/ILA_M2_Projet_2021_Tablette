@@ -23,6 +23,12 @@ class Database{
         .snapshots();
   }
 
+  Stream<QuerySnapshot> loadUserInfoByEmail(String email){
+    return users
+        .where('email', isEqualTo: email)
+        .snapshots();
+  }
+
   Stream<QuerySnapshot> loadUserInfo(String userID) {
     return users
         .where('userID', isEqualTo: userID)

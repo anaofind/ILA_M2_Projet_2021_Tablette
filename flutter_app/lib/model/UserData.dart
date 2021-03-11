@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import 'Role.dart';
 
 class UserData {
@@ -8,6 +10,12 @@ class UserData {
   final String firstName;
   final Role role;
 
-  UserData(this.email, this.login, this.name, this.firstName, this.role);
+  UserData({
+    @required this.email,
+    @required this.login,
+    @required this.name,
+    @required this.firstName,
+    @required this.role
+  });
 
 }

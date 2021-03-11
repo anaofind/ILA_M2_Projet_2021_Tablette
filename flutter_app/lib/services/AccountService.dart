@@ -3,13 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_app/model/Role.dart';
 import 'package:flutter_app/model/UserData.dart';
 
+import '../model/UserData.dart';
 import 'Database.dart';
 
 class AccountService {
   static FirebaseAuth auth = FirebaseAuth.instance;
   static Database database = Database();
   static UserData currentUserData;
-  Database getDatabase(){
+
+  static Role futureRole;
+
+  static Database getDatabase(){
       return database;
   }
 
@@ -17,8 +21,23 @@ class AccountService {
     return auth.authStateChanges();
   }
 
-  static UserData getCurrentUserData(){
-    return currentUserData;
+  static Future<void> refreshCurrentUser(String email) async {
+    QuerySnapshot query = await database.loadUserInfoByEmail(email).first;
+    if (query != null) {
+      if (query.docs.length > 0) {
+        QueryDocumentSnapshot doc = query.docs.first;
+        if (doc.exists) {
+          print("CREATE USER");
+          currentUserData = UserData(
+              email: doc.data()['email'],
+              login: doc.data()['login'],
+              name: doc.data()['name'],
+              firstName: doc.data()['firstName'],
+              role: futureRole
+          );
+        }
+      }
+    }
   }
 
   static bool isSignIn() {
@@ -43,30 +62,33 @@ class AccountService {
       } catch (error) {
         switch (error.code) {
           case "email-already-in-use":
-            errorMessage = "This email is already is use.";
+            errorMessage = "This email is already is use";
             break;
           case "invalid-email":
-            errorMessage = "Your email address appears to be malformed.";
+            errorMessage = "Your email address appears to be malformed";
             break;
           case "weak-password":
-            errorMessage = "Please choose a stronger password.";
+            errorMessage = "Please choose a stronger password";
             break;
           default:
-            errorMessage = "An undefined error happened.";
+            errorMessage = "An undefined error happened";
         }
       }
     }
     if (errorMessage != null) {
       return errorMessage;
     }
-    await signOut();
+    return await signOut();
   }
 
   static Future<String> signIn(String email, String password, Role role) async {
     String errorMessage;
     try {
+      futureRole = role;
+      refreshCurrentUser(email);
       await auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (error) {
+      futureRole = null;
       switch (error.code) {
         case "invalid-email":
           errorMessage = "Your email address appears to be malformed";
@@ -78,28 +100,7 @@ class AccountService {
           errorMessage = "User with this email doesn't exist";
           break;
         default:
-          errorMessage = "An undefined error happened";
-      }
-    }
-    if (errorMessage == null) {
-      String id = auth.currentUser.uid;
-      QuerySnapshot query = await database.loadUserInfo(id).first;
-      if (query != null) {
-        if (query.docs.length > 0) {
-          QueryDocumentSnapshot doc = query.docs.first;
-          if (doc.exists) {
-            currentUserData = UserData(
-                doc.data()['email'], doc.data()['login'], doc.data()['name'],
-                doc.data()['firstName'], role);
-          } else {
-            errorMessage = 'account not founded';
-          }
-        } else {
-          errorMessage = 'error query';
-        }
-      }
-      if (errorMessage != null) {
-        await signOut();
+          errorMessage = error.code;
       }
     }
     return errorMessage;
