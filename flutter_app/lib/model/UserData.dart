@@ -8,7 +8,7 @@ class UserData {
   final String login;
   final String name;
   final String firstName;
-  final Role role;
+  Role role;
 
   UserData({
     @required this.email,
