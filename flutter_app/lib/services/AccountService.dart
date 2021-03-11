@@ -21,44 +21,27 @@ class AccountService {
     return auth.authStateChanges();
   }
 
-  static Future<void> refreshCurrentUser(String email) async {
-    QuerySnapshot query = await database.loadUserInfoByEmail(email).first;
-    if (query != null) {
-      if (query.docs.length > 0) {
-        QueryDocumentSnapshot doc = query.docs.first;
-        if (doc.exists) {
-          print("CREATE USER");
-          currentUserData = UserData(
-              email: doc.data()['email'],
-              login: doc.data()['login'],
-              name: doc.data()['name'],
-              firstName: doc.data()['firstName'],
-              role: futureRole
-          );
-        }
-      }
-    }
+  static Future<void> refreshCurrentUser(String email, Role role) async {
+    currentUserData = await database.loadUserInfoByEmail(email);
+    currentUserData.role = role;
   }
 
   static bool isSignIn() {
     return currentUserData != null;
   }
 
-  static Future<String> signUp(String email, String login, String password, String nom, String prenom) async {
+  static Future<String> signUp(String email, String login, String password, String name, String firstName) async {
     String errorMessage;
-    QuerySnapshot query = await database.loadUserInfoByLogin(login).first;
-    if (query != null) {
-      QueryDocumentSnapshot doc = query.docs.first;
-      if (doc != null && doc.exists) {
-        errorMessage = "login already used";
-      }
-    } else {
-      errorMessage = "error query";
+
+    UserData userData = await database.loadUserInfoByLogin(login);
+    if (userData != null) {
+      errorMessage = "login already used";
     }
+
     if (errorMessage == null) {
       try {
         UserCredential userCredential = await auth.createUserWithEmailAndPassword(email: email, password: password);
-        database.uploadUser(email, login, nom, prenom, userCredential.user.uid);
+        await database.uploadUser(email, login, name, firstName, userCredential.user.uid);
       } catch (error) {
         switch (error.code) {
           case "email-already-in-use":
@@ -85,7 +68,7 @@ class AccountService {
     String errorMessage;
     try {
       futureRole = role;
-      refreshCurrentUser(email);
+      refreshCurrentUser(email, role);
       await auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (error) {
       futureRole = null;
@@ -108,18 +91,11 @@ class AccountService {
 
   static Future<String> signInWithLogin(String login, String password, Role role) async {
     String errorMessage;
-    QuerySnapshot query = await database.loadUserInfoByLogin(login).first;
-    if (query != null) {
-      QueryDocumentSnapshot doc = query.docs.first;
-      if (doc != null) {
-        String email = doc.data()['email'];
-        print(doc.data().toString());
-        errorMessage = await signIn(email, password, role);
-      } else {
-        errorMessage = "login not found";
-      }
+    UserData userData = await database.loadUserInfoByLogin(login);
+    if (userData != null) {
+      errorMessage = await signIn(userData.email, password, role);
     } else {
-      errorMessage = "error query";
+      errorMessage = "login not found";
     }
     return errorMessage;
   }

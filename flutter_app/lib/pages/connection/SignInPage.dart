@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/Role.dart';
 import 'package:flutter_app/services/AccountService.dart';
+import 'package:flutter_app/validator/DataValidator.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'SignUpPage.dart';
@@ -129,10 +130,9 @@ class SignInPageState extends State<SignInPage> {
   Future<void> signIn() async {
     final formState = formkey.currentState;
     if (formState.validate()) {
-      formState.save();
-      bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(loginEmail);
       String errorMessage;
-      if (emailValid) {
+      formState.save();
+      if (DataValidator.isEmail(loginEmail)) {
         errorMessage = await AccountService.signIn(loginEmail, password, role);
       } else {
         errorMessage = await AccountService.signInWithLogin(loginEmail, password, role);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/services/AccountService.dart';
+import 'package:flutter_app/validator/DataValidator.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -37,7 +38,10 @@ class SignUpPageState extends State<SignUpPage> {
                     // ignore: missing_return
                     validator: (input) {
                       if(input.isEmpty){
-                        return 'Il n\'y a pas d\'email';
+                        return 'email obligatoire';
+                      }
+                      if (! DataValidator.isEmail(input)) {
+                        return 'email non valide';
                       }
                     },
                     onFieldSubmitted: (_) {
