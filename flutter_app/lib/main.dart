@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/UserData.dart';
 import 'package:flutter_app/pages/HomePage.dart';
+import 'package:flutter_app/pages/MapPage.dart';
 import 'package:flutter_app/pages/UserPage.dart';
 import 'package:flutter_app/pages/connection/SignInPage.dart';
 import 'package:flutter_app/services/AccountService.dart';
@@ -56,7 +57,7 @@ class AppHomePageState extends State<AppHomePage> {
       case 0:
         return HomePage();
       case 1:
-        return HomePage();
+        return MapPage();
       case 2:
         return HomePage();
       case 3 :
