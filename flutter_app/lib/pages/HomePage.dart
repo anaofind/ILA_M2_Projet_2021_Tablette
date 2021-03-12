@@ -26,7 +26,7 @@ class HomePageState extends State<HomePage> {
         ),
         body: Center(
           child: Text(
-            "Bienvenu"
+            "Bienvenue"
           ),
         )
     );

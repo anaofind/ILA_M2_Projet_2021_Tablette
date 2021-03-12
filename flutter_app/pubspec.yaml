@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  sidenavbar: ^0.0.2
   provider: ^3.1.0
 
   firebase_core: ^0.5.0
@@ -41,6 +41,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  assets:
+    - Icone_Png/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
