@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/services/AuthService.dart';
+import 'package:flutter_app/model/Role.dart';
+import 'package:flutter_app/services/AccountService.dart';
+import 'package:flutter_app/validator/DataValidator.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
-import 'SignUp.dart';
+import 'SignUpPage.dart';
 
 class SignInPage extends StatefulWidget {
   SignInPage({Key key}) : super(key: key);
@@ -12,14 +15,14 @@ class SignInPage extends StatefulWidget {
 
 class SignInPageState extends State<SignInPage> {
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
-  String email, password;
+  String loginEmail, password;
+  Role role = Role.Intervener;
 
-  AuthService authService = AuthService();
+  AccountService accountService = AccountService();
 
   @override
   Widget build(BuildContext context) {
     final FocusNode passwordNode = FocusNode();
-
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
@@ -37,22 +40,22 @@ class SignInPageState extends State<SignInPage> {
                     // ignore: missing_return
                     validator: (input) {
                       if (input.isEmpty) {
-                        return 'Il n\'y a pas d\'email';
+                        return 'identifiant ou email obligatoire';
                       }
                     },
                     onFieldSubmitted: (_) {
                       TextEditingController().clear();
                     },
-                    onSaved: (input) => email = input,
+                    onSaved: (input) => loginEmail = input,
                     decoration: InputDecoration(
-                        icon: Icon(Icons.email), labelText: 'Email'),
+                        icon: Icon(Icons.account_box_rounded), labelText: 'Identifiant / Email'),
                   ),
                   TextFormField(
                     // ignore: missing_return
                     focusNode: passwordNode,
                     validator: (input) {
                       if (input.isEmpty) {
-                        return 'Il n\'y a pas de mot de passe';
+                        return 'mot de passe obligatoire';
                       } else {return null;}
                     },
                     onFieldSubmitted: (_) async {
@@ -66,11 +69,38 @@ class SignInPageState extends State<SignInPage> {
                     obscureText: true,
                   ),
                   SizedBox(height: 20),
+                  ListTile(
+                    title: const Text('Opérateur'),
+                    leading: Radio(
+                      value: Role.Operator,
+                      groupValue: role,
+                      onChanged: (Role value) {
+                        setState(() {
+                          role = value;
+                        });
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('Intervenant'),
+                    leading: Radio(
+                      value: Role.Intervener,
+                      groupValue: role,
+                      onChanged: (Role value) {
+                        setState(() {
+                          role = value;
+                        });
+                      },
+                    ),
+                  ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       RaisedButton(
-                        onPressed: signIn,
+                        onPressed: () async {
+                          await signIn();
+                        },
                         child: Text('Se connecter'),
                       ),
                       SizedBox(
@@ -100,14 +130,20 @@ class SignInPageState extends State<SignInPage> {
   Future<void> signIn() async {
     final formState = formkey.currentState;
     if (formState.validate()) {
+      String errorMessage;
       formState.save();
-      await authService.signInAccount(email, password);
-      Navigator.of(context).pop();
-      if (Navigator.canPop(context)) {
-        Navigator.pop(context);
+      if (DataValidator.isEmail(loginEmail)) {
+        errorMessage = await AccountService.signIn(loginEmail, password, role);
+      } else {
+        errorMessage = await AccountService.signInWithLogin(loginEmail, password, role);
       }
-      /*Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ProfilePage(artists: this.artists)));*/
+      if (errorMessage != null) {
+        Alert(
+            context: context,
+            title: "Connexion",
+            desc: errorMessage
+        ).show();
+      }
     }
   }
 }
