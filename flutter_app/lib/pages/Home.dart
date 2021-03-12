@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/services/AuthService.dart';
 
@@ -26,7 +27,7 @@ class HomePageState extends State<HomePage> {
         ),
         body: Center(
           child: Text(
-            "Bienvenu"
+              "Bienvenu"
           ),
         )
     );
