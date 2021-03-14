@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
 
 
-class Intervention {
+class Interventions {
   final String id;
   final String nom;
   final String adresse;
@@ -10,7 +10,7 @@ class Intervention {
   final DateTime date;
   final List<MoyenIntervention> moyens;
 
-  Intervention(this.id, this.nom, this.adresse, this.codeSinistre, this.date, this.moyens);
+  Interventions(this.id, this.nom, this.adresse, this.codeSinistre, this.date, this.moyens);
 
   List<Map> ConvertMoyensToMap(List<MoyenIntervention> moyens) {
     List<Map> moyensIntervention = [];
@@ -31,7 +31,7 @@ class Intervention {
     };
   }
 
-  Intervention.fromSnapshot(DocumentSnapshot snapshot)
+  Interventions.fromSnapshot(DocumentSnapshot snapshot)
       : assert(snapshot != null),
         id = snapshot.id,
         nom = snapshot.data()['nom'],
