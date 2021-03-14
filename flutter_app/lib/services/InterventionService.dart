@@ -7,13 +7,16 @@ import 'package:flutter_app/models/MoyenIntervention.dart';
 class InterventionService {
   CollectionReference interventions = FirebaseFirestore.instance.collection('interventions');
 
-  Future<void> addIntervention(String nom, String adresse, String codeSinistre, List<Moyen> moyens) {
+  Future<void> addIntervention(String nom, String adresse, String codeSinistre, List<MoyenIntervention> moyens) {
     DateTime date = DateTime.now();
-    List<MoyenIntervention> moyensIntervention = List<MoyenIntervention>();
+    /*List<MoyenIntervention> moyensIntervention = List<MoyenIntervention>();
     moyens.forEach((moyen) {
       moyensIntervention.add(new MoyenIntervention(moyen, Etat.enCours.toString(), date, null, null));
-    });
-    Intervention intervention = Intervention(null, nom, adresse, codeSinistre, date, moyensIntervention);
+    });*/
+    moyens.forEach((moyen) {
+     moyen.demandeA = date;
+      });
+    Intervention intervention = Intervention(null, nom, adresse, codeSinistre, date, moyens);
     return  interventions.add(intervention.toMap());
   }
   Stream<QuerySnapshot> loadAllInterventions(){

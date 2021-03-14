@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:flutter_app/util/ColorConverter.dart';
+
 import 'Moyen.dart';
 
 class MoyenInterventionDocument {
@@ -6,12 +10,13 @@ class MoyenInterventionDocument {
 
 class MoyenIntervention {
   final Moyen moyen;
-  final String etat;
-  final DateTime demandeA;
-  final DateTime departA;
-  final DateTime arriveA;
+  String etat;
+  DateTime demandeA;
+  DateTime departA;
+  DateTime arriveA;
+  final Color couleur;
 
-  MoyenIntervention(this.moyen, this.etat, this.demandeA, this.departA, this.arriveA);
+  MoyenIntervention(this.moyen, this.etat, this.demandeA, this.departA, this.arriveA, this.couleur);
 
 
   Map<String, dynamic> toMap() {
@@ -22,7 +27,8 @@ class MoyenIntervention {
       'etat': etat,
       'demandeA': demandeA,
       'departA': departA,
-      'arriveA': arriveA
+      'arriveA': arriveA,
+      'couleur': ColorConverter.stringFromColor(couleur)
     };
   }
   MoyenIntervention.fromMap(Map<String, dynamic> map)
@@ -31,7 +37,7 @@ class MoyenIntervention {
         etat = map['etat'],
         demandeA = map['demandeA'].toDate(),
         departA = map['departA']!=null?map['departA'].toDate():null,
-        arriveA = map['arriveA']!=null?map['arriveA'].toDate():null;
-
+        arriveA = map['arriveA']!=null?map['arriveA'].toDate():null,
+        couleur = ColorConverter.colorFromString(map['couleur']);
 
 }

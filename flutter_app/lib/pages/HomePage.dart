@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app/services/AccountService.dart';
+
+import 'NewInterventionPage.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -25,10 +26,20 @@ class HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text('Acceuil'),
         ),
-        body: Center(
-          child: Text(
-              "Bienvenu"
-          ),
+        body: Column(
+          children: [
+            Text(
+                "Bienvenu"
+            ),
+            ElevatedButton(
+              child: Text('Nouvelle intervention'),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => NewInterventionPage())
+                );
+              },
+            )
+          ],
         )
     );
   }

@@ -8,7 +8,7 @@ class Intervention {
   final String adresse;
   final String codeSinistre;
   final DateTime date;
-  final List<MoyenIntervention> moyens;
+  List<MoyenIntervention> moyens;
 
   Intervention(this.id, this.nom, this.adresse, this.codeSinistre, this.date, this.moyens);
 

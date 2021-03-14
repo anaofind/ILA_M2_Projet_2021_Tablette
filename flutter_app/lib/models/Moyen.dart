@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 enum Etat {
   enCours,
   prevu
@@ -17,4 +19,12 @@ class Moyen {
       'couleurDefaut': couleurDefaut
     };
   }
+  Moyen.fromSnapshot(DocumentSnapshot snapshot)
+      : assert(snapshot != null),
+        id = snapshot.id,
+        codeMoyen = snapshot.data()['codeMoyen'],
+        description = snapshot.data()['description'],
+        couleurDefaut = snapshot.data()['couleurDefaut'];
+
+
 }
