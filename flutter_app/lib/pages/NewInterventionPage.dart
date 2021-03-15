@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/models/Intervention.dart';
 import 'package:flutter_app/models/Moyen.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
+import 'package:flutter_app/models/Sinistre.dart';
 import 'package:flutter_app/services/AccountService.dart';
 import 'package:flutter_app/services/InterventionService.dart';
 import 'package:flutter_app/services/MoyenService.dart';
@@ -24,7 +25,10 @@ class NewInterventionPageState extends State<NewInterventionPage> {
   MoyenService moyenService = MoyenService();
   InterventionService interventionService = InterventionService();
   List<MoyenIntervention> moyensIntervention = new List<MoyenIntervention>();
-
+  List<DropdownMenuItem<Sinistre>> _dropdownMenuItemsSinistres = List();
+  Sinistre _selectedSinistre;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String nomIntervention, adresseIntervention;
 
   @override
   Future<void> initState() {
@@ -127,7 +131,6 @@ class NewInterventionPageState extends State<NewInterventionPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   new DropdownButton<Moyen>(
-                                    // hint: Text('Séléctionnez un moyen'),
                                     value: _selectedMoyen,
                                     items: _dropdownMenuItems,
                                     onChanged: (value) {
@@ -141,7 +144,6 @@ class NewInterventionPageState extends State<NewInterventionPage> {
                                       });
                                     },
                                   ),
-                                  //Text('Selected: ${_selectedColor}'),
                                   CircleAvatar(backgroundColor: _selectedColor)
                                 ],
                               ),
@@ -209,22 +211,8 @@ class NewInterventionPageState extends State<NewInterventionPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      floatingActionButton: Container(
-        padding: EdgeInsets.only(bottom: 25.0),
-        child: Align(
-          alignment: Alignment.bottomRight,
-          child: FloatingActionButton(
-            child: Icon(Icons.add),
-            mini: true,
-            onPressed: () {
-              selectionMoyen();
-            },
-          ),
-        ),
-      ),
       appBar: AppBar(
         title: Text('Acceuil'),
       ),
@@ -233,43 +221,106 @@ class NewInterventionPageState extends State<NewInterventionPage> {
         child: Row(
             children: <Widget>[
               Expanded(
-                flex: 7, // 70%
-                child: Container(//color: Colors.grey,
-                  child:   ElevatedButton(
-                    child: Text('Commencer l\'intervention'),
-                    onPressed: () {
-                      setState(() {
-                        moyensIntervention.isEmpty?Fluttertoast.showToast(
-                            msg: "Veuillez ajouter des moyens",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.TOP,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0
-                        ):{interventionService.addIntervention("Mission Incendie gare",
-                            "19 Place de la Gare, 35005 Rennes", "INC", moyensIntervention),
-                          Fluttertoast.showToast(
-                              msg: "Intervention créée",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.TOP,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.green,
-                              textColor: Colors.white,
-                              fontSize: 16.0
-                          ),
-                          moyensIntervention.clear()};
-                      });
-                    },
+                flex: 4, // 40%
+                child: Container(
+                  child:   Column(
+                    children: [
+                      // formulaire
+                      Form(
+                      key: _formKey,
+                      child: Column(
+                          children: <Widget>[
+                      TextFormField(
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                          labelText: 'Nom d\'intervention : *',
+                        ),
+                        validator: (input) {
+                          if (input.isEmpty) {
+                            return 'Veillez saisir le nom de l\'intervention';
+                          }
+                        },
+                        onFieldSubmitted: (_) {
+                          TextEditingController().clear();
+                        },
+                        onSaved: (input) => nomIntervention = input,
+                      ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                          labelText: 'Adresse : *',
+                          //icon: IconButton(
+                            //  icon: Icon(Icons.search), onPressed: null)
+                      ),
+                      validator: (input) {
+                        if (input.isEmpty) {
+                          return 'Veillez saisir une adresse';
+                        }
+                      },
+                      onFieldSubmitted: (_) {
+                        TextEditingController().clear();
+                      },
+                      onSaved: (input) => adresseIntervention = input,
+                    ),
+                      //Liste des sinistres
+                      StreamBuilder(
+                          stream: sinistreService.loadAllSinistres(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else {
+                              _dropdownMenuItemsSinistres.isEmpty ?
+                              snapshot.data.docs.forEach((val) {
+                                _dropdownMenuItemsSinistres.add(DropdownMenuItem<Sinistre>(
+                                  value: Sinistre.fromSnapshot(val),
+                                  child: new Text(val.data()['codeSinistre']),
+                                ));
+                              }) : _dropdownMenuItemsSinistres = _dropdownMenuItemsSinistres;
+                              _selectedSinistre = _selectedSinistre == null
+                                  ? _dropdownMenuItemsSinistres[0].value
+                                  : _selectedSinistre;
+                              return new DropdownButton<Sinistre>(
+                                value: _selectedSinistre,
+                                items: _dropdownMenuItemsSinistres,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedSinistre = value;
+                                    print('_selectedSinistre ' +
+                                        _selectedSinistre.codeSinistre);
+                                  });
+                                },
+                              );
+                            }
+                          }
+                      )
+                          ]
+                      ),
 
+                  ),
+                    ]
                   ),
                 ),
               ),
               Expanded(
-                flex: 3, // 30%
+                flex: 4, // 40%
                 child:
                 Column(
                   children: [
+                    Container(
+                      padding: EdgeInsets.only(bottom: 25.0),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: FloatingActionButton(
+                          child: Icon(Icons.add),
+                          mini: true,
+                          onPressed: () {
+                            selectionMoyen();
+                          },
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: moyensIntervention.isEmpty?Center(child: Text('Pas de moyens séléctionnés')):ListView.builder
                         (
@@ -280,7 +331,6 @@ class NewInterventionPageState extends State<NewInterventionPage> {
                                 backgroundColor: moyensIntervention[index].couleur,
                               ),
                               title:Text(moyensIntervention[index].moyen.codeMoyen),
-                              //subtitle: Text('1'),
                               trailing:IconButton(
                                 icon: const Icon(Icons.remove_circle, size: 30,),
                                 color: Colors.red,
@@ -301,6 +351,43 @@ class NewInterventionPageState extends State<NewInterventionPage> {
 
 
               ),
+              Expanded(
+                  child: ElevatedButton(
+                    child: Text('ENVOYER'),
+                    onPressed: () {
+                      setState(() {
+                        if (_formKey.currentState.validate()) {
+                          _formKey.currentState.save();
+                          moyensIntervention.isEmpty?Fluttertoast.showToast(
+                              msg: "Veuillez ajouter des moyens",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.TOP,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                          ):{
+                            interventionService.addIntervention(nomIntervention,
+                                adresseIntervention, _selectedSinistre.codeSinistre, moyensIntervention),
+                            Fluttertoast.showToast(
+                                msg: "Intervention créée",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.TOP,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.green,
+                                textColor: Colors.white,
+                                fontSize: 16.0
+                            ),
+                            moyensIntervention.clear(),
+                        if (Navigator.canPop(context)) {
+                        Navigator.pop(context)
+                        }
+                          };
+                        }
+                      });
+                    },
+                  )
+              )
 
             ]
         ),
