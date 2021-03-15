@@ -8,6 +8,7 @@ import 'package:flutter_app/pages/HomePage.dart';
 import 'package:flutter_app/pages/UserPage.dart';
 import 'package:flutter_app/pages/connection/SignInPage.dart';
 import 'package:flutter_app/services/AccountService.dart';
+import 'package:flutter_app/pages/intervention/ListInterventionPage.dart';
 import 'package:provider/provider.dart';
 
 import 'services/AccountService.dart';
@@ -54,7 +55,7 @@ class AppHomePageState extends State<AppHomePage> {
     }
     switch(selectedIndex){
       case 0:
-        return HomePage();
+        return ListInterventionPage();
       case 1:
         return HomePage();
       case 2:

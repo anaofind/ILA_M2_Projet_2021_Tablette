@@ -19,9 +19,9 @@ class InterventionService {
     Intervention intervention = Intervention(null, nom, adresse, codeSinistre, date, moyens);
     return  interventions.add(intervention.toMap());
   }
+
   Stream<QuerySnapshot> loadAllInterventions(){
     return interventions.snapshots();
-
   }
   /*
   Future<List<String>> loadAllSinistres() async{
@@ -31,15 +31,12 @@ class InterventionService {
     .toList();
 
   }
-*/
+  */
   Future<DocumentSnapshot> getInterventionById(String id) {
-
     return interventions.doc(id).get();
-
   }
 
   Future<DocumentSnapshot> getInterventionByName(String nom) {
-
     return  interventions.where(
         "nom", isEqualTo: nom)
         .get()
@@ -51,7 +48,5 @@ class InterventionService {
         return null;
       }
     });
-
   }
-
 }

@@ -53,4 +53,24 @@ class Intervention {
         moyens =new List<MoyenIntervention>.from(snapshot.data()['moyens'].map((s) => MoyenIntervention.fromMap(s)).toList()),
         symbols =new List<SymbolIntervention>.from(snapshot.data()['symbols'].map((s) => SymbolIntervention.fromMap(s)).toList());
 
+
+  String get getNom {
+    return this.nom;
+  }
+
+  String get getCode {
+    return this.codeSinistre;
+  }
+
+  String get getAdresse {
+    return this.adresse;
+  }
+
+  DateTime get getDate {
+    return this.date;
+  }
+
+  List<MoyenIntervention> get getMoyens{
+    return this.moyens;
+  }
 }
