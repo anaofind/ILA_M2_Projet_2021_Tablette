@@ -45,8 +45,13 @@ flutter:
   assets:
         - Icone_Png/
         - Icone_Png/Danger/
-        - Icone_Png/Défense/
+        - Icone_Png/Defense/
         - Icone_Png/Infrastructure/
+        - Icone_Png/Infrastructure/Vehicule/
+        - Icone_Png/Infrastructure/Vehicule/FPT/
+        - Icone_Png/Infrastructure/Vehicule/VLCG/
+        - Icone_Png/Infrastructure/Vehicule/VSAV/
+        - Icone_Png/Chemin/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
