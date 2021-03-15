@@ -5,12 +5,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/UserData.dart';
 import 'package:flutter_app/pages/HomePage.dart';
+import 'package:flutter_app/pages/SitacPage.dart';
 import 'package:flutter_app/pages/UserPage.dart';
 import 'package:flutter_app/pages/connection/SignInPage.dart';
 import 'package:flutter_app/services/AccountService.dart';
 import 'package:flutter_app/pages/intervention/ListInterventionPage.dart';
 import 'package:provider/provider.dart';
 
+import 'models/Intervention.dart';
 import 'services/AccountService.dart';
 
 void main() async {
@@ -57,7 +59,8 @@ class AppHomePageState extends State<AppHomePage> {
       case 0:
         return ListInterventionPage();
       case 1:
-        return HomePage();
+        return SitacPage( Intervention("1", "nom", "adresse",
+            'codeSinistre', DateTime.now(), []));
       case 2:
         return HomePage();
       case 3 :

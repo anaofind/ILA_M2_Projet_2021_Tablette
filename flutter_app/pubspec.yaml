@@ -23,8 +23,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  multi_select_flutter: ^3.1.8
+  uuid: ^2.2.2
 
+  sidenavbar: ^0.0.2
   provider: ^3.1.0
 
   firebase_core: ^0.5.0
@@ -44,6 +45,16 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  assets:
+        - Icone_Png/
+        - Icone_Png/Danger/
+        - Icone_Png/Defense/
+        - Icone_Png/Infrastructure/
+        - Icone_Png/Infrastructure/Vehicule/
+        - Icone_Png/Infrastructure/Vehicule/FPT/
+        - Icone_Png/Infrastructure/Vehicule/VLCG/
+        - Icone_Png/Infrastructure/Vehicule/VSAV/
+        - Icone_Png/Chemin/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

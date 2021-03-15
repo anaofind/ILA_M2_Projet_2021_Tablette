@@ -6,6 +6,7 @@ import 'package:flutter_app/models/MoyenIntervention.dart';
 import '../../models/Intervention.dart';
 import '../../services/InterventionService.dart';
 import '../NewInterventionPage.dart';
+import '../SitacPage.dart';
 import 'InterventionPage.dart';
 
 
@@ -49,7 +50,7 @@ class _ListInterventionPage extends State<ListInterventionPage> {
 
   void showIntervention(DocumentSnapshot doc) {
     Navigator.push(_context, MaterialPageRoute(builder: (BuildContext context) {
-      return InterventionPage(
+      return SitacPage(
           Intervention(doc.id, doc.data()['nom'], doc.data()['adresse'],
               doc.data()['codeSinistre'], doc.data()['date'].toDate(), doc.data()['moyens'])
           );
