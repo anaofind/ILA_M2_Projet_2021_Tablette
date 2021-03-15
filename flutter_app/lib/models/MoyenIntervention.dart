@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:flutter_app/models/Position.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_app/util/ColorConverter.dart';
 
@@ -16,8 +17,9 @@ class MoyenIntervention {
   DateTime departA;
   DateTime arriveA;
   final Color couleur;
+  Position position;
 
-  MoyenIntervention(this.moyen, this.etat, this.demandeA, this.departA, this.arriveA, this.couleur):id = Uuid().v4();
+  MoyenIntervention(this.moyen, this.etat, this.demandeA, this.departA, this.arriveA, this.couleur):id = Uuid().v4(), position = null;
 
 
   Map<String, dynamic> toMap() {
@@ -30,7 +32,9 @@ class MoyenIntervention {
       'demandeA': demandeA,
       'departA': departA,
       'arriveA': arriveA,
-      'couleur': ColorConverter.stringFromColor(couleur)
+      'couleur': ColorConverter.stringFromColor(couleur),
+      'latitude': position!=null?position.latitude:null,
+      'longitude': position!=null?position.longitude:null
     };
   }
   MoyenIntervention.fromMap(Map<String, dynamic> map)
@@ -41,6 +45,7 @@ class MoyenIntervention {
         demandeA = map['demandeA'].toDate(),
         departA = map['departA']!=null?map['departA'].toDate():null,
         arriveA = map['arriveA']!=null?map['arriveA'].toDate():null,
-        couleur = ColorConverter.colorFromString(map['couleur']);
+        couleur = ColorConverter.colorFromString(map['couleur']),
+        position = Position( map['latitude'], map['longitude']);
 
 }

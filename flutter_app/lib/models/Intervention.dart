@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
 
+import 'SymbolIntervention.dart';
+
 
 class Intervention {
   final String id;
@@ -9,8 +11,9 @@ class Intervention {
   final String codeSinistre;
   final DateTime date;
   List<MoyenIntervention> moyens;
+  List<SymbolIntervention> symbols;
 
-  Intervention(this.id, this.nom, this.adresse, this.codeSinistre, this.date, this.moyens);
+  Intervention(this.id, this.nom, this.adresse, this.codeSinistre, this.date, this.moyens): symbols = List();
 
   List<Map> ConvertMoyensToMap(List<MoyenIntervention> moyens) {
     List<Map> moyensIntervention = [];
@@ -20,6 +23,14 @@ class Intervention {
     });
     return moyensIntervention;
   }
+  List<Map> ConvertSymbolsToMap(List<SymbolIntervention> symbols) {
+    List<Map> symbolsIntervention = [];
+    symbols.forEach((SymbolIntervention symbol) {
+      Map step = symbol.toMap();
+      symbolsIntervention.add(step);
+    });
+    return symbolsIntervention;
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -28,6 +39,7 @@ class Intervention {
       'codeSinistre': codeSinistre,
       'date': date,
       'moyens': ConvertMoyensToMap(moyens),
+      'symbols': ConvertSymbolsToMap(symbols),
     };
   }
 
@@ -38,6 +50,7 @@ class Intervention {
         adresse = snapshot.data()['adresse'],
         codeSinistre = snapshot.data()['codeSinistre'],
         date = snapshot.data()['date'].toDate(),
-        moyens =new List<MoyenIntervention>.from(snapshot.data()['moyens'].map((s) => MoyenIntervention.fromMap(s)).toList());
+        moyens =new List<MoyenIntervention>.from(snapshot.data()['moyens'].map((s) => MoyenIntervention.fromMap(s)).toList()),
+        symbols =new List<SymbolIntervention>.from(snapshot.data()['symbols'].map((s) => SymbolIntervention.fromMap(s)).toList());
 
 }
