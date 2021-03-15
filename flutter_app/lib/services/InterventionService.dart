@@ -1,6 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_app/models/Interventions.dart';
+import 'package:flutter_app/models/Intervention.dart';
 import 'package:flutter_app/models/Moyen.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
 
@@ -13,12 +13,12 @@ class InterventionService {
     moyens.forEach((moyen) {
       moyensIntervention.add(new MoyenIntervention(moyen, Etat.enCours.toString(), date, null, null));
     });
-    Interventions intervention = Interventions(null, nom, adresse, codeSinistre, date, moyensIntervention);
+    Intervention intervention = Intervention(null, nom, adresse, codeSinistre, date, moyensIntervention);
     return  interventions.add(intervention.toMap());
   }
+
   Stream<QuerySnapshot> loadAllInterventions(){
     return interventions.snapshots();
-
   }
   /*
   Future<List<String>> loadAllSinistres() async{
@@ -28,15 +28,12 @@ class InterventionService {
     .toList();
 
   }
-*/
+  */
   Future<DocumentSnapshot> getInterventionById(String id) {
-
     return interventions.doc(id).get();
-
   }
 
   Future<DocumentSnapshot> getInterventionByName(String nom) {
-
     return  interventions.where(
         "nom", isEqualTo: nom)
         .get()
@@ -48,7 +45,5 @@ class InterventionService {
         return null;
       }
     });
-
   }
-
 }

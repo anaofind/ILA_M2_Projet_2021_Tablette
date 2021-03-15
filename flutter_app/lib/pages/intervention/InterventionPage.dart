@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/Intervention.dart';
+import 'package:flutter_app/models/Intervention.dart';
 
 class InterventionPage extends StatefulWidget {
   Intervention _monIntervention;

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/Intervention.dart';
 import 'package:flutter_app/pages/Home.dart';
 import 'package:flutter_app/pages/connection/SignIn.dart';
 import 'package:flutter_app/pages/intervention/ListInterventionPage.dart';

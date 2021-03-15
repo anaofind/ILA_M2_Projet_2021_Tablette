@@ -1,7 +1,9 @@
 import 'dart:core';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../model/Intervention.dart';
+import '../../models/Intervention.dart';
+import '../../services/InterventionService.dart';
 import 'InterventionPage.dart';
 
 
@@ -12,75 +14,86 @@ class ListInterventionPage extends StatefulWidget {
 }
 
 class _ListInterventionPage extends State<ListInterventionPage> {
+  InterventionService _interventionService;
   _ListInterventionPage(){
-    _laListe.add(new Intervention("Intervention 1", "I1", "Ici", DateTime.now()));
-    _laListe.add(new Intervention("Intervention 2", "I2", "Istic", DateTime.now()));
-    _laListe.add(new Intervention("Intervention 3", "I1", "Ici", DateTime.now()));
-    _laListe.add(new Intervention("Intervention 4", "I2", "Istic", DateTime.now()));
-    _laListe.add(new Intervention("Intervention 5", "I1", "Ici", DateTime.now()));
-    _laListe.add(new Intervention("Intervention 6", "I2", "Istic", DateTime.now()));
+    _interventionService = InterventionService();
   }
 
-  int selectedIndex = 0;
-  List<Intervention> _laListe = []; //retieve list on firebase
+  int selectedIndex = 0, iLigne = 0;
+  List<Intervention> _laListe = []; //retrieve list on firebase
   BuildContext _context;
   bool _isAdmin = true;
-  DataRow getRow(int numLigne) {
-    return DataRow(
-      selected: selectedIndex == numLigne,
-      cells: <DataCell>[
-        DataCell(Text(_laListe[numLigne].getNom)),
-        DataCell(Text(_laListe[numLigne].getCode)),
-        DataCell(Text(_laListe[numLigne].getAdresse)),
-        DataCell(Text(_laListe[numLigne].getDate.toString())),
-      ],
-      onSelectChanged: (index) {
-        setState(() {
-          selectedIndex = numLigne;
-          showIntervention(numLigne);
-        });
-      }
-    );
-  }
 
-  void showIntervention(int numI) {
-      Navigator.push(_context, MaterialPageRoute(builder: (BuildContext context) {
-        return InterventionPage(_laListe[numI]);
-      }));
+  void showIntervention(DocumentSnapshot doc) {
+    Navigator.push(_context, MaterialPageRoute(builder: (BuildContext context) {
+      return InterventionPage(
+          Intervention(doc.id, doc.data()['nom'], doc.data()['adresse'],
+              doc.data()['codeSinistre'], doc.data()['date'].toDate(), doc.data()['moyens'])
+          );
+    }));
   }
 
   @override
   Widget build(BuildContext context) {
     //afficher le + selon le rôle
     _context = context;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Interventions"),
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: <Widget>[
-            Container(
-              child: DataTable(
-                columns: [
-                  DataColumn(label: Text("Nom")),
-                  DataColumn(label: Text("Code sinistre")),
-                  DataColumn(label: Text("Adresse")),
-                  DataColumn(label: Text("Date")),
-                ],
-                rows: List.generate(_laListe.length, (index) => getRow(index)),
-              ),
-            ),
-            _showAddButton()
-          ],
-        )
-      )
+    return StreamBuilder<QuerySnapshot>(
+      stream: _interventionService.loadAllInterventions(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        return SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: DataTable(
+                    columns: [
+                      DataColumn(label: Text("Nom")),
+                      DataColumn(label: Text("Code sinistre")),
+                      DataColumn(label: Text("Adresse")),
+                      DataColumn(label: Text("Date")),
+                    ],
+                    rows: snapshot.data.docs.map((DocumentSnapshot document) {
+
+                      _laListe.add(
+                          Intervention(document.id, document.data()['nom'],
+                          document.data()['adresse'], document.data()['codeSinistre'],
+                          document.data()['date'].toDate(), document.data()['moyens'])
+                      );
+
+                      return DataRow(
+                          cells: <DataCell>[
+                            DataCell(Text(document.data()['nom'])),
+                            DataCell(Text(document.data()['codeSinistre'])),
+                            DataCell(Text(document.data()['adresse'])),
+                            DataCell(Text(document.data()['date'].toDate().toString())),
+                          ],
+                          onSelectChanged: (ind) {
+                            setState(() {
+                              showIntervention(document);
+                            });
+                          }
+                      );
+                    }).toList(),
+                  ),
+                ),
+                _showAddButton()
+              ],
+            )
+        );
+      }
     );
   }
 
   Container _showAddButton() {
-    if(_isAdmin) {
+    if(!_isAdmin) {
+      return Container();
+    } else {
       return Container(
         child: FloatingActionButton.extended(
           onPressed: () {
@@ -91,8 +104,6 @@ class _ListInterventionPage extends State<ListInterventionPage> {
           backgroundColor: Colors.blue,
         ),
       );
-    } else {
-      return Container();
     }
   }
 }
