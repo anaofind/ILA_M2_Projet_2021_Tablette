@@ -214,100 +214,111 @@ class NewInterventionPageState extends State<NewInterventionPage> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text('Acceuil'),
+        title: Text('Nouvelle intervention'),
       ),
       body: Container(
+        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
         //alignment: Alignment.center,
         child: Row(
             children: <Widget>[
               Expanded(
-                flex: 4, // 40%
+                flex: 3, // 40%
                 child: Container(
+                  margin: const EdgeInsets.all(32.0),
                   child:   Column(
-                    children: [
-                      // formulaire
-                      Form(
-                      key: _formKey,
-                      child: Column(
-                          children: <Widget>[
-                      TextFormField(
-                        textInputAction: TextInputAction.next,
-                        decoration: const InputDecoration(
-                          labelText: 'Nom d\'intervention : *',
-                        ),
-                        validator: (input) {
-                          if (input.isEmpty) {
-                            return 'Veillez saisir le nom de l\'intervention';
-                          }
-                        },
-                        onFieldSubmitted: (_) {
-                          TextEditingController().clear();
-                        },
-                        onSaved: (input) => nomIntervention = input,
-                      ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          labelText: 'Adresse : *',
-                          //icon: IconButton(
-                            //  icon: Icon(Icons.search), onPressed: null)
-                      ),
-                      validator: (input) {
-                        if (input.isEmpty) {
-                          return 'Veillez saisir une adresse';
-                        }
-                      },
-                      onFieldSubmitted: (_) {
-                        TextEditingController().clear();
-                      },
-                      onSaved: (input) => adresseIntervention = input,
-                    ),
-                      //Liste des sinistres
-                      StreamBuilder(
-                          stream: sinistreService.loadAllSinistres(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else {
-                              _dropdownMenuItemsSinistres.isEmpty ?
-                              snapshot.data.docs.forEach((val) {
-                                _dropdownMenuItemsSinistres.add(DropdownMenuItem<Sinistre>(
-                                  value: Sinistre.fromSnapshot(val),
-                                  child: new Text(val.data()['codeSinistre']),
-                                ));
-                              }) : _dropdownMenuItemsSinistres = _dropdownMenuItemsSinistres;
-                              _selectedSinistre = _selectedSinistre == null
-                                  ? _dropdownMenuItemsSinistres[0].value
-                                  : _selectedSinistre;
-                              return new DropdownButton<Sinistre>(
-                                value: _selectedSinistre,
-                                items: _dropdownMenuItemsSinistres,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedSinistre = value;
-                                    print('_selectedSinistre ' +
-                                        _selectedSinistre.codeSinistre);
-                                  });
-                                },
-                              );
-                            }
-                          }
-                      )
-                          ]
-                      ),
+                      children: [
+                        // formulaire
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Nom d\'intervention : *',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                TextFormField(
+                                  textInputAction: TextInputAction.next,
+                                  validator: (input) {
+                                    if (input.isEmpty) {
+                                      return 'Veillez saisir le nom de l\'intervention';
+                                    }
+                                  },
+                                  onFieldSubmitted: (_) {
+                                    TextEditingController().clear();
+                                  },
+                                  onSaved: (input) => nomIntervention = input,
+                                ),
+                                Text(
+                                  'Adresse: *',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                TextFormField(
+                                  validator: (input) {
+                                    if (input.isEmpty) {
+                                      return 'Veillez saisir une adresse';
+                                    }
+                                  },
+                                  onFieldSubmitted: (_) {
+                                    TextEditingController().clear();
+                                  },
+                                  onSaved: (input) => adresseIntervention = input,
+                                ),
+                                //Liste des sinistres
+                                Text(
+                                  'Code sinistre : *',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                StreamBuilder(
+                                    stream: sinistreService.loadAllSinistres(),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      } else {
+                                        _dropdownMenuItemsSinistres.isEmpty ?
+                                        snapshot.data.docs.forEach((val) {
+                                          _dropdownMenuItemsSinistres.add(DropdownMenuItem<Sinistre>(
+                                            value: Sinistre.fromSnapshot(val),
+                                            child: new Text(val.data()['codeSinistre']),
+                                          ));
+                                        }) : _dropdownMenuItemsSinistres = _dropdownMenuItemsSinistres;
+                                        _selectedSinistre = _selectedSinistre == null
+                                            ? _dropdownMenuItemsSinistres[0].value
+                                            : _selectedSinistre;
+                                        return new DropdownButton<Sinistre>(
+                                          value: _selectedSinistre,
+                                          items: _dropdownMenuItemsSinistres,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _selectedSinistre = value;
+                                              print('_selectedSinistre ' +
+                                                  _selectedSinistre.codeSinistre);
+                                            });
+                                          },
+                                        );
+                                      }
+                                    }
+                                )
+                              ]
+                          ),
 
-                  ),
-                    ]
+                        ),
+                      ]
                   ),
                 ),
               ),
               Expanded(
-                flex: 4, // 40%
+                flex: 3, // 40%
                 child:
                 Column(
                   children: [
+                    Text(
+                      'Ajouter des moyens :',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     Container(
                       padding: EdgeInsets.only(bottom: 25.0),
                       child: Align(
@@ -322,6 +333,7 @@ class NewInterventionPageState extends State<NewInterventionPage> {
                       ),
                     ),
                     Expanded(
+                      flex: 3,
                       child: moyensIntervention.isEmpty?Center(child: Text('Pas de moyens séléctionnés')):ListView.builder
                         (
                           itemCount: moyensIntervention.length,
@@ -379,9 +391,9 @@ class NewInterventionPageState extends State<NewInterventionPage> {
                                 fontSize: 16.0
                             ),
                             moyensIntervention.clear(),
-                        if (Navigator.canPop(context)) {
-                        Navigator.pop(context)
-                        }
+                            if (Navigator.canPop(context)) {
+                              Navigator.pop(context)
+                            }
                           };
                         }
                       });
