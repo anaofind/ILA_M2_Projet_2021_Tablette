@@ -46,7 +46,10 @@ class _ListInterventionPage extends State<ListInterventionPage> {
           );
         }
 
-        return SingleChildScrollView(
+        return ListView(
+          padding: EdgeInsets.all(20.0),
+          children: <Widget>[
+            SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
@@ -62,8 +65,8 @@ class _ListInterventionPage extends State<ListInterventionPage> {
 
                       _laListe.add(
                           Intervention(document.id, document.data()['nom'],
-                          document.data()['adresse'], document.data()['codeSinistre'],
-                          document.data()['date'].toDate(), document.data()['moyens'])
+                              document.data()['adresse'], document.data()['codeSinistre'],
+                              document.data()['date'].toDate(), document.data()['moyens'])
                       );
 
                       return DataRow(
@@ -85,6 +88,8 @@ class _ListInterventionPage extends State<ListInterventionPage> {
                 _showAddButton()
               ],
             )
+            )
+          ],
         );
       }
     );
