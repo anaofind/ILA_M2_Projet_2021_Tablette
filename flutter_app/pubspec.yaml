@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   uuid: ^2.2.2
-
+  intl: ^0.16.1
   sidenavbar: ^0.0.2
   provider: ^3.1.0
 

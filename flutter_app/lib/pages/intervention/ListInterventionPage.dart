@@ -8,6 +8,7 @@ import '../../services/InterventionService.dart';
 import '../NewInterventionPage.dart';
 import '../SitacPage.dart';
 import 'InterventionPage.dart';
+import 'package:intl/intl.dart';
 
 
 class ListInterventionPage extends StatefulWidget {
@@ -26,7 +27,8 @@ class _ListInterventionPage extends State<ListInterventionPage> {
   List<Intervention> _laListe = []; //retrieve list on firebase
   BuildContext _context;
   bool _isAdmin = true;
-
+  int _currentSortColumn = 3;
+  bool _isAscending = true;
 
   List<DataRow> _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
     return  snapshot.map((data) => _buildListItem(context, data)).toList();
@@ -35,24 +37,26 @@ class _ListInterventionPage extends State<ListInterventionPage> {
 
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+
     final intervention = Intervention.fromSnapshot(data);
-
-
-
     return DataRow(cells: [
       DataCell(Text(intervention.nom)),
       DataCell(Text(intervention.codeSinistre)),
       DataCell(Text(intervention.adresse)),
-      DataCell(Text(intervention.date.toString())),
-    ]);
+      DataCell(Text(DateFormat('yyyy-MM-dd  kk:mm:ss').format(intervention.date)))
+    ],
+        onSelectChanged: (ind) {
+          setState(() {
+            showIntervention(data);
+          });
+        });
   }
 
 
   void showIntervention(DocumentSnapshot doc) {
     Navigator.push(_context, MaterialPageRoute(builder: (BuildContext context) {
       return SitacPage(
-          Intervention(doc.id, doc.data()['nom'], doc.data()['adresse'],
-              doc.data()['codeSinistre'], doc.data()['date'].toDate(), doc.data()['moyens'])
+          Intervention.fromSnapshot(doc)
           );
     }));
   }
@@ -79,13 +83,37 @@ class _ListInterventionPage extends State<ListInterventionPage> {
               children: <Widget>[
                 Container(
                   child: DataTable(
-                    columns: [
-                      DataColumn(label: Text("Nom")),
-                      DataColumn(label: Text("Code sinistre")),
-                      DataColumn(label: Text("Adresse")),
-                      DataColumn(label: Text("Date")),
+                    sortColumnIndex: _currentSortColumn,
+                    sortAscending: _isAscending,
+                    showCheckboxColumn: false,
+                    columns: const <DataColumn>[
+                      DataColumn(
+                        label: Text(
+                          'Nom',
+                          style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Code sinistre',
+                          style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Adresse',
+                          style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Date',
+                          style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                        ),)
+
                     ],
-                    rows: snapshot.data.docs.map((DocumentSnapshot document) {
+                    rows: _buildList(context, snapshot.data.docs)
+                    /*snapshot.data.docs.map((DocumentSnapshot document) {
 
                       /*_laListe.add(
                           Intervention(document.id, document.data()['nom'],
@@ -106,7 +134,8 @@ class _ListInterventionPage extends State<ListInterventionPage> {
                             });
                           }
                       );
-                    }).toList(),
+                    }
+                    ).toList(),*/
                   ),
                 ),
                 _showAddButton()
