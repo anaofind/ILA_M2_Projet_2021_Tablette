@@ -22,7 +22,12 @@ class _InterventionPage extends State<InterventionPage> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text(_monIntervention.getNom),
+        title: Text('SITAC ' + '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' +
+            '' +  _monIntervention.getDate.toString() +
+            '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' + _monIntervention.getNom +
+            '\n\t\t\t\t\t\t\t\t\t\t\t\t' + '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' +
+            '' + _monIntervention.getAdresse),
+      backgroundColor: Colors.red,
       ),
       body: Container(),
     );
