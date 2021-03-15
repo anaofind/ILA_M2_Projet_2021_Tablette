@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/Role.dart';
+import 'package:flutter_app/models/Role.dart';
 import 'package:flutter_app/services/AccountService.dart';
 import 'package:flutter_app/validator/DataValidator.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';

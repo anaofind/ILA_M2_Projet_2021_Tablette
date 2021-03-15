@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../model/UserData.dart';
+import '../models/UserData.dart';
 
 class Database{
   final CollectionReference users = FirebaseFirestore.instance.collection("users");

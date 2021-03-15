@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_app/model/Role.dart';
-import 'package:flutter_app/model/UserData.dart';
+import 'package:flutter_app/models/Role.dart';
+import 'package:flutter_app/models/UserData.dart';
 
-import '../model/UserData.dart';
+import '../models/UserData.dart';
 import 'Database.dart';
 
 class AccountService {
