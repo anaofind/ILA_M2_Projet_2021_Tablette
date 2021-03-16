@@ -42,10 +42,10 @@ class SitacPageState extends State<SitacPage> {
             bottom: TabBar(
               tabs: [
                 Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure_Basic.png'),)),
-                Tab(icon: Image(image: new AssetImage('Icone_Png/Danger/CibleAction_Basic.png'),)),
-                Tab(icon: Image(image: new AssetImage('Icone_Png/Danger/Danger_Basic.png'),)),
+                Tab(icon: Image(image: new AssetImage('Icone_Png/Danger/S_Action_Noir_1.png'),)),
+                Tab(icon: Image(image: new AssetImage('Icone_Png/Danger/S_Danger_Noir_1.png'),)),
                 Tab(icon: Image(image: new AssetImage('Icone_Png/PointEau.png'),)),
-                Tab(icon: Image(image: new AssetImage('Icone_Png/Defense/Perimetrale_Basic_Prevue.png'),)),
+                Tab(icon: Image(image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Noir_0.png'),)),
                 Tab(icon: Image(image: new AssetImage('Icone_Png/Chemin/Chemin_Encours.png'),)),
                 Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure_Civil_EnCours.png'),)),
 
@@ -76,22 +76,22 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'FPT_Unique_Encours';
+                                      SelectorMoyenSymbol.name = 'M_FPT_Rouge_1';
                                       SelectorMoyenSymbol.type = 'moyen';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/FPT/FPT_Unique_Encours.png' ),
+                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/FPT/M_FPT_Rouge_1.png' ),
                                       width: 90,
                                       height: 90,
                                     ),
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'FPT_Unique_Prevue';
+                                      SelectorMoyenSymbol.name = 'M_FPT_Rouge_0';
                                       SelectorMoyenSymbol.type = 'moyen';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/FPT/FPT_Unique_Prevue.png'),
+                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/FPT/M_FPT_Rouge_0.png'),
                                       width: 90,
                                       height: 90,
                                     ),
@@ -103,48 +103,22 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'VLGC_Unique_Rouge_Encours';
+                                      SelectorMoyenSymbol.name = 'M_VLCG_Rouge_1';
                                       SelectorMoyenSymbol.type = 'moyen';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/VLCG/VLGC_Unique_Rouge_Encours.png'),
+                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/VLCG/M_VLCG_Rouge_1.png'),
                                       width: 90,
                                       height: 90,
                                     ),
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'VLGC_Unique_Rouge_Prevue';
+                                      SelectorMoyenSymbol.name = 'M_VLCG_Rouge_0';
                                       SelectorMoyenSymbol.type = 'moyen';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/VLCG/VLGC_Unique_Rouge_Prevue.png'),
-                                      width: 90,
-                                      height: 90,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      SelectorMoyenSymbol.name = 'VLGC_Unique_Vert_Encours';
-                                      SelectorMoyenSymbol.type = 'moyen';
-                                    },
-                                    child: Image(
-                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/VLCG/VLGC_Unique_Vert_Encours.png'),
-                                      width: 90,
-                                      height: 90,
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      SelectorMoyenSymbol.name = 'VLGC_Unique_Vert_Prevue';
-                                      SelectorMoyenSymbol.type = 'moyen';
-                                    },
-                                    child: Image(
-                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/VLCG/VLGC_Unique_Vert_Prevue.png'),
+                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/VLCG/M_VLCG_Rouge_0.png'),
                                       width: 90,
                                       height: 90,
                                     ),
@@ -155,22 +129,48 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'VSAV_Unique_Encours';
+                                      SelectorMoyenSymbol.name = 'M_VLCG_Vert_1';
                                       SelectorMoyenSymbol.type = 'moyen';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/VSAV/VSAV_Unique_Encours.png'),
+                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/VLCG/M_VLCG_Vert_1.png'),
                                       width: 90,
                                       height: 90,
                                     ),
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'VSAV_Unique_Prevue';
+                                      SelectorMoyenSymbol.name = 'M_VLCG_Vert_0';
                                       SelectorMoyenSymbol.type = 'moyen';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/VSAV/VSAV_Unique_Prevue.png'),
+                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/VLCG/M_VLCG_Vert_0.png'),
+                                      width: 90,
+                                      height: 90,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      SelectorMoyenSymbol.name = 'M_VSAV_Vert_1';
+                                      SelectorMoyenSymbol.type = 'moyen';
+                                    },
+                                    child: Image(
+                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/VSAV/M_VSAV_Vert_1.png'),
+                                      width: 90,
+                                      height: 90,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      SelectorMoyenSymbol.name = 'M_VSAV_Vert_0';
+                                      SelectorMoyenSymbol.type = 'moyen';
+                                    },
+                                    child: Image(
+                                      image: new AssetImage('Icone_Png/Infrastructure/Vehicule/VSAV/M_VSAV_Vert_0.png'),
                                       width: 90,
                                       height: 90,
                                     ),
@@ -181,22 +181,22 @@ class SitacPageState extends State<SitacPage> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        SelectorMoyenSymbol.name = 'PosteCommandement_Seul_Encours';
+                                        SelectorMoyenSymbol.name = 'S_Poste_Violet_1';
                                         SelectorMoyenSymbol.type = 'symbol';
                                       },
                                       child: Image(
-                                        image: new AssetImage('Icone_Png/PosteCommandement_Seul_Encours.png'),
+                                        image: new AssetImage('Icone_Png/S_Poste_Violet_1.png'),
                                         width: 90,
                                         height: 90,
                                       ),
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        SelectorMoyenSymbol.name = 'PosteCommandement_Seul_Prevue';
+                                        SelectorMoyenSymbol.name = 'S_Poste_Violet_0';
                                         SelectorMoyenSymbol.type = 'symbol';
                                       },
                                       child: Image(
-                                        image: new AssetImage('Icone_Png/PosteCommandement_Seul_Prevue.png'),
+                                        image: new AssetImage('Icone_Png/S_Poste_Violet_0.png'),
                                         width: 90,
                                         height: 90,
                                       ),
@@ -213,11 +213,11 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Cible_Action_Incendie';
+                                      SelectorMoyenSymbol.name = 'S_Action_Rouge_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Danger/CibleAction_Incendie.png' ),
+                                      image: new AssetImage('Icone_Png/Danger/S_Action_Rouge_1.png' ),
                                       width: 100,
                                       height: 100,
                                     ),
@@ -228,11 +228,11 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Cible_Action_Civil';
+                                      SelectorMoyenSymbol.name = 'S_Action_Vert_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Danger/CibleAction_Civil.png' ),
+                                      image: new AssetImage('Icone_Png/Danger/S_Action_Vert_1.png' ),
                                       width: 100,
                                       height: 100,
                                     ),
@@ -243,11 +243,11 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Cible_Action_Eau';
+                                      SelectorMoyenSymbol.name = 'S_Action_Bleu_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Danger/CibleAction_Eau.png'),
+                                      image: new AssetImage('Icone_Png/Danger/S_Action_Bleu_1.png'),
                                       width: 100,
                                       height: 100,
                                     ),
@@ -258,11 +258,11 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Cible_Action_Particulier';
+                                      SelectorMoyenSymbol.name = 'S_Action_Orange_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Danger/CibleAction_Particulier.png'),
+                                      image: new AssetImage('Icone_Png/Danger/S_Action_Orange_1.png'),
                                       width: 100,
                                       height: 100,
                                     ),
@@ -278,48 +278,22 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Danger_Incendie';
+                                      SelectorMoyenSymbol.name = 'S_Danger_Rouge_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Danger/Danger_Incendie.png' ),
+                                      image: new AssetImage('Icone_Png/Danger/S_Danger_Rouge_1.png' ),
                                       width: 80,
                                       height: 80,
                                     ),
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'PointSensible_Incendie';
+                                      SelectorMoyenSymbol.name = 'S_PointSensible_Rouge_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Danger/PointSensible_Incendie.png' ),
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      SelectorMoyenSymbol.name = 'Danger_Civil';
-                                      SelectorMoyenSymbol.type = 'symbol';
-                                    },
-                                    child: Image(
-                                      image: new AssetImage('Icone_Png/Danger/Danger_Civil.png'),
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      SelectorMoyenSymbol.name = 'PointSensible_Civil';
-                                      SelectorMoyenSymbol.type = 'symbol';
-                                    },
-                                    child: Image(
-                                      image: new AssetImage('Icone_Png/Danger/PointSensible_Civil.png'),
+                                      image: new AssetImage('Icone_Png/Danger/S_PointSensible_Rouge_1.png' ),
                                       width: 80,
                                       height: 80,
                                     ),
@@ -330,22 +304,22 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Danger_Eau';
+                                      SelectorMoyenSymbol.name = 'S_Danger_Vert_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Danger/Danger_Eau.png'),
+                                      image: new AssetImage('Icone_Png/Danger/S_Danger_Vert_1.png'),
                                       width: 80,
                                       height: 80,
                                     ),
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'PointSensible_Eau';
+                                      SelectorMoyenSymbol.name = 'S_PointSensible_Vert_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Danger/PointSensible_Eau.png'),
+                                      image: new AssetImage('Icone_Png/Danger/S_PointSensible_Vert_1.png'),
                                       width: 80,
                                       height: 80,
                                     ),
@@ -356,22 +330,48 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Danger_Particulier';
+                                      SelectorMoyenSymbol.name = 'S_Danger_Bleu_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Danger/Danger_Particulier.png'),
+                                      image: new AssetImage('Icone_Png/Danger/S_Danger_Bleu_1.png'),
                                       width: 80,
                                       height: 80,
                                     ),
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'PointSensible_Particulier';
+                                      SelectorMoyenSymbol.name = 'S_PointSensible_Bleu_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Danger/PointSensible_Particulier.png'),
+                                      image: new AssetImage('Icone_Png/Danger/S_PointSensible_Bleu_1.png'),
+                                      width: 80,
+                                      height: 80,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      SelectorMoyenSymbol.name = 'S_Danger_Orange_1';
+                                      SelectorMoyenSymbol.type = 'symbol';
+                                    },
+                                    child: Image(
+                                      image: new AssetImage('Icone_Png/Danger/S_Danger_Orange_1.png'),
+                                      width: 80,
+                                      height: 80,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      SelectorMoyenSymbol.name = 'S_PointSensible_Orange_1';
+                                      SelectorMoyenSymbol.type = 'symbol';
+                                    },
+                                    child: Image(
+                                      image: new AssetImage('Icone_Png/Danger/S_PointSensible_Orange_1.png'),
                                       width: 80,
                                       height: 80,
                                     ),
@@ -387,12 +387,12 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'PointEau_Perienne';
+                                      SelectorMoyenSymbol.name = 'S_Perienne_Bleu_1.png';
                                       SelectorMoyenSymbol.type = 'symbol';
 
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/PointEau_Perienne.png' ),
+                                      image: new AssetImage('Icone_Png/S_Perienne_Bleu_1.png' ),
                                       width: 90,
                                       height: 90,
                                     ),
@@ -403,11 +403,11 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'PointEau_NonPerienne';
+                                      SelectorMoyenSymbol.name = 'S_NonPerienne_Bleu_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/PointEau_NonPerienne.png'),
+                                      image: new AssetImage('Icone_Png/S_NonPerienne_Bleu_1.png'),
                                       width: 90,
                                       height: 90,
                                     ),
@@ -418,11 +418,11 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'PointEau_Ravitaillement';
+                                      SelectorMoyenSymbol.name = 'S_Ravitaillement_Bleu_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/PointEau_Ravitaillement.png'),
+                                      image: new AssetImage('Icone_Png/S_Ravitaillement_Bleu_1.png'),
                                       width: 90,
                                       height: 90,
                                     ),
@@ -438,48 +438,22 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Defense_Incendie_Encours';
+                                      SelectorMoyenSymbol.name = 'S_Defense_Rouge_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Defense_Incendie_Encours.png' ),
+                                      image: new AssetImage('Icone_Png/Defense/S_Defense_Rouge_1.png' ),
                                       width: 80,
                                       height: 80,
                                     ),
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Defense_Incendie_Prevue';
+                                      SelectorMoyenSymbol.name = 'S_Defense_Rouge_0';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Defense_Incendie_Prevue.png' ),
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      SelectorMoyenSymbol.name = 'Defense_Civil_Encours';
-                                      SelectorMoyenSymbol.type = 'symbol';
-                                    },
-                                    child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Defense_Civil_Encours.png'),
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      SelectorMoyenSymbol.name = 'Defense_Civil_Prevue';
-                                      SelectorMoyenSymbol.type = 'symbol';
-                                    },
-                                    child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Defense_Civil_Prevue.png'),
+                                      image: new AssetImage('Icone_Png/Defense/S_Defense_Rouge_0.png' ),
                                       width: 80,
                                       height: 80,
                                     ),
@@ -490,48 +464,22 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Defense_Eau_Encours';
+                                      SelectorMoyenSymbol.name = 'S_Defense_Vert_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Defense_Eau_Encours.png'),
+                                      image: new AssetImage('Icone_Png/Defense/S_Defense_Vert_1.png'),
                                       width: 80,
                                       height: 80,
                                     ),
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Defense_Eau_Prevue';
+                                      SelectorMoyenSymbol.name = 'S_Defense_Vert_0';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Defense_Eau_Prevue.png'),
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      SelectorMoyenSymbol.name = 'Defense_Particulier_Encours';
-                                      SelectorMoyenSymbol.type = 'symbol';
-                                    },
-                                    child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Defense_Particulier_Encours.png'),
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      SelectorMoyenSymbol.name = 'Defense_Particulier_Prevue';
-                                      SelectorMoyenSymbol.type = 'symbol';
-                                    },
-                                    child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Defense_Particulier_Prevue.png'),
+                                      image: new AssetImage('Icone_Png/Defense/S_Defense_Vert_0.png'),
                                       width: 80,
                                       height: 80,
                                     ),
@@ -542,48 +490,22 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Perimetrale_Incendie_Encours';
+                                      SelectorMoyenSymbol.name = 'S_Defense_Bleu_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Perimetrale_Incendie_Encours.png' ),
+                                      image: new AssetImage('Icone_Png/Defense/S_Defense_Bleu_1.png'),
                                       width: 80,
                                       height: 80,
                                     ),
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Perimetrale_Incendie_Prevue';
+                                      SelectorMoyenSymbol.name = 'S_Defense_Bleu_0';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Perimetrale_Incendie_Prevue.png' ),
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      SelectorMoyenSymbol.name = 'Perimetrale_Civil_Encours';
-                                      SelectorMoyenSymbol.type = 'symbol';
-                                    },
-                                    child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Perimetrale_Civil_Encours.png'),
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      SelectorMoyenSymbol.name = 'Perimetrale_Civil_Prevue';
-                                      SelectorMoyenSymbol.type = 'symbol';
-                                    },
-                                    child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Perimetrale_Civil_Prevue.png'),
+                                      image: new AssetImage('Icone_Png/Defense/S_Defense_Bleu_0.png'),
                                       width: 80,
                                       height: 80,
                                     ),
@@ -594,22 +516,22 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Perimetrale_Eau_Encours';
+                                      SelectorMoyenSymbol.name = 'S_Defense_Orange_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Perimetrale_Eau_Encours.png'),
+                                      image: new AssetImage('Icone_Png/Defense/S_Defense_Orange_1.png'),
                                       width: 80,
                                       height: 80,
                                     ),
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Perimetrale_Eau_Prevue';
+                                      SelectorMoyenSymbol.name = 'S_Defense_Orange_0';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Perimetrale_Eau_Prevue.png'),
+                                      image: new AssetImage('Icone_Png/Defense/S_Defense_Orange_0.png'),
                                       width: 80,
                                       height: 80,
                                     ),
@@ -620,22 +542,100 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Perimetrale_Particulier_Encours';
+                                      SelectorMoyenSymbol.name = 'S_Perimetrale_Rouge_1';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Perimetrale_Particulier_Encours.png'),
+                                      image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Rouge_1.png' ),
                                       width: 80,
                                       height: 80,
                                     ),
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'Perimetrale_Particulier_Prevue';
+                                      SelectorMoyenSymbol.name = 'S_Perimetrale_Rouge_0';
                                       SelectorMoyenSymbol.type = 'symbol';
                                     },
                                     child: Image(
-                                      image: new AssetImage('Icone_Png/Defense/Perimetrale_Particulier_Prevue.png'),
+                                      image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Rouge_0.png' ),
+                                      width: 80,
+                                      height: 80,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      SelectorMoyenSymbol.name = 'S_Perimetrale_Vert_1';
+                                      SelectorMoyenSymbol.type = 'symbol';
+                                    },
+                                    child: Image(
+                                      image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Vert_1.png'),
+                                      width: 80,
+                                      height: 80,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      SelectorMoyenSymbol.name = 'S_Perimetrale_Vert_0';
+                                      SelectorMoyenSymbol.type = 'symbol';
+                                    },
+                                    child: Image(
+                                      image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Vert_0.png'),
+                                      width: 80,
+                                      height: 80,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      SelectorMoyenSymbol.name = 'S_Perimetrale_Bleu_1';
+                                      SelectorMoyenSymbol.type = 'symbol';
+                                    },
+                                    child: Image(
+                                      image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Bleu_1.png'),
+                                      width: 80,
+                                      height: 80,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      SelectorMoyenSymbol.name = 'S_Perimetrale_Bleu_0';
+                                      SelectorMoyenSymbol.type = 'symbol';
+                                    },
+                                    child: Image(
+                                      image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Bleu_0.png'),
+                                      width: 80,
+                                      height: 80,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      SelectorMoyenSymbol.name = 'S_Perimetrale_Orange_1';
+                                      SelectorMoyenSymbol.type = 'symbol';
+                                    },
+                                    child: Image(
+                                      image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Orange_1.png'),
+                                      width: 80,
+                                      height: 80,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      SelectorMoyenSymbol.name = 'S_Perimetrale_Orange_0';
+                                      SelectorMoyenSymbol.type = 'symbol';
+                                    },
+                                    child: Image(
+                                      image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Orange_0.png'),
                                       width: 80,
                                       height: 80,
                                     ),

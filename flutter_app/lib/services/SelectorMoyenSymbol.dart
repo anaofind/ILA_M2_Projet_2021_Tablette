@@ -14,98 +14,128 @@ class SelectorMoyenSymbol {
   static String getPathImageByName(String name) {
     String pathImage;
     switch (name) {
-      case 'Cible_Action_Incendie' :
-        pathImage = 'Icone_Png/Danger/CibleAction_Incendie.png';
+      case 'M_FPT_Rouge_1' :
+        pathImage = 'Icone_Png/Infrastructure/Vehicule/FPT/M_FPT_Rouge_1.png';
         break;
-      case 'Cible_Action_Civil' :
-        pathImage = 'Icone_Png/Danger/CibleAction_Civil.png';
+      case 'M_FPT_Rouge_0' :
+        pathImage = 'Icone_Png/Infrastructure/Vehicule/FPT/M_FPT_Rouge_0.png';
         break;
-      case 'Cible_Action_Eau' :
-        pathImage = 'Icone_Png/Danger/CibleAction_Eau.png';
+      case 'M_VLCG_Rouge_1' :
+        pathImage = 'Icone_Png/Infrastructure/Vehicule/VLCG/M_VLCG_Rouge_1.png';
         break;
-      case 'Cible_Action_Particulier' :
-        pathImage = 'Icone_Png/Danger/CibleAction_Particulier.png';
+      case 'M_VLCG_Rouge_0' :
+        pathImage = 'Icone_Png/Infrastructure/Vehicule/VLCG/M_VLCG_Rouge_0.png';
         break;
-      case 'Danger_Incendie' :
-        pathImage = 'Icone_Png/Danger/Danger_Incendie.png';
+      case 'M_VLCG_Vert_1' :
+        pathImage = 'Icone_Png/Infrastructure/Vehicule/VLCG/M_VLCG_Vert_1.png';
         break;
-      case 'PointSensible_Incendie' :
-        pathImage = 'Icone_Png/Danger/PointSensible_Incendie.png';
+      case 'M_VLCG_Vert_0' :
+        pathImage = 'Icone_Png/Infrastructure/Vehicule/VLCG/M_VLCG_Vert_0.png';
         break;
-      case 'Danger_Civil' :
-        pathImage = 'Icone_Png/Danger/Danger_Civil.png';
+      case 'M_VSAV_Vert_1' :
+        pathImage = 'Icone_Png/Infrastructure/Vehicule/VSAV/M_VSAV_Vert_1.png';
         break;
-      case 'PointSensible_Civil' :
-        pathImage = 'Icone_Png/Danger/PointSensible_Civil.png';
+      case 'M_VSAV_Vert_0' :
+        pathImage = 'Icone_Png/Infrastructure/Vehicule/VSAV/M_VSAV_Vert_0.png';
         break;
-      case 'Danger_Eau' :
-        pathImage = 'Icone_Png/Danger/Danger_Eau.png';
+      case 'S_Poste_Violet_1' :
+        pathImage = 'Icone_Png/S_Poste_Violet_1.png';
         break;
-      case 'PointSensible_Eau' :
-        pathImage = 'Icone_Png/Danger/PointSensible_Eau.png';
+      case 'S_Poste_Violet_0' :
+        pathImage = 'Icone_Png/S_Poste_Violet_0.png';
         break;
-      case 'Danger_Particulier' :
-        pathImage = 'Icone_Png/Danger/Danger_Particulier.png';
+      case 'S_Action_Rouge_1' :
+        pathImage = 'Icone_Png/Danger/S_Action_Rouge_1.png';
         break;
-      case 'PointSensible_Particulier' :
-        pathImage = 'Icone_Png/Danger/PointSensible_Particulier.png';
+      case 'S_Action_Vert_1' :
+        pathImage = 'Icone_Png/Danger/S_Action_Vert_1.png';
         break;
-      case 'PointEau_Perienne' :
-        pathImage = 'Icone_Png/PointEau_Perienne.png';
+      case 'S_Action_Bleu_1' :
+        pathImage = 'Icone_Png/Danger/S_Action_Bleu_1.png';
         break;
-      case 'PointEau_NonPerienne' :
-        pathImage = 'Icone_Png/PointEau_NonPerienne.png';
+      case 'S_Action_Orange_1' :
+        pathImage = 'Icone_Png/Danger/S_Action_Orange_1.png';
         break;
-      case 'PointEau_Ravitaillement' :
-        pathImage = 'Icone_Png/PointEau_Ravitaillement.png';
+      case 'S_Danger_Rouge_1' :
+        pathImage = 'Icone_Png/Danger/S_Danger_Rouge_1.png';
         break;
-      case 'Defense_Incendie_Encours' :
-        pathImage = 'Icone_Png/Defense/Defense_Incendie_Encours.png';
+      case 'S_PointSensible_Rouge_1' :
+        pathImage = 'Icone_Png/Danger/S_PointSensible_Rouge_1.png';
         break;
-      case 'Defense_Incendie_Prevue' :
-        pathImage = 'Icone_Png/Defense/Defense_Incendie_Prevue.png';
+      case 'S_Danger_Vert_1' :
+        pathImage = 'Icone_Png/Danger/S_Danger_Vert_1.png';
         break;
-      case 'Defense_Civil_Encours' :
-        pathImage = 'Icone_Png/Defense/Defense_Civil_Encours.png';
+      case 'S_PointSensible_Vert_1' :
+        pathImage = 'Icone_Png/Danger/S_PointSensible_Vert_1.png';
         break;
-      case 'Defense_Civil_Prevue' :
-        pathImage = 'Icone_Png/Defense/Defense_Civil_Prevue.png';
+      case 'S_Danger_Bleu_1' :
+        pathImage = 'Icone_Png/Danger/S_Danger_Bleu_1.png';
         break;
-      case 'Defense_Eau_Encours' :
-        pathImage = 'Icone_Png/Defense/Defense_Eau_Encours.png';
+      case 'S_PointSensible_Bleu_1' :
+        pathImage = 'Icone_Png/Danger/S_PointSensible_Bleu_1.png';
         break;
-      case 'Defense_Eau_Prevue' :
-        pathImage = 'Icone_Png/Defense/Defense_Eau_Prevue.png';
+      case 'S_Danger_Orange_1' :
+        pathImage = 'Icone_Png/Danger/S_Danger_Orange_1.png';
         break;
-      case 'Defense_Particulier_Encours' :
-        pathImage = 'Icone_Png/Defense/Defense_Particulier_Encours.png';
+      case 'S_PointSensible_Orange_1' :
+        pathImage = 'Icone_Png/Danger/S_PointSensible_Orange_1.png';
         break;
-      case 'Defense_Particulier_Prevue' :
-        pathImage = 'Icone_Png/Defense/Defense_Particulier_Prevue.png';
+      case 'S_Perienne_Bleu_1' :
+        pathImage = 'Icone_Png/S_Perienne_Bleu_1.png';
         break;
-      case 'Perimetrale_Incendie_Encours' :
-        pathImage = 'Icone_Png/Defense/Perimetrale_Incendie_Encours.png';
+      case 'S_NonPerienne_Bleu_1' :
+        pathImage = 'Icone_Png/S_NonPerienne_Bleu_1.png';
         break;
-      case 'Perimetrale_Incendie_Prevue' :
-        pathImage = 'Icone_Png/Defense/Perimetrale_Incendie_Prevue.png';
+      case 'S_Ravitaillement_Bleu_1' :
+        pathImage = 'Icone_Png/S_Ravitaillement_Bleu_1.png';
         break;
-      case 'Perimetrale_Civil_Encours' :
-        pathImage = 'Icone_Png/Defense/Perimetrale_Civil_Encours.png';
+      case 'S_Defense_Rouge_1' :
+        pathImage = 'Icone_Png/Defense/S_Defense_Rouge_1.png';
         break;
-      case 'Perimetrale_Civil_Prevue' :
-        pathImage = 'Icone_Png/Defense/Perimetrale_Civil_Prevue.png';
+      case 'S_Defense_Rouge_0' :
+        pathImage = 'Icone_Png/Defense/S_Defense_Rouge_0.png';
         break;
-      case 'Perimetrale_Eau_Encours' :
-        pathImage = 'Icone_Png/Defense/Perimetrale_Eau_Encours.png';
+      case 'S_Defense_Vert_1' :
+        pathImage = 'Icone_Png/Defense/S_Defense_Vert_1.png';
         break;
-      case 'Perimetrale_Eau_Prevue' :
-        pathImage = 'Icone_Png/Defense/Perimetrale_Eau_Prevue.png';
+      case 'S_Defense_Vert_0' :
+        pathImage = 'Icone_Png/Defense/S_Defense_Vert_0.png';
         break;
-      case 'Perimetrale_Particulier_Encours' :
-        pathImage = 'Icone_Png/Defense/Perimetrale_Particulier_Encours.png';
+      case 'S_Defense_Bleu_1' :
+        pathImage = 'Icone_Png/Defense/S_Defense_Bleu_1.png';
         break;
-      case 'Perimetrale_Particulier_Prevue' :
-        pathImage = 'Icone_Png/Defense/Perimetrale_Particulier_Prevue.png';
+      case 'S_Defense_Bleu_0' :
+        pathImage = 'Icone_Png/Defense/S_Defense_Bleu_0.png';
+        break;
+      case 'S_Defense_Orange_1' :
+        pathImage = 'Icone_Png/Defense/S_Defense_Orange_1.png';
+        break;
+      case 'S_Defense_Orange_0' :
+        pathImage = 'Icone_Png/Defense/S_Defense_Orange_0.png';
+        break;
+      case 'S_Perimetrale_Rouge_1' :
+        pathImage = 'Icone_Png/Defense/S_Perimetrale_Rouge_1.png';
+        break;
+      case 'S_Perimetrale_Rouge_0' :
+        pathImage = 'Icone_Png/Defense/S_Perimetrale_Rouge_0.png';
+        break;
+      case 'S_Perimetrale_Vert_1' :
+        pathImage = 'Icone_Png/Defense/S_Perimetrale_Vert_1.png';
+        break;
+      case 'S_Perimetrale_Vert_0' :
+        pathImage = 'Icone_Png/Defense/S_Perimetrale_Vert_0.png';
+        break;
+      case 'S_Perimetrale_Bleu_1' :
+        pathImage = 'Icone_Png/Defense/S_Perimetrale_Bleu_1.png';
+        break;
+      case 'S_Perimetrale_Bleu_0' :
+        pathImage = 'Icone_Png/Defense/S_Perimetrale_Bleu_0.png';
+        break;
+      case 'S_Perimetrale_Orange_1' :
+        pathImage = 'Icone_Png/Defense/S_Perimetrale_Orange_1.png';
+        break;
+      case 'S_Perimetrale_Orange_0' :
+        pathImage = 'Icone_Png/Defense/S_Perimetrale_Orange_0.png';
         break;
       case 'Chemin_Encours' :
         pathImage = 'Icone_Png/Chemin/Chemin_Encours.png';
@@ -121,36 +151,6 @@ class SelectorMoyenSymbol {
         break;
       case 'Infrastructure_Civil_EnCours' :
         pathImage = 'Icone_Png/Infrastructure_Civil_EnCours.png';
-        break;
-      case 'FPT_Unique_Encours' :
-        pathImage = 'Icone_Png/Infrastructure/Vehicule/FPT/FPT_Unique_Encours.png';
-        break;
-      case 'FPT_Unique_Prevue' :
-        pathImage = 'Icone_Png/Infrastructure/Vehicule/FPT/FPT_Unique_Prevue.png';
-        break;
-      case 'VLGC_Unique_Rouge_Encours' :
-        pathImage = 'Icone_Png/Infrastructure/Vehicule/VLCG/VLGC_Unique_Rouge_Encours.png';
-        break;
-      case 'VLGC_Unique_Rouge_Prevue' :
-        pathImage = 'Icone_Png/Infrastructure/Vehicule/VLCG/VLGC_Unique_Rouge_Prevue.png';
-        break;
-      case 'VLGC_Unique_Vert_Encours' :
-        pathImage = 'Icone_Png/Infrastructure/Vehicule/VLCG/VLGC_Unique_Vert_Encours.png';
-        break;
-      case 'VLGC_Unique_Vert_Prevue' :
-        pathImage = 'Icone_Png/Infrastructure/Vehicule/VLCG/VLGC_Unique_Vert_Prevue.png';
-        break;
-      case 'VSAV_Unique_Encours' :
-        pathImage = 'Icone_Png/Infrastructure/Vehicule/VSAV/VSAV_Unique_Encours.png';
-        break;
-      case 'VSAV_Unique_Prevue' :
-        pathImage = 'Icone_Png/Infrastructure/Vehicule/VSAV/VSAV_Unique_Prevue.png';
-        break;
-      case 'PosteCommandement_Seul_Encours' :
-        pathImage = 'Icone_Png/PosteCommandement_Seul_Encours.png';
-        break;
-      case 'PosteCommandement_Seul_Prevue' :
-        pathImage = 'Icone_Png/PosteCommandement_Seul_Prevue.png';
         break;
     }
     return pathImage;
