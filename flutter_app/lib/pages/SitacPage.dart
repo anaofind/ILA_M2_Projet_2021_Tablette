@@ -387,9 +387,8 @@ class SitacPageState extends State<SitacPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      SelectorMoyenSymbol.name = 'S_Perienne_Bleu_1.png';
+                                      SelectorMoyenSymbol.name = 'S_Perienne_Bleu_1';
                                       SelectorMoyenSymbol.type = 'symbol';
-
                                     },
                                     child: Image(
                                       image: new AssetImage('Icone_Png/S_Perienne_Bleu_1.png' ),
