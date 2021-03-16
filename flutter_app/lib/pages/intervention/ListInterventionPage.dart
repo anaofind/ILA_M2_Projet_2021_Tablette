@@ -2,7 +2,11 @@ import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/main.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
+import 'file:///D:/Etudes/cours/Master/M2/Projet/ILA_M2_Projet_2021_Tablette/flutter_app/lib/services/NavigatorPage.dart';
+import 'package:flutter_app/pages/HomePage.dart';
+import 'package:flutter_app/services/SelectorIntervention.dart';
 import '../../models/Intervention.dart';
 import '../../services/InterventionService.dart';
 import '../NewInterventionPage.dart';
@@ -54,11 +58,9 @@ class _ListInterventionPage extends State<ListInterventionPage> {
 
 
   void showIntervention(DocumentSnapshot doc) {
-    Navigator.push(_context, MaterialPageRoute(builder: (BuildContext context) {
-      return SitacPage(
-          Intervention.fromSnapshot(doc)
-          );
-    }));
+    Intervention intervention = Intervention.fromSnapshot(doc);
+    SelectorIntervention.selectIntervention(intervention);
+    NavigatorPage.navigateTo(1);
   }
 
   @override

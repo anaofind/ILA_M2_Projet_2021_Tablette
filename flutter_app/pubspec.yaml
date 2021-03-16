@@ -34,6 +34,9 @@ dependencies:
   cloud_firestore: ^0.14.0+2
 
   rflutter_alert: ^1.0.1
+
+  flutter_map: any
+  latlong: ^0.6.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

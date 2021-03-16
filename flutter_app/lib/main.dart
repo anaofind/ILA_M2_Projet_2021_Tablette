@@ -3,13 +3,16 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'file:///D:/Etudes/cours/Master/M2/Projet/ILA_M2_Projet_2021_Tablette/flutter_app/lib/services/NavigatorPage.dart';
 import 'package:flutter_app/models/UserData.dart';
 import 'package:flutter_app/pages/HomePage.dart';
+import 'package:flutter_app/pages/MapPage.dart';
 import 'package:flutter_app/pages/SitacPage.dart';
 import 'package:flutter_app/pages/UserPage.dart';
 import 'package:flutter_app/pages/connection/SignInPage.dart';
 import 'package:flutter_app/services/AccountService.dart';
 import 'package:flutter_app/pages/intervention/ListInterventionPage.dart';
+import 'package:flutter_app/services/SelectorIntervention.dart';
 import 'package:provider/provider.dart';
 
 import 'models/Intervention.dart';
@@ -47,20 +50,36 @@ class AppHomePage extends StatefulWidget {
 }
 
 class AppHomePageState extends State<AppHomePage> {
-  int selectedIndex = 0;
-  onNavTap(int index) => setState(()=> selectedIndex = index);
+  onNavTap(int index) => setState(()=> NavigatorPage.indexSelectedPage = index);
+
+  AppHomePageState() {
+    NavigatorPage.refreshFunction = this.refresh;
+    SelectorIntervention.selectInterventionFunction = this.selectIntervention;
+  }
+
+  Intervention interventionSelected;
+
+  void refresh() {
+    this.setState(() {});
+  }
+
+  void selectIntervention(Intervention intervention) {
+    this.interventionSelected = intervention;
+  }
 
   Widget loadPage(bool isAuth) {
     // print(isAuth);
     if (! isAuth) {
       return SignInPage();
     }
-    switch(selectedIndex){
+    switch(NavigatorPage.indexSelectedPage){
       case 0:
         return ListInterventionPage();
       case 1:
-        return SitacPage( Intervention("1", "nom", "adresse",
-            'codeSinistre', DateTime.now(), []));
+        if (this.interventionSelected != null) {
+          return SitacPage(this.interventionSelected);
+        }
+        return HomePage();
       case 2:
         return HomePage();
       case 3 :
@@ -103,7 +122,7 @@ class AppHomePageState extends State<AppHomePage> {
               label: 'Utilisateur'
           ),
         ],
-        currentIndex: selectedIndex,
+        currentIndex: NavigatorPage.indexSelectedPage,
         onTap: onNavTap,
         unselectedItemColor: Colors.grey,
         selectedItemColor: Colors.blueGrey,
