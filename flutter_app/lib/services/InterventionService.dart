@@ -32,6 +32,12 @@ class InterventionService {
 
   }
   */
+
+  void updateIntervention(Intervention intervention) {
+     DocumentReference reference = interventions.doc(intervention.id);
+     reference.set(intervention.toMap());
+  }
+
   Future<DocumentSnapshot> getInterventionById(String id) {
     return interventions.doc(id).get();
   }
