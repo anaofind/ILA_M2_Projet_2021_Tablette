@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'file:///D:/Etudes/cours/Master/M2/Projet/ILA_M2_Projet_2021_Tablette/flutter_app/lib/services/NavigatorPage.dart';
 import 'package:flutter_app/models/UserData.dart';
 import 'package:flutter_app/pages/HomePage.dart';
 import 'package:flutter_app/pages/MapPage.dart';
@@ -12,6 +11,7 @@ import 'package:flutter_app/pages/UserPage.dart';
 import 'package:flutter_app/pages/connection/SignInPage.dart';
 import 'package:flutter_app/services/AccountService.dart';
 import 'package:flutter_app/pages/intervention/ListInterventionPage.dart';
+import 'package:flutter_app/services/NavigatorPage.dart';
 import 'package:flutter_app/services/SelectorIntervention.dart';
 import 'package:provider/provider.dart';
 
