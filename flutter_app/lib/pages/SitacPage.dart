@@ -464,8 +464,8 @@ class SitacPageState extends State<SitacPage> {
                           ListView.builder(
                             itemCount: _monIntervention.getMoyens.length,
                             itemBuilder: (context, index){
-                              return Container(
-                                child: new Text('Icone_Png/'+'${_monIntervention.getMoyens[index].toString()}'+"/"+'${_monIntervention.getMoyens[index].couleur}'"/"+'${_monIntervention.getMoyens[index].etat}'),
+                              return Image(
+                                image: new AssetImage('Icone_Png/Infrastructure/Vehicule/'+'${_monIntervention.getMoyens[index].moyen.id}'+"/M_"+'${_monIntervention.getMoyens[index].moyen.id}'+"_"+'${_monIntervention.getMoyens[index].moyen.couleurDefaut}'"_"+'${_monIntervention.getMoyens[index].etat}'+".png"),
                               );
                             },
                           ),
