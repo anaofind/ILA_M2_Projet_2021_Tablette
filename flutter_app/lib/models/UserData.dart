@@ -16,18 +16,18 @@ class UserData {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'userID': id,
       'email': email,
       'login': login,
       'name': name,
       'firstName': firstName,
-      'role': role,
+      'role': role.toString(),
     };
   }
 
   UserData.fromSnapshot(DocumentSnapshot snapshot)
-      : assert(snapshot != null && snapshot.exists),
-        id = snapshot.id,
+      : assert(snapshot != null),
+        id = snapshot.data()['userID'],
         email = snapshot.data()['email'],
         login = snapshot.data()['login'],
         name = snapshot.data()['name'],

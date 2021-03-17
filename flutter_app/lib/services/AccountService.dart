@@ -47,18 +47,41 @@ class AccountService {
     }
   }
 
-  static Stream<DocumentSnapshot> loadCurrentUser() {
+  static Future<DocumentSnapshot> loadUserInfoById(String userID) async{
+    Query query = users.where('userID', isEqualTo: userID).limit(1);
+    QueryDocumentSnapshot doc = await database.getFirstDoc(query);
+    return doc;
+  }
+
+  static Stream<QuerySnapshot> loadUserInfo(String userID) {
+    return users
+        .where('userID', isEqualTo: userID)
+        .snapshots();
+  }
+
+  static Stream<QuerySnapshot> loadCurrentUser() {
     if (auth.currentUser != null) {
-      return users.doc(auth.currentUser.uid).get().asStream();
+      return loadUserInfo(auth.currentUser.uid);
     }
   }
 
-  static void updateRoleUser(Role role) {
+  static Future<void> updateUser(UserData userData) async {
+    QuerySnapshot snapshot = await loadCurrentUser().first;
+    DocumentReference reference = users.doc(snapshot.docs[0].id);
+    reference.set(userData.toMap());
+  }
+
+  static Future<void> updateRoleUser(Role role) async {
     if (auth.currentUser != null) {
-      DocumentReference reference = users.doc(auth.currentUser.uid);
-      reference.set({'role' : role});
+      QuerySnapshot snapshot = await loadCurrentUser().first;
+      UserData userData = UserData.fromSnapshot(snapshot.docs[0]);
+      if (userData != null) {
+       userData.role = role;
+       updateUser(userData);
+      }
     }
   }
+
 
   Future<String> signUp(String email, String login, String password, String name, String firstName) async {
     String errorMessage;
@@ -98,6 +121,7 @@ class AccountService {
     String errorMessage;
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
+      updateRoleUser(role);
     } catch (error) {
       switch (error.code) {
         case "invalid-email":

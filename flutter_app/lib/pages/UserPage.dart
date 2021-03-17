@@ -19,16 +19,15 @@ class UserPageState extends State<UserPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<DocumentSnapshot>(
+    return StreamBuilder<QuerySnapshot>(
       stream: AccountService.loadCurrentUser(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData || !snapshot.data.exists) {
+        if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-        print (snapshot.data.id);
-        UserData userData = UserData.fromSnapshot(snapshot.data);
+        UserData userData = UserData.fromSnapshot(snapshot.data.docs[0]);
         return Scaffold(
             resizeToAvoidBottomPadding: false,
             appBar: AppBar(
@@ -38,19 +37,19 @@ class UserPageState extends State<UserPage> {
               child: Column(
                 children: [
                   Text(
-                      this.userData.email
+                      userData.email
                   ),
                   Text(
-                      this.userData.login
+                      userData.login
                   ),
                   Text(
-                      this.userData.name
+                      userData.name
                   ),
                   Text(
-                      this.userData.firstName
+                      userData.firstName
                   ),
                   Text(
-                      this.userData.role.toString()
+                      userData.role.toString()
                   ),
                 ],
               ),
