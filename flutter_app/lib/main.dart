@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/models/Moyen.dart';
 import 'package:flutter_app/models/UserData.dart';
 import 'package:flutter_app/pages/HomePage.dart';
 import 'package:flutter_app/pages/SitacPage.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_app/pages/intervention/ListInterventionPage.dart';
 import 'package:provider/provider.dart';
 
 import 'models/Intervention.dart';
+import 'models/MoyenIntervention.dart';
 import 'services/AccountService.dart';
 
 void main() async {
@@ -60,7 +62,7 @@ class AppHomePageState extends State<AppHomePage> {
         return ListInterventionPage();
       case 1:
         return SitacPage( Intervention("1", "nom", "adresse",
-            'codeSinistre', DateTime.now(), []));
+            'codeSinistre', DateTime.now(), [new MoyenIntervention(new Moyen("id", "codeMoyen", "description", "couleurDefaut"), "etat",  DateTime.now(),  DateTime.now(),  DateTime.now(), new Color(0))]));
       case 2:
         return HomePage();
       case 3 :

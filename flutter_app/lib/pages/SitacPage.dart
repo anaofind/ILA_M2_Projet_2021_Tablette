@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_app/models/Intervention.dart';
@@ -29,11 +31,27 @@ class SitacPageState extends State<SitacPage> {
   _monIntervention = uneI;
   }
 
+  ListView test(){
+
+    for(int i=0; i<_monIntervention.getMoyens.length; i++){
+      log(_monIntervention.getMoyens[i].id);
+    }
+
+    return ListView.builder(
+      itemCount: _monIntervention.getMoyens.length,
+      itemBuilder: (context, index){
+        return Container(
+          child: new Text('Icone_Png/'+'${_monIntervention.getMoyens[index].toString()}'+"/"+'${_monIntervention.getMoyens[index].couleur}'"/"+'${_monIntervention.getMoyens[index].etat}'),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DefaultTabController(
-        length: 7,
+        length: 8,
         child: Scaffold(
           appBar: AppBar(
             bottom: TabBar(
@@ -45,7 +63,7 @@ class SitacPageState extends State<SitacPage> {
                 Tab(icon: Image(image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Noir_0.png'),)),
                 Tab(icon: Image(image: new AssetImage('Icone_Png/Chemin/Chemin_Encours.png'),)),
                 Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure_Civil_EnCours.png'),)),
-
+                Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure_Civil_EnCours.png'),)),
               ],
             ),
             title: Text('SITAC ' + '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' +
@@ -420,7 +438,6 @@ class SitacPageState extends State<SitacPage> {
                           ),
 
                           ListView(
-                            scrollDirection: Axis.horizontal,
                             padding: const EdgeInsets.all(8),
                             children: <Widget>[
                               Image(
@@ -440,6 +457,17 @@ class SitacPageState extends State<SitacPage> {
                                 height: 100,
                               ),
                             ],
+                          ),
+
+                          // MOYEN demandé à partir d'infrastructure
+
+                          ListView.builder(
+                            itemCount: _monIntervention.getMoyens.length,
+                            itemBuilder: (context, index){
+                              return Container(
+                                child: new Text('Icone_Png/'+'${_monIntervention.getMoyens[index].toString()}'+"/"+'${_monIntervention.getMoyens[index].couleur}'"/"+'${_monIntervention.getMoyens[index].etat}'),
+                              );
+                            },
                           ),
                         ],
                       ),
