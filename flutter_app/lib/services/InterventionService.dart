@@ -1,8 +1,12 @@
 
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_app/models/Intervention.dart';
 import 'package:flutter_app/models/Moyen.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
+import 'package:flutter_app/models/Position.dart';
+import 'package:flutter_app/models/SymbolIntervention.dart';
 
 class InterventionService {
   CollectionReference interventions = FirebaseFirestore.instance.collection('interventions');
@@ -22,6 +26,95 @@ class InterventionService {
 
   Stream<QuerySnapshot> loadAllInterventions(){
     return interventions.snapshots();
+  }
+
+  Future<void> addMoyenToIntervention(String idIntervention, MoyenIntervention moyen) {
+    Intervention i;
+    List<MoyenIntervention> moyens;
+    interventions.doc(idIntervention).get().then((DocumentSnapshot doc) {
+      if(doc.exists) {
+        i = Intervention.fromSnapshot(doc);
+        moyens = i.moyens;
+        moyens.add(moyen);
+        return interventions.doc(idIntervention)
+            .update({'moyens': i.ConvertMoyensToMap(moyens)});
+      }
+    });
+  }
+
+  Future<void> addSymbolToIntervention(String idIntervention, SymbolIntervention symbol) {
+    Intervention i;
+    List<SymbolIntervention> symbols;
+    interventions.doc(idIntervention).get().then((DocumentSnapshot doc) {
+      if(doc.exists) {
+        i = Intervention.fromSnapshot(doc);
+        symbols = i.symbols;
+        symbols.add(symbol);
+        return interventions.doc(idIntervention)
+            .update({'symbols': i.ConvertSymbolsToMap(symbols)});
+      }
+    });
+  }
+
+  Future<void> addMoyenOrSymbolToIntervention(String idIntervention, dynamic object) {
+
+    if (object is MoyenIntervention){addMoyenToIntervention(idIntervention, object);};
+    if (object is SymbolIntervention){addSymbolToIntervention(idIntervention, object);};
+
+  }
+
+  Future<void> updatePositionSymbolIntervention(String idIntervention, idSymbol, Position newPosition) {
+    Intervention i;
+    List<SymbolIntervention> symbols;
+    interventions.doc(idIntervention).get().then((DocumentSnapshot doc) {
+      if(doc.exists) {
+        i = Intervention.fromSnapshot(doc);
+        symbols = i.symbols;
+        symbols.forEach((symbol) {
+          if(symbol.id == idSymbol){
+            symbol.position= newPosition;
+          }
+        });
+        return interventions.doc(idIntervention)
+            .update({'symbols': i.ConvertSymbolsToMap(symbols)});
+      }
+    });
+  }
+
+  Future<void> updateEtatSymbolIntervention(String idIntervention, idSymbol, Etat newEtat) {
+    Intervention i;
+    List<SymbolIntervention> symbols;
+    interventions.doc(idIntervention).get().then((DocumentSnapshot doc) {
+      if(doc.exists) {
+        i = Intervention.fromSnapshot(doc);
+        symbols = i.symbols;
+        symbols.forEach((symbol) {
+          if(symbol.id == idSymbol){
+            symbol.etat= newEtat.toString();
+          }
+        });
+        return interventions.doc(idIntervention)
+            .update({'symbols': i.ConvertSymbolsToMap(symbols)});
+      }
+    });
+  }
+
+  Future<void> updateCouleurSymbolIntervention(String idIntervention, idSymbol, Color newCouleur) {
+    Intervention i;
+    List<SymbolIntervention> symbols;
+    interventions.doc(idIntervention).get().then((DocumentSnapshot doc) {
+      if(doc.exists) {
+        i = Intervention.fromSnapshot(doc);
+        symbols = i.symbols;
+        symbols.forEach((symbol) {
+          if(symbol.id == idSymbol){
+            symbol.couleur= newCouleur;
+          }
+        });
+        return interventions.doc(idIntervention)
+            .update({'symbols': i.ConvertSymbolsToMap(symbols)});
+      }
+    });
   }
   /*
   Future<List<String>> loadAllSinistres() async{
