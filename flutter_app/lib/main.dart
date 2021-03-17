@@ -62,7 +62,7 @@ class AppHomePageState extends State<AppHomePage> {
         return ListInterventionPage();
       case 1:
         return SitacPage( Intervention("1", "nom", "adresse",
-            'codeSinistre', DateTime.now(), [new MoyenIntervention(new Moyen("FPT", "codeMoyen", "description", "Rouge"), "1",  DateTime.now(),  DateTime.now(),  DateTime.now(), new Color(0))]));
+            'codeSinistre', DateTime.now(), [new MoyenIntervention(new Moyen("FPT", "codeMoyen", "description", "Rouge"), "1",  DateTime.now(),  DateTime.now(),  DateTime.now(), new Color(0)), new MoyenIntervention(new Moyen("FPT", "codeMoyen", "description", "Rouge"), "1",  DateTime.now(),  DateTime.now(),  DateTime.now(), new Color(0))]));
       case 2:
         return HomePage();
       case 3 :
