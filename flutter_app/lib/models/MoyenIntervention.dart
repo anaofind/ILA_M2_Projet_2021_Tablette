@@ -50,19 +50,21 @@ class MoyenIntervention {
         couleur = ColorConverter.colorFromString(map['couleur']),
         position = Position( map['latitude'], map['longitude']);
 
-  MoyenIntervention.fromCaracteristicsAndPosition(SymbolCaracteristics caracteristics, Position position){
+  MoyenIntervention.fromCaracteristicsAndPosition(SymbolCaracteristics caracteristics, Position position) {
     MoyenService moyenService = MoyenService();
-    Moyen moyen;
     moyenService.getMoyenByCode(caracteristics.nomSymbol)
-        .then((snapshot) => moyen = Moyen.fromSnapshot(snapshot));
-    this.id = Uuid().v4();
-    this.moyen = moyen;
-    this.position =position;
-    this.couleur =ColorConverter.colorFromString(caracteristics.couleur);
-    this.etat = SymbolIntervention.EtatFromCode(caracteristics.etat);
-    demandeA = DateTime.now();
-    departA = null;
-    arriveA = null;
+        .then((snapshot) => {
+        this.id = Uuid().v4(),
+        this.moyen = Moyen.fromSnapshot(snapshot),
+        this.position =position,
+        this.couleur =ColorConverter.colorFromString(caracteristics.couleur),
+        this.etat = SymbolIntervention.EtatFromCode(caracteristics.etat),
+        demandeA = DateTime.now(),
+        departA = null,
+        arriveA = null}
+
+    );
+
   }
 
 }

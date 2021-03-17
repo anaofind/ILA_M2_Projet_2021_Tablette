@@ -28,6 +28,19 @@ class InterventionService {
     return interventions.snapshots();
   }
 
+  List<MoyenIntervention> loadAllMoyensIntervention(String idIntervention){
+    List<MoyenIntervention> moyensInterventionList = List();
+    interventions.doc(idIntervention).get().then(
+            (document) {
+              moyensInterventionList = List();
+                  List.from(document.data()['moyens']).forEach((element) {
+                    MoyenIntervention data = MoyenIntervention.fromMap(element);
+                    moyensInterventionList.add(data);
+                  });
+            });
+              return moyensInterventionList;
+  }
+
   Future<void> addMoyenToIntervention(String idIntervention, MoyenIntervention moyen) {
     Intervention i;
     List<MoyenIntervention> moyens;
@@ -125,8 +138,8 @@ class InterventionService {
 
   }
   */
-  Future<DocumentSnapshot> getInterventionById(String id) {
-    return interventions.doc(id).get();
+  Stream<DocumentSnapshot> getInterventionById(String id) {
+    return interventions.doc(id).get().asStream();
   }
 
   Future<DocumentSnapshot> getInterventionByName(String nom) {
