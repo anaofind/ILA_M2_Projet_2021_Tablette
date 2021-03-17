@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/Intervention.dart';
 import 'package:flutter_app/models/Moyen.dart';
@@ -42,88 +43,94 @@ class MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FlutterMap(
-        mapController: this.mapController,
-        options: MapOptions(
-          center: this.currentCenter,
-          zoom: this.currentZoom,
-          maxZoom: this.maxZoom,
-          minZoom: this.minZoom,
-          interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
-          onTap:(LatLng latLng) async{
-            if (SelectorMoyenSymbol.isSelected()) {
-              if (SelectorMoyenSymbol.type == 'moyen') {
-
-              } else if (SelectorMoyenSymbol.type == 'symbol') {
-                SymbolIntervention symbol = SymbolIntervention(
-                    SelectorMoyenSymbol.name,
-                    Position(latLng.latitude, latLng.longitude)
-                );
-                if (this.checkSymbol(symbol)) {
-                  this.intervention.symbols.add(symbol);
-                  this.interventionService.updateIntervention(intervention);
-                }
-              }
-              createMarker(latLng, SelectorMoyenSymbol.getPathImage());
-            }
-          },
-        ),
-        layers: [
-          TileLayerOptions(
-              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",//?source=${DateTime.now().millisecondsSinceEpoch}",
-              subdomains: ['a', 'b', 'c']
-          ),
-          new MarkerLayerOptions(
-              markers: markers
-          ),
-        ],
-      ),
-      floatingActionButton: Row(
-        children: [
-          Column(
-            children: [
-              Spacer(),
-              FloatingActionButton(
-                child: Icon(Icons.clear),
-                backgroundColor: Colors.redAccent,
-                onPressed: () {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: this.interventionService.getInterventionById(intervention.id),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return Scaffold(
+          body: FlutterMap(
+            mapController: this.mapController,
+            options: MapOptions(
+              center: this.currentCenter,
+              zoom: this.currentZoom,
+              maxZoom: this.maxZoom,
+              minZoom: this.minZoom,
+              interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+              onTap:(LatLng latLng) async{
+                if (SelectorMoyenSymbol.isSelected()) {
+                  Position position = Position(latLng.latitude, latLng.longitude);
+                  dynamic symbolOrMoyen = SymbolDecider.createObjectRelatedToSymbol(SelectorMoyenSymbol.pathImage, position);
+                  this.interventionService.addMoyenOrSymbolToIntervention(this.intervention.id, symbolOrMoyen);
+                  SelectorMoyenSymbol.deselect();
                   this.setState(() {
-                    this.intervention.symbols.clear();
-                    this.interventionService.updateIntervention(this.intervention);
-                    this.idSymbolSelected = -1;
                     this.refreshMarkers();
                   });
-                },
+                }
+              },
+            ),
+            layers: [
+              TileLayerOptions(
+                urlTemplate: "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png",
+                subdomains: ['a', 'b', 'c'],
+                keepBuffer: 6,
+                tileSize: 256,
+              ),
+              new MarkerLayerOptions(
+                  markers: markers
               ),
             ],
           ),
-          Spacer(),
-          Spacer(),
-          Spacer(),
-          Spacer(),
-          Spacer(),
-          Spacer(),
-          Spacer(),
-          Column(
-              children: [
-                Spacer(),
-                FloatingActionButton(
-                  child: Icon(Icons.add),
-                  onPressed: zoomPlus,
-                  backgroundColor: Colors.lightGreen,
-                ),
-                FloatingActionButton(
-                  child: Icon(Icons.remove),
-                  onPressed: zoomMinus,
-                  backgroundColor: Colors.green,
-                )
-              ],
+          floatingActionButton: Row(
+            children: [
+              Column(
+                children: [
+                  Spacer(),
+                  FloatingActionButton(
+                    child: Icon(Icons.clear),
+                    backgroundColor: Colors.redAccent,
+                    onPressed: () {
+                      this.setState(() {
+                        this.intervention.symbols.clear();
+                        this.interventionService.updateIntervention(this.intervention);
+                        this.idSymbolSelected = -1;
+                        this.refreshMarkers();
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Spacer(),
+              Spacer(),
+              Spacer(),
+              Spacer(),
+              Spacer(),
+              Spacer(),
+              Spacer(),
+              Column(
+                  children: [
+                    Spacer(),
+                    FloatingActionButton(
+                      child: Icon(Icons.add),
+                      onPressed: zoomPlus,
+                      backgroundColor: Colors.lightGreen,
+                    ),
+                    FloatingActionButton(
+                      child: Icon(Icons.remove),
+                      onPressed: zoomMinus,
+                      backgroundColor: Colors.green,
+                    )
+                  ],
+              ),
+              Spacer(),
+            ],
           ),
-          Spacer(),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+          floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+        );
+      }
     );
   }
 
@@ -174,7 +181,7 @@ class MapPageState extends State<MapPage> {
       MoyenIntervention moyen = this.intervention.moyens[i];
       if (this.checkMoyen(moyen)) {
         LatLng position = LatLng(moyen.position.latitude, moyen.position.longitude);
-        String pathImage = SelectorMoyenSymbol.getPathImageByName(moyen.moyen.codeMoyen);
+        String pathImage = SymbolDecider.createIconPathRelatedToObject(moyen);
         createMarker(position, pathImage);
       }
     }
@@ -182,7 +189,7 @@ class MapPageState extends State<MapPage> {
       SymbolIntervention symbol = this.intervention.symbols[i];
       if (this.checkSymbol(symbol)) {
         LatLng position = LatLng(symbol.position.latitude, symbol.position.longitude);
-        String pathImage = SelectorMoyenSymbol.getPathImageByName(symbol.nomSymbol);
+        String pathImage = SymbolDecider.createIconPathRelatedToObject(symbol);
         createMarker(position, pathImage);
       }
     }
@@ -192,8 +199,7 @@ class MapPageState extends State<MapPage> {
     if (moyen != null) {
       Position position = moyen.position;
       if (position != null && position.latitude != null && position.longitude != null) {
-        String name = moyen.moyen.codeMoyen;
-        if (name != null && SelectorMoyenSymbol.getPathImageByName(name) != null) {
+        if (moyen != null && SymbolDecider.createIconPathRelatedToObject(moyen) != null) {
           return true;
         }
       }
@@ -205,8 +211,7 @@ class MapPageState extends State<MapPage> {
     if (symbol != null) {
       Position position = symbol.position;
       if (position != null && position.latitude != null && position.longitude != null) {
-        String name = symbol.nomSymbol;
-        if (name != null && SelectorMoyenSymbol.getPathImageByName(name) != null) {
+        if (symbol != null && SymbolDecider.createIconPathRelatedToObject(symbol) != null) {
           return true;
         }
       }

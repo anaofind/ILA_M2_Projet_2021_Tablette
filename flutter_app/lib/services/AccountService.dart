@@ -7,33 +7,63 @@ import '../models/UserData.dart';
 import 'Database.dart';
 
 class AccountService {
+  static CollectionReference users = FirebaseFirestore.instance.collection("users");
+
   static FirebaseAuth auth = FirebaseAuth.instance;
   static Database database = Database();
-  static UserData currentUserData;
-
-  static Role futureRole;
-
-  static Database getDatabase(){
-      return database;
-  }
 
   static Stream<User> get user {
     return auth.authStateChanges();
   }
 
-  static Future<void> refreshCurrentUser(String email, Role role) async {
-    currentUserData = await database.loadUserInfoByEmail(email);
-    currentUserData.role = role;
+  static Future<void> uploadUser(String email, String login, String name, String firstName, String userID){
+    return users.add({
+      'email' : email,
+      'login' : login,
+      'name' : name,
+      'firstName' : firstName,
+      'userID' : userID,
+      'role' : Role.Intervener.toString()
+    }).then((value) => print("user added")).catchError((error) => print("error during upload " + error.code));
   }
 
-  static bool isSignIn() {
-    return currentUserData != null;
+  static Future<UserData> loadUserInfoByLogin(String login) async{
+    Query query = users.where('login', isEqualTo: login).limit(1);
+    QueryDocumentSnapshot doc = await database.getFirstDoc(query);
+    if (doc != null) {
+      if (doc.exists) {
+        return UserData.fromSnapshot(doc);
+      }
+    }
   }
 
-  static Future<String> signUp(String email, String login, String password, String name, String firstName) async {
+  static Future<UserData> loadUserInfoByEmail(String email) async{
+    Query query = users.where('email', isEqualTo: email).limit(1);
+    QueryDocumentSnapshot doc = await database.getFirstDoc(query);
+    if (doc != null) {
+      if (doc.exists) {
+        return UserData.fromSnapshot(doc);
+      }
+    }
+  }
+
+  static Stream<DocumentSnapshot> loadCurrentUser() {
+    if (auth.currentUser != null) {
+      return users.doc(auth.currentUser.uid).get().asStream();
+    }
+  }
+
+  static void updateRoleUser(Role role) {
+    if (auth.currentUser != null) {
+      DocumentReference reference = users.doc(auth.currentUser.uid);
+      reference.set({'role' : role});
+    }
+  }
+
+  Future<String> signUp(String email, String login, String password, String name, String firstName) async {
     String errorMessage;
 
-    UserData userData = await database.loadUserInfoByLogin(login);
+    UserData userData = await loadUserInfoByLogin(login);
     if (userData != null) {
       errorMessage = "login already used";
     }
@@ -41,7 +71,7 @@ class AccountService {
     if (errorMessage == null) {
       try {
         UserCredential userCredential = await auth.createUserWithEmailAndPassword(email: email, password: password);
-        await database.uploadUser(email, login, name, firstName, userCredential.user.uid);
+        await uploadUser(email, login, name, firstName, userCredential.user.uid);
       } catch (error) {
         switch (error.code) {
           case "email-already-in-use":
@@ -64,14 +94,11 @@ class AccountService {
     return await signOut();
   }
 
-  static Future<String> signIn(String email, String password, Role role) async {
+  Future<String> signIn(String email, String password, Role role) async {
     String errorMessage;
     try {
-      futureRole = role;
-      refreshCurrentUser(email, role);
       await auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (error) {
-      futureRole = null;
       switch (error.code) {
         case "invalid-email":
           errorMessage = "Your email address appears to be malformed";
@@ -89,9 +116,9 @@ class AccountService {
     return errorMessage;
   }
 
-  static Future<String> signInWithLogin(String login, String password, Role role) async {
+  Future<String> signInWithLogin(String login, String password, Role role) async {
     String errorMessage;
-    UserData userData = await database.loadUserInfoByLogin(login);
+    UserData userData = await loadUserInfoByLogin(login);
     if (userData != null) {
       errorMessage = await signIn(userData.email, password, role);
     } else {
@@ -100,11 +127,10 @@ class AccountService {
     return errorMessage;
   }
 
-  static Future<String> signOut() async {
+  Future<String> signOut() async {
     String errorMessage;
     try {
       await auth.signOut();
-      currentUserData = null;
     } catch (error) {
       errorMessage = "Unexpected log out error";
     }
