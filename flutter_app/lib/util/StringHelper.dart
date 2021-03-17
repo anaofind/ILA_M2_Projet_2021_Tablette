@@ -23,7 +23,7 @@ class StringHelper {
   }
 
   static String fullPathIconfromCaracteristics(SymbolCaracteristics caracteristics) {
-    String path=caracteristics.basePath+caracteristics.typeSymbol+caracteristics.couleur+caracteristics.etat+'.png';
+    String path=caracteristics.basePath+caracteristics.typeSymbol+'_'+caracteristics.nomSymbol+'_'+caracteristics.couleur+'_'+caracteristics.etat+'.png';
     return path;
   }
 }
