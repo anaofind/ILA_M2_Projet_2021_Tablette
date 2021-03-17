@@ -20,8 +20,9 @@ class MoyenIntervention {
   DateTime arriveA;
   Color couleur;
   Position position;
+  String basePath;
 
-  MoyenIntervention(this.moyen, this.etat, this.demandeA, this.departA, this.arriveA, this.couleur):id = Uuid().v4(), position = null;
+  MoyenIntervention(this.moyen, this.etat, this.demandeA, this.departA, this.arriveA, this.couleur, this.basePath):id = Uuid().v4(), position = null;
 
 
   Map<String, dynamic> toMap() {
@@ -36,7 +37,8 @@ class MoyenIntervention {
       'arriveA': arriveA,
       'couleur': ColorConverter.stringFromColor(couleur),
       'latitude': position!=null?position.latitude:null,
-      'longitude': position!=null?position.longitude:null
+      'longitude': position!=null?position.longitude:null,
+      'basePath': basePath,
     };
   }
   MoyenIntervention.fromMap(Map<String, dynamic> map)
@@ -48,7 +50,8 @@ class MoyenIntervention {
         departA = map['departA']!=null?map['departA'].toDate():null,
         arriveA = map['arriveA']!=null?map['arriveA'].toDate():null,
         couleur = ColorConverter.colorFromString(map['couleur']),
-        position = Position( map['latitude'], map['longitude']);
+        position = Position( map['latitude'], map['longitude']),
+        basePath = map['basePath'];
 
   MoyenIntervention.fromCaracteristicsAndPosition(SymbolCaracteristics caracteristics, Position position) {
     MoyenService moyenService = MoyenService();
@@ -59,6 +62,7 @@ class MoyenIntervention {
         this.position =position,
         this.couleur =ColorConverter.colorFromString(caracteristics.couleur),
         this.etat = SymbolIntervention.EtatFromCode(caracteristics.etat),
+        this.basePath =caracteristics.basePath,
         demandeA = DateTime.now(),
         departA = null,
         arriveA = null}

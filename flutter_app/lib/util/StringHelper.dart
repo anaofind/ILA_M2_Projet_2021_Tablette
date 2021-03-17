@@ -8,10 +8,22 @@ class StringHelper {
     String withoutExtention = (fin != -1)? withoutBase.substring(0, fin): withoutBase;
     return withoutExtention;
   }
+  static String basePathIcon(String path) {
+    var index = path.lastIndexOf('/');
+    String base = (index != -1)? path.substring(0, index+1): path;
+    return base;
+  }
 
-  static SymbolCaracteristics caracteristicsFromString(String iconPngName) {
-    List<String> parts = iconPngName.split("_");
-    SymbolCaracteristics caracteristics = SymbolCaracteristics(parts[0], parts[1], parts[2], parts[3]);
+  static SymbolCaracteristics caracteristicsFromString(String iconPngPathName) {
+    String nomIcon = nomIconPngFromPath(iconPngPathName);
+    String base = basePathIcon(iconPngPathName);
+    List<String> parts = nomIcon.split("_");
+    SymbolCaracteristics caracteristics = SymbolCaracteristics(parts[0], parts[1], parts[2], parts[3], base);
     return caracteristics;
+  }
+
+  static String fullPathIconfromCaracteristics(SymbolCaracteristics caracteristics) {
+    String path=caracteristics.basePath+caracteristics.typeSymbol+caracteristics.couleur+caracteristics.etat+'.png';
+    return path;
   }
 }
