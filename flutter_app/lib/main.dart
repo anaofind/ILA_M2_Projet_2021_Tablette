@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/models/UserData.dart';
 import 'package:flutter_app/pages/HomePage.dart';
 import 'package:flutter_app/pages/SitacPage.dart';
 import 'package:flutter_app/pages/UserPage.dart';
@@ -127,7 +128,7 @@ class AppHomePageState extends State<AppHomePage> {
       ),
       floatingActionButton : FloatingActionButton (
         onPressed: () {
-          AccountService.signOut();
+          AccountService().signOut();
         },
         child: Icon(Icons.logout),
         backgroundColor: Colors.red,

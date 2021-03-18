@@ -133,9 +133,9 @@ class SignInPageState extends State<SignInPage> {
       String errorMessage;
       formState.save();
       if (DataValidator.isEmail(loginEmail)) {
-        errorMessage = await AccountService.signIn(loginEmail, password, role);
+        errorMessage = await accountService.signIn(loginEmail, password, role);
       } else {
-        errorMessage = await AccountService.signInWithLogin(loginEmail, password, role);
+        errorMessage = await accountService.signInWithLogin(loginEmail, password, role);
       }
       if (errorMessage != null) {
         Alert(

@@ -35,7 +35,7 @@ dependencies:
 
   rflutter_alert: ^1.0.1
 
-  flutter_map: any
+  flutter_map: ^0.11.0
   latlong: ^0.6.1
 dev_dependencies:
   flutter_test:

@@ -4,6 +4,7 @@ enum Etat {
   enCours,
   prevu
 }
+
 class Moyen {
   final String id;
   final String codeMoyen;
@@ -19,6 +20,7 @@ class Moyen {
       'couleurDefaut': couleurDefaut
     };
   }
+
   Moyen.fromSnapshot(DocumentSnapshot snapshot)
       : assert(snapshot != null),
         id = snapshot.id,

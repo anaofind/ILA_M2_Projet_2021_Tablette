@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/lib-ext/dragmarker.dart';
 import 'package:flutter_app/models/Intervention.dart';
-import 'package:flutter_app/models/Moyen.dart';
 import 'package:flutter_app/models/SymbolIntervention.dart';
 import 'package:flutter_app/models/Position.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
@@ -245,6 +244,8 @@ class MapPageState extends State<MapPage> {
         LatLng position = LatLng(moyen.position.latitude, moyen.position.longitude);
         String pathImage = SelectorMoyenSymbol.getPathImageByName(moyen.moyen.codeMoyen);
         createDragMarker(position, pathImage);
+        String pathImage = SymbolDecider.createIconPathRelatedToObject(moyen);
+        createMarker(position, pathImage);
       }
     }
 
@@ -254,6 +255,8 @@ class MapPageState extends State<MapPage> {
         LatLng position = LatLng(symbol.position.latitude, symbol.position.longitude);
         String pathImage = SelectorMoyenSymbol.getPathImageByName(symbol.nomSymbol);
         createDragMarker(position, pathImage);
+        String pathImage = SymbolDecider.createIconPathRelatedToObject(symbol);
+        createMarker(position, pathImage);
       }
     }
   }
@@ -262,8 +265,7 @@ class MapPageState extends State<MapPage> {
     if (moyen != null) {
       Position position = moyen.position;
       if (position != null && position.latitude != null && position.longitude != null) {
-        String name = moyen.moyen.codeMoyen;
-        if (name != null && SelectorMoyenSymbol.getPathImageByName(name) != null) {
+        if (moyen != null && SymbolDecider.createIconPathRelatedToObject(moyen) != null) {
           return true;
         }
       }
@@ -275,8 +277,7 @@ class MapPageState extends State<MapPage> {
     if (symbol != null) {
       Position position = symbol.position;
       if (position != null && position.latitude != null && position.longitude != null) {
-        String name = symbol.nomSymbol;
-        if (name != null && SelectorMoyenSymbol.getPathImageByName(name) != null) {
+        if (symbol != null && SymbolDecider.createIconPathRelatedToObject(symbol) != null) {
           return true;
         }
       }
