@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/Intervention.dart';
-import 'package:flutter_app/models/Moyen.dart';
 import 'package:flutter_app/models/SymbolIntervention.dart';
 import 'package:flutter_app/models/Position.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
@@ -39,70 +38,74 @@ class MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
-      stream: this.interventionService.getInterventionById(intervention.id),
-      builder: (context, snapshot) {
-        print("UPDATE STREAM");
-        if (!snapshot.hasData || snapshot.hasError) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        this.intervention = Intervention.fromSnapshot(snapshot.data);
-        this.refreshMarkers();
-        return Scaffold(
-          body: FlutterMap(
-            mapController: this.mapController,
-            options: MapOptions(
-              center: this.currentCenter,
-              zoom: this.currentZoom,
-              maxZoom: this.maxZoom,
-              minZoom: this.minZoom,
-              interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
-              onTap:(LatLng latLng) async{
-                if (SelectorMoyenSymbol.isSelected()) {
-                  Position position = Position(latLng.latitude, latLng.longitude);
-                  dynamic symbolOrMoyen = SymbolDecider.createObjectRelatedToSymbol(SelectorMoyenSymbol.pathImage, position);
-                  this.interventionService.addMoyenOrSymbolToIntervention(this.intervention.id, symbolOrMoyen);
-                  SelectorMoyenSymbol.deselect();
-                }
-              },
+        stream: this.interventionService.getInterventionById(intervention.id),
+        builder: (context, snapshot) {
+          print("REFRESH MAP");
+          if (!snapshot.hasData || snapshot.hasError) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          this.intervention = Intervention.fromSnapshot(snapshot.data);
+          this.refreshMarkers();
+          return Scaffold(
+            body: FlutterMap(
+              mapController: this.mapController,
+              options: MapOptions(
+                center: this.currentCenter,
+                zoom: this.currentZoom,
+                maxZoom: this.maxZoom,
+                minZoom: this.minZoom,
+                interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+                onTap:(LatLng latLng) async{
+                  if (SelectorMoyenSymbol.isSelected()) {
+                    Position position = Position(latLng.latitude, latLng.longitude);
+                    dynamic symbolOrMoyen = SymbolDecider.createObjectRelatedToSymbol(SelectorMoyenSymbol.pathImage, position);
+                    this.interventionService.addMoyenOrSymbolToIntervention(this.intervention.id, symbolOrMoyen);
+                    SelectorMoyenSymbol.deselect();
+                  }
+                },
+              ),
+              layers: [
+                TileLayerOptions(
+                  urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                  subdomains: ['a', 'b', 'c'],
+                  keepBuffer: 6,
+                  tileSize: 256,
+                ),
+                new MarkerLayerOptions(
+                    markers: markers
+                ),
+              ],
             ),
-            layers: [
-              TileLayerOptions(
-                urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                subdomains: ['a', 'b', 'c'],
-                keepBuffer: 6,
-                tileSize: 256,
-              ),
-              new MarkerLayerOptions(
-                  markers: markers
-              ),
-            ],
-          ),
-          floatingActionButton: Row(
-            children: [
-              Column(
-                children: [
-                  Spacer(),
-                  FloatingActionButton(
-                    child: Icon(Icons.clear),
-                    backgroundColor: Colors.redAccent,
-                    onPressed: () {
-                      this.intervention.symbols.clear();
-                      this.idSymbolSelected = -1;
-                      this.interventionService.updateIntervention(this.intervention);
-                    },
-                  ),
-                ],
-              ),
-              Spacer(),
-              Spacer(),
-              Spacer(),
-              Spacer(),
-              Spacer(),
-              Spacer(),
-              Spacer(),
-              Column(
+            floatingActionButton: Row(
+              children: [
+                Column(
+                  children: [
+                    Spacer(),
+                    FloatingActionButton(
+                      child: Icon(Icons.clear),
+                      backgroundColor: Colors.redAccent,
+                      onPressed: () {
+                        this.idSymbolSelected = -1;
+                        this.intervention.symbols.clear();
+                        this.intervention.moyens.forEach((element) {
+                          element.position.latitude = null;
+                          element.position.longitude = null;
+                        });
+                        this.interventionService.updateIntervention(this.intervention);
+                      },
+                    ),
+                  ],
+                ),
+                Spacer(),
+                Spacer(),
+                Spacer(),
+                Spacer(),
+                Spacer(),
+                Spacer(),
+                Spacer(),
+                Column(
                   children: [
                     Spacer(),
                     FloatingActionButton(
@@ -116,13 +119,13 @@ class MapPageState extends State<MapPage> {
                       backgroundColor: Colors.green,
                     )
                   ],
-              ),
-              Spacer(),
-            ],
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-        );
-      }
+                ),
+                Spacer(),
+              ],
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+          );
+        }
     );
   }
 
@@ -137,7 +140,6 @@ class MapPageState extends State<MapPage> {
   }
 
   createMarker(LatLng latLng, String pathImage) {
-    print("CREATE MARKER");
     int id = markers.length;
     Color color = (this.idSymbolSelected == id)? Colors.purple : Colors.red;
     Marker marker = new Marker(
