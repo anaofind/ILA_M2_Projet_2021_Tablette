@@ -54,6 +54,7 @@ flutter:
         - Icone_Png/Infrastructure/Vehicule/FPT/
         - Icone_Png/Infrastructure/Vehicule/VLCG/
         - Icone_Png/Infrastructure/Vehicule/VSAV/
+        - Icone_Png/Infrastructure/Aerien/
         - Icone_Png/Chemin/
 
   # The following line ensures that the Material Icons font is

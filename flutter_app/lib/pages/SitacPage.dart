@@ -62,8 +62,8 @@ class SitacPageState extends State<SitacPage> {
                 Tab(icon: Image(image: new AssetImage('Icone_Png/PointEau.png'),)),
                 Tab(icon: Image(image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Noir_0.png'),)),
                 Tab(icon: Image(image: new AssetImage('Icone_Png/Chemin/S_Fleche_Noir_1.png'),)),
-                Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),)),
-                Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),)),
+                Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure/Aerien/M_Aerien_Noir_1.png'),)),
+                Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure/Moyen.png'),)),
               ],
             ),
             title: Text('SITAC ' + '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' +
