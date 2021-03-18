@@ -25,6 +25,4 @@ class SymbolIntervention {
         nomSymbol = map['nomSymbol'],
         position = Position( map['latitude'], map['longitude']);
 
-
-
 }
