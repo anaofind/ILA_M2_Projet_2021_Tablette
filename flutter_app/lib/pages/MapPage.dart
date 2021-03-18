@@ -170,13 +170,24 @@ class MapPageState extends State<MapPage> {
       onDragStart:  (details,point) => print("Start point $point"),
       onDragEnd:    (details,point) {
         //update intervention and make refresh
-        //look for symbol in list of intervention's symbol
-        int i=0;
+        //look for symbol or moyens in list of intervention
+        int i=0, j=0;
         while(i<this.intervention.symbols.length && SymbolDecider.createIconPathRelatedToObject(this.intervention.symbols[i]) != pathImage) {
           i++;
         }
-        this.intervention.symbols[i].position = Position(point.latitude, point.longitude);
-        this.interventionService.updateIntervention(intervention);
+        if(i != this.intervention.symbols.length && SymbolDecider.createIconPathRelatedToObject(this.intervention.symbols[i]) == pathImage) {
+          this.intervention.symbols[i].position = Position(point.latitude, point.longitude);
+          this.interventionService.updateIntervention(intervention);
+        } else {
+          while(j<this.intervention.moyens.length && SymbolDecider.createIconPathRelatedToObject(this.intervention.moyens[j]) != pathImage) {
+            j++;
+          }
+          if(j != this.intervention.moyens.length && SymbolDecider.createIconPathRelatedToObject(this.intervention.moyens[j]) == pathImage) {
+            this.intervention.moyens[j].position = Position(point.latitude, point.longitude);
+            this.interventionService.updateIntervention(intervention);
+          }
+        }
+        SelectorMoyenSymbol.deselect();
       },
       onDragUpdate: (details,point) {},
       onTap:        (point) {},
