@@ -29,22 +29,12 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          title: Text('Acceuil'),
+          title: Text('Page blanche'),
         ),
-        body: Column(
-          children: [
-            Text(
-                "Bienvenu"
-            ),
-            ElevatedButton(
-              child: Text('Nouvelle intervention'),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => NewInterventionPage())
-                );
-              },
-            )
-          ],
+        body: Center(
+          child: Text(
+              "Page blanche"
+          ),
         )
     );
   }

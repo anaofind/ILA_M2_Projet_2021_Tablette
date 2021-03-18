@@ -78,7 +78,7 @@ class AppHomePageState extends State<AppHomePage> {
         if (this.interventionSelected != null) {
           return SitacPage(this.interventionSelected);
         }
-        return HomePage();
+        return SitacPage(null);
       case 2:
         return HomePage();
       case 3 :

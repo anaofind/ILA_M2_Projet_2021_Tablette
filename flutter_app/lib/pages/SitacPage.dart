@@ -36,8 +36,9 @@ class SitacPageState extends State<SitacPage> {
 
   @override
   Widget build(BuildContext context) {
+    String id = (this._monIntervention != null)? this._monIntervention.id: ' ';
     return StreamBuilder<DocumentSnapshot>(
-        stream: InterventionService().getInterventionById(_monIntervention.id),
+        stream: InterventionService().getInterventionById(id),
         builder: (context, snapshot) {
           if (! snapshot.hasData) {
             return Center (
@@ -50,7 +51,7 @@ class SitacPageState extends State<SitacPage> {
                 children: [
                   Spacer(),
                   Text(
-                    'Intervention indisponible',
+                    (id != ' ')? 'Intervention indisponible' : 'Aucune intervention séléctionnée',
                   ),
                   ElevatedButton(
                     child: Text(
