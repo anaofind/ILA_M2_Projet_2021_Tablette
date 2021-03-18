@@ -131,7 +131,7 @@ class AppHomePageState extends State<AppHomePage> {
           AccountService().signOut();
         },
         child: Icon(Icons.logout),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.black,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );

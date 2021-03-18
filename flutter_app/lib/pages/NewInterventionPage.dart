@@ -57,18 +57,20 @@ class NewInterventionPageState extends State<NewInterventionPage> {
 
     Future<List<MoyenIntervention>> futureValue = showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return StatefulBuilder(
             builder: (context, setState) {
               return AlertDialog(
+
                 title: Text('Moyens'),
                 actions: <Widget>[
-                  FlatButton(
+                  /*FlatButton(
                     onPressed: () {
                       Navigator.of(context).pop(moyensIntervention);
                     },
                     child: Text('Annuler'),
-                  ),
+                  ),*/
                   FlatButton(
                     onPressed: () {
                       Navigator.of(context).pop(newMoyens);
@@ -249,7 +251,7 @@ class NewInterventionPageState extends State<NewInterventionPage> {
                                     TextEditingController().clear();
                                   },
                                   onSaved: (input) => nomIntervention = input,
-                                ),
+                                ),SizedBox(height: 20),
                                 Text(
                                   'Adresse: *',
                                   style: TextStyle(fontWeight: FontWeight.bold),
@@ -264,7 +266,7 @@ class NewInterventionPageState extends State<NewInterventionPage> {
                                     TextEditingController().clear();
                                   },
                                   onSaved: (input) => adresseIntervention = input,
-                                ),
+                                ),SizedBox(height: 40),
                                 //Liste des sinistres
                                 Text(
                                   'Code sinistre : *',
@@ -319,7 +321,7 @@ class NewInterventionPageState extends State<NewInterventionPage> {
                     Text(
                       'Ajouter des moyens :',
                       style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                    ),SizedBox(height: 10),
                     Container(
                       padding: EdgeInsets.only(bottom: 25.0),
                       child: Align(

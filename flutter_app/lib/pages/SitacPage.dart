@@ -5,6 +5,7 @@ import 'package:flutter_app/models/SymbolIntervention.dart';
 import 'package:flutter_app/pages/MapPage.dart';
 import 'package:flutter_app/services/AccountService.dart';
 import 'package:flutter_app/services/SelectorMoyenSymbol.dart';
+import 'package:intl/intl.dart';
 import 'package:sidenavbar/sidenavbar.dart';
 import '../services/AccountService.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class SitacPageState extends State<SitacPage> {
               ],
             ),
             title: Text('SITAC ' + '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' +
-                '' +  _monIntervention.getDate.toString() +
+                '' +  DateFormat('yyyy-MM-dd  kk:mm:ss').format(_monIntervention.getDate) +
                 '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' + _monIntervention.getNom +
                 '\n\t\t\t\t\t\t\t\t\t\t\t\t' + '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' +
                 '' + _monIntervention.getAdresse),

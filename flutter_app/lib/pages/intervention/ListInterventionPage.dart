@@ -67,62 +67,65 @@ class _ListInterventionPage extends State<ListInterventionPage> {
   Widget build(BuildContext context) {
     //afficher le + selon le rôle
     _context = context;
-    return StreamBuilder<QuerySnapshot>(
-      stream: _interventionService.loadAllInterventions(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+    return Scaffold(
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          title: Text('Liste des interventions'),
+        ),
+        body: StreamBuilder<QuerySnapshot>(
+        stream: _interventionService.loadAllInterventions(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-        return ListView(
-          padding: EdgeInsets.all(20.0),
-          children: <Widget>[
-            SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  child: DataTable(
-                    sortColumnIndex: _currentSortColumn,
-                    sortAscending: _isAscending,
-                    showCheckboxColumn: false,
-                    columns: const <DataColumn>[
-                      DataColumn(
-                        label: Text(
-                          'Nom',
-                          style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Code sinistre',
-                          style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Adresse',
-                          style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Date',
-                          style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                        ),)
+          return ListView(
+            padding: EdgeInsets.all(20.0),
+            children: <Widget>[
+              SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        child: DataTable(
+                            sortColumnIndex: _currentSortColumn,
+                            sortAscending: _isAscending,
+                            showCheckboxColumn: false,
+                            columns: const <DataColumn>[
+                              DataColumn(
+                                label: Text(
+                                  'Nom',
+                                  style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Code sinistre',
+                                  style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Adresse',
+                                  style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Date',
+                                  style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                                ),)
 
-                    ],
-                    rows: _buildList(context, snapshot.data.docs)
-                    /*snapshot.data.docs.map((DocumentSnapshot document) {
-
+                            ],
+                            rows: _buildList(context, snapshot.data.docs)
+                          /*snapshot.data.docs.map((DocumentSnapshot document) {
                       /*_laListe.add(
                           Intervention(document.id, document.data()['nom'],
                               document.data()['adresse'], document.data()['codeSinistre'],
                               document.data()['date'].toDate(), document.data()['moyens'].cast<List<MoyenIntervention>>())
                       );*/
-
                       return DataRow(
                           cells: <DataCell>[
                             DataCell(Text(document.data()['nom'])),
@@ -138,15 +141,16 @@ class _ListInterventionPage extends State<ListInterventionPage> {
                       );
                     }
                     ).toList(),*/
-                  ),
-                ),
-                _showAddButton()
-              ],
-            )
-            )
-          ],
-        );
-      }
+                        ),
+                      ),
+                      _showAddButton()
+                    ],
+                  )
+              )
+            ],
+          );
+        }
+    )
     );
   }
 
