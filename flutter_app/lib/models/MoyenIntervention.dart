@@ -53,22 +53,27 @@ class MoyenIntervention {
         position = Position( map['latitude'], map['longitude']),
         basePath = map['basePath'];
 
-  MoyenIntervention.fromCaracteristicsAndPosition(SymbolCaracteristics caracteristics, Position position) {
+  MoyenIntervention.fromCaracteristicsAndPosition(SymbolCaracteristics caracteristics, Position position)  {
     MoyenService moyenService = MoyenService();
     moyenService.getMoyenByCode(caracteristics.nomSymbol)
-        .then((snapshot) => {
-      this.id = Uuid().v4(),
-      this.moyen = Moyen.fromSnapshot(snapshot),
-      this.position =position,
-      this.couleur =ColorConverter.colorFromString(caracteristics.couleur),
-      this.etat = SymbolIntervention.EtatFromCode(caracteristics.etat),
-      this.basePath =caracteristics.basePath,
-      demandeA = DateTime.now(),
-      departA = null,
-      arriveA = null}
+        .then((snapshot) {
+          print('code ' + snapshot.data()['codeMoyen']);
+          print('description ' + snapshot.data()['description']);
+          print('couleurDefaut ' + snapshot.data()['couleurDefaut']);
 
+      this.id = Uuid().v4();
+      this.moyen =  Moyen.fromSnapshot(snapshot);
+      this.position =position;
+      this.couleur =ColorConverter.colorFromString(caracteristics.couleur);
+      this.etat = SymbolIntervention.EtatFromCode(caracteristics.etat);
+      this.basePath =caracteristics.basePath;
+      demandeA = DateTime.now();
+      departA = null;
+      arriveA = null;
+        }
     );
 
   }
+
 
 }

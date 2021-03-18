@@ -13,7 +13,7 @@ class StringHelper {
     String base = (index != -1)? path.substring(0, index+1): path;
     return base;
   }
-
+//Icone_Png/Infrastructure/Vehicule/FPT/M_FPT_Rouge_1.png
   static SymbolCaracteristics caracteristicsFromString(String iconPngPathName) {
     String nomIcon = nomIconPngFromPath(iconPngPathName);
     String base = basePathIcon(iconPngPathName);

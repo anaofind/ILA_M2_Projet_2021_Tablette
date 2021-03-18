@@ -35,6 +35,7 @@ class MoyenService {
         .get()
         .then((querySnapshot) {
       if(querySnapshot.size!=0) {
+        print('query '+querySnapshot.docs[0].data()['codeMoyen']);
         return querySnapshot.docs[0];
       }
       else{

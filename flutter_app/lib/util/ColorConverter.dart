@@ -32,12 +32,6 @@ class ColorConverter{
     if(color == Colors.orange){ret =  'Colors.orange';}
     if(color == Colors.purple){ret =  'Colors.purple';}
 
-    if(color == Colors.black){ret =  'Noir';}
-    if(color == Colors.green){ret =  'Vert';}
-    if(color == Colors.red){ret =  'Rouge';}
-    if(color == Colors.blue){ret =  'Bleu';}
-    if(color == Colors.orange){ret =  'Orange';}
-    if(color == Colors.purple){ret =  'Violet';}
     return ret;
   }
 
