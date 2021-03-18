@@ -72,14 +72,14 @@ class SitacPageState extends State<SitacPage> {
                 appBar: AppBar(
                   bottom: TabBar(
                     tabs: [
-                      Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Basic.png'),)),
+                      Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),)),
                       Tab(icon: Image(image: new AssetImage('Icone_Png/Danger/S_Action_Noir_1.png'),)),
                       Tab(icon: Image(image: new AssetImage('Icone_Png/Danger/S_Danger_Noir_1.png'),)),
                       Tab(icon: Image(image: new AssetImage('Icone_Png/PointEau.png'),)),
                       Tab(icon: Image(image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Noir_0.png'),)),
                       Tab(icon: Image(image: new AssetImage('Icone_Png/Chemin/S_Fleche_Noir_1.png'),)),
                       Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),)),
-                      Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),)),
+                      Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Basic.png'),)),
                     ],
                   ),
                   title: Text('SITAC ' + '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' +
@@ -99,6 +99,766 @@ class SitacPageState extends State<SitacPage> {
                             flex: 1,
                             child: TabBarView(
                               children: [
+                                ListView.builder(
+                                  itemCount: _monIntervention.getMoyens.length,
+                                  itemBuilder: (context, index){
+                                    MoyenIntervention moyen = _monIntervention.moyens[index];
+                                    if (moyen != null && moyen.moyen != null && moyen.moyen.couleurDefaut != null && moyen.etat != null && moyen.position.latitude == null && moyen.position.longitude == null) {
+                                      String pathImage = SymbolDecider.createIconPathRelatedToObject(moyen);
+                                      return GestureDetector(
+                                        onTap: () {
+                                          SelectorMoyenSymbol.moyenId = index;
+                                          SelectorMoyenSymbol.pathImage = pathImage;
+                                        },
+                                        child: Image(
+                                          image: new AssetImage(pathImage),
+                                        ),
+                                      );
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                // MOYEN demandé à partir d'infrastructure
+                                ListView(
+                                  padding: const EdgeInsets.all(8),
+                                  children: <Widget>[
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Action_Rouge_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Danger/S_Action_Rouge_1.png'),
+                                            width: 100,
+                                            height: 100,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Action_Vert_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Danger/S_Action_Vert_1.png'),
+                                            width: 100,
+                                            height: 100,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Action_Bleu_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Danger/S_Action_Bleu_1.png'),
+                                            width: 100,
+                                            height: 100,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Action_Orange_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Danger/S_Action_Orange_1.png'),
+                                            width: 100,
+                                            height: 100,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                ListView(
+                                  padding: const EdgeInsets.all(8),
+                                  children: <Widget>[
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Danger_Rouge_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Danger/S_Danger_Rouge_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_PointSensible_Rouge_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Danger/S_PointSensible_Rouge_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Danger_Vert_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Danger/S_Danger_Vert_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_PointSensible_Vert_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Danger/S_PointSensible_Vert_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Danger_Bleu_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Danger/S_Danger_Bleu_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_PointSensible_Bleu_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Danger/S_PointSensible_Bleu_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Danger_Orange_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Danger/S_Danger_Orange_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_PointSensible_Orange_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Danger/S_PointSensible_Orange_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                ListView(
+                                  padding: const EdgeInsets.all(8),
+                                  children: <Widget>[
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/S_Perienne_Bleu_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/S_Perienne_Bleu_1.png'),
+                                            width: 90,
+                                            height: 90,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/S_NonPerienne_Bleu_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/S_NonPerienne_Bleu_1.png'),
+                                            width: 90,
+                                            height: 90,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/S_Ravitaillement_Bleu_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/S_Ravitaillement_Bleu_1.png'),
+                                            width: 90,
+                                            height: 90,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                ListView(
+                                  padding: const EdgeInsets.all(8),
+                                  children: <Widget>[
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Rouge_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Rouge_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Rouge_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Rouge_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Vert_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Vert_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Vert_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Vert_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Bleu_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Bleu_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Bleu_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Bleu_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Orange_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Orange_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Orange_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Orange_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Rouge_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Rouge_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Rouge_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Rouge_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Vert_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Vert_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Vert_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Vert_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Bleu_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Bleu_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Bleu_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Bleu_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Orange_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Orange_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Orange_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Orange_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                ListView(
+                                  padding: const EdgeInsets.all(8),
+                                  children: <Widget>[
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Noir_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Noir_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Noir_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Noir_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Noir_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Noir_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Noir_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Noir_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Rouge_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Rouge_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Rouge_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Rouge_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Rouge_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Rouge_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Rouge_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Rouge_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Orange_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Orange_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Orange_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Orange_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Orange_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Orange_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Orange_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Orange_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Vert_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Vert_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Vert_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Vert_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Vert_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Vert_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Vert_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Vert_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Bleu_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Bleu_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Bleu_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Bleu_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Bleu_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Bleu_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Bleu_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Bleu_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Violet_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Violet_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Violet_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Violet_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Violet_1.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Violet_1.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Violet_0.png';
+                                          },
+                                          child: Image(
+                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Violet_0.png'),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                ListView(
+                                  padding: const EdgeInsets.all(8),
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () {
+                                        SelectorMoyenSymbol.pathImage = 'Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png';
+                                      },
+                                      child: Image(
+                                        image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),
+                                        width: 100,
+                                        height: 100,
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        SelectorMoyenSymbol.pathImage = 'Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png';
+                                      },
+                                      child: Image(
+                                        image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),
+                                        width: 100,
+                                        height: 100,
+                                      ),
+                                    ),
+
+                                    GestureDetector(
+                                      onTap: () {
+                                        SelectorMoyenSymbol.pathImage = 'Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png';
+                                      },
+                                      child: Image(
+                                        image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),
+                                        width: 100,
+                                        height: 100,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 ListView(
                                   //scrollDirection: Axis.horizontal,
                                   padding: const EdgeInsets.all(8),
@@ -576,770 +1336,6 @@ class SitacPageState extends State<SitacPage> {
 
                                   ],
                                 ),
-                                ListView(
-                                  padding: const EdgeInsets.all(8),
-                                  children: <Widget>[
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Action_Rouge_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Danger/S_Action_Rouge_1.png'),
-                                            width: 100,
-                                            height: 100,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Action_Vert_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Danger/S_Action_Vert_1.png'),
-                                            width: 100,
-                                            height: 100,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Action_Bleu_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Danger/S_Action_Bleu_1.png'),
-                                            width: 100,
-                                            height: 100,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Action_Orange_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Danger/S_Action_Orange_1.png'),
-                                            width: 100,
-                                            height: 100,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                ListView(
-                                  padding: const EdgeInsets.all(8),
-                                  children: <Widget>[
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Danger_Rouge_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Danger/S_Danger_Rouge_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_PointSensible_Rouge_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Danger/S_PointSensible_Rouge_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Danger_Vert_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Danger/S_Danger_Vert_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_PointSensible_Vert_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Danger/S_PointSensible_Vert_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Danger_Bleu_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Danger/S_Danger_Bleu_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_PointSensible_Bleu_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Danger/S_PointSensible_Bleu_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_Danger_Orange_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Danger/S_Danger_Orange_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Danger/S_PointSensible_Orange_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Danger/S_PointSensible_Orange_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                ListView(
-                                  padding: const EdgeInsets.all(8),
-                                  children: <Widget>[
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/S_Perienne_Bleu_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/S_Perienne_Bleu_1.png'),
-                                            width: 90,
-                                            height: 90,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/S_NonPerienne_Bleu_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/S_NonPerienne_Bleu_1.png'),
-                                            width: 90,
-                                            height: 90,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/S_Ravitaillement_Bleu_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/S_Ravitaillement_Bleu_1.png'),
-                                            width: 90,
-                                            height: 90,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                ListView(
-                                  padding: const EdgeInsets.all(8),
-                                  children: <Widget>[
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Rouge_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Rouge_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Rouge_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Rouge_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Vert_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Vert_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Vert_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Vert_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Bleu_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Bleu_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Bleu_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Bleu_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Orange_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Orange_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Defense_Orange_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Defense_Orange_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Rouge_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Rouge_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Rouge_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Rouge_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Vert_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Vert_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Vert_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Vert_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Bleu_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Bleu_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Bleu_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Bleu_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Orange_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Orange_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Defense/S_Perimetrale_Orange_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Orange_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-
-                                ListView(
-                                  padding: const EdgeInsets.all(8),
-                                  children: <Widget>[
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Noir_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Noir_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Noir_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Noir_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Noir_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Noir_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Noir_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Noir_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Rouge_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Rouge_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Rouge_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Rouge_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Rouge_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Rouge_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Rouge_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Rouge_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Orange_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Orange_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Orange_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Orange_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Orange_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Orange_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Orange_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Orange_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Vert_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Vert_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Vert_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Vert_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Vert_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Vert_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Vert_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Vert_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Bleu_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Bleu_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Bleu_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Bleu_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Bleu_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Bleu_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Bleu_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Bleu_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Violet_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Violet_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Chemin_Violet_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Chemin_Violet_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Violet_1.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Violet_1.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            SelectorMoyenSymbol.pathImage = 'Icone_Png/Chemin/S_Fleche_Violet_0.png';
-                                          },
-                                          child: Image(
-                                            image: new AssetImage('Icone_Png/Chemin/S_Fleche_Violet_0.png'),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-
-                                ListView(
-                                  padding: const EdgeInsets.all(8),
-                                  children: <Widget>[
-                                    GestureDetector(
-                                      onTap: () {
-                                        SelectorMoyenSymbol.pathImage = 'Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png';
-                                      },
-                                      child: Image(
-                                        image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),
-                                        width: 100,
-                                        height: 100,
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        SelectorMoyenSymbol.pathImage = 'Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png';
-                                      },
-                                      child: Image(
-                                        image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),
-                                        width: 100,
-                                        height: 100,
-                                      ),
-                                    ),
-
-                                    GestureDetector(
-                                      onTap: () {
-                                        SelectorMoyenSymbol.pathImage = 'Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png';
-                                      },
-                                      child: Image(
-                                        image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),
-                                        width: 100,
-                                        height: 100,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                // MOYEN demandé à partir d'infrastructure
-
-                                ListView.builder(
-                                  itemCount: _monIntervention.getMoyens.length,
-                                  itemBuilder: (context, index){
-                                    MoyenIntervention moyen = _monIntervention.moyens[index];
-                                    if (moyen != null && moyen.moyen != null && moyen.moyen.couleurDefaut != null && moyen.etat != null && moyen.position.latitude == null && moyen.position.longitude == null) {
-                                      String pathImage = SymbolDecider.createIconPathRelatedToObject(moyen);
-                                      return GestureDetector(
-                                        onTap: () {
-                                          SelectorMoyenSymbol.moyenId = index;
-                                          SelectorMoyenSymbol.pathImage = pathImage;
-                                        },
-                                        child: Image(
-                                          image: new AssetImage(pathImage),
-                                        ),
-                                      );
-                                    }
-                                    return null;
-                                  },
-                                ),
                               ],
                             ),
                           ),
@@ -1361,5 +1357,4 @@ class SitacPageState extends State<SitacPage> {
         }
     );
   }
-
 }

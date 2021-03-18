@@ -93,6 +93,31 @@ class InterventionService {
     });
   }
 
+  Future<void> updatePositionMoyenIntervention(String idIntervention, String idMoyen, Position newPosition) {
+    Intervention i;
+    List<MoyenIntervention> moyens;
+    interventions.doc(idIntervention).get().then((DocumentSnapshot doc) {
+      if(doc.exists) {
+        i = Intervention.fromSnapshot(doc);
+        moyens = i.moyens;
+        moyens.forEach((moyen) {
+          if(moyen.id == idMoyen){
+            moyen.position= newPosition;
+          }
+        });
+        return interventions.doc(idIntervention)
+            .update({'moyens': i.ConvertMoyensToMap(moyens)});
+      }
+    });
+  }
+
+  Future<void> updatePositionMoyenOrSymbolIntervention(String idIntervention, dynamic object, Position newPosition) {
+
+    if (object is MoyenIntervention){updatePositionMoyenIntervention(idIntervention, object.id, newPosition);};
+    if (object is SymbolIntervention){updatePositionSymbolIntervention(idIntervention, object.id, newPosition);};
+
+  }
+
   Future<void> updateEtatSymbolIntervention(String idIntervention, idSymbol, Etat newEtat) {
     Intervention i;
     List<SymbolIntervention> symbols;
