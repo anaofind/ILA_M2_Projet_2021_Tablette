@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_app/models/Position.dart';
 import 'package:flutter_app/services/MoyenService.dart';
 import 'package:uuid/uuid.dart';
@@ -55,12 +57,11 @@ class MoyenIntervention {
 
   MoyenIntervention.fromCaracteristicsAndPosition(SymbolCaracteristics caracteristics, Position position)  {
     MoyenService moyenService = MoyenService();
-    moyenService.getMoyenByCode(caracteristics.nomSymbol)
+    /*moyenService.getMoyenByCode(caracteristics.nomSymbol)
         .then((snapshot) {
           print('code ' + snapshot.data()['codeMoyen']);
           print('description ' + snapshot.data()['description']);
           print('couleurDefaut ' + snapshot.data()['couleurDefaut']);
-
       this.id = Uuid().v4();
       this.moyen =  Moyen.fromSnapshot(snapshot);
       this.position =position;
@@ -71,9 +72,17 @@ class MoyenIntervention {
       departA = null;
       arriveA = null;
         }
-    );
-
+    );*/
+    moyenService.getMoyenByCode(caracteristics.nomSymbol).forEach((element) {
+      this.id = Uuid().v4();
+      this.moyen =  Moyen.fromSnapshot(element.docs[0]);
+      this.position =position;
+      this.couleur =ColorConverter.colorFromString(caracteristics.couleur);
+      this.etat = SymbolIntervention.EtatFromCode(caracteristics.etat);
+      this.basePath =caracteristics.basePath;
+      demandeA = DateTime.now();
+      departA = null;
+      arriveA = null;
+    });
   }
-
-
 }

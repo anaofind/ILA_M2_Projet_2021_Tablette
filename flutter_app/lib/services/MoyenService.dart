@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_app/models/Moyen.dart';
 
@@ -16,10 +15,8 @@ class MoyenService {
   /*
   Future<List<String>> loadAllSinistres() async{
     QuerySnapshot snapshots = await sinistres.get();
-
     return snapshots.docs.map((doc) => doc.data()['codeSinistre'])
     .toList();
-
   }
 */
   Future<DocumentSnapshot> getMoyenById(String id) {
@@ -28,20 +25,11 @@ class MoyenService {
 
   }
 
-  Future<DocumentSnapshot> getMoyenByCode(String codeMoyen) async{
+  Stream<QuerySnapshot> getMoyenByCode(String codeMoyen) {
 
-     return await moyens.where(
-        "codeMoyen", isEqualTo: codeMoyen)
-        .get()
-        .then((querySnapshot) {
-      if(querySnapshot.size!=0) {
-        print('query '+querySnapshot.docs[0].data()['codeMoyen']);
-        return querySnapshot.docs[0];
-      }
-      else{
-        return null;
-      }
-    });
+    return  moyens.where(
+        "codeMoyen", isEqualTo: codeMoyen).snapshots();
+
 
   }
 
