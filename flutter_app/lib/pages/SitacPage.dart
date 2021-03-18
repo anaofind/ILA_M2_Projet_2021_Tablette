@@ -61,7 +61,7 @@ class SitacPageState extends State<SitacPage> {
                 Tab(icon: Image(image: new AssetImage('Icone_Png/Danger/S_Danger_Noir_1.png'),)),
                 Tab(icon: Image(image: new AssetImage('Icone_Png/PointEau.png'),)),
                 Tab(icon: Image(image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Noir_0.png'),)),
-                Tab(icon: Image(image: new AssetImage('Icone_Png/Chemin/Chemin_Encours.png'),)),
+                Tab(icon: Image(image: new AssetImage('Icone_Png/Chemin/S_Fleche_Noir_1.png'),)),
                 Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),)),
                 Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),)),
               ],
@@ -628,7 +628,12 @@ class SitacPageState extends State<SitacPage> {
                               Row(
                                 children: [
                                   Image(
-                                    image: new AssetImage('Icone_Png/Chemin/Chemin_Encours.png' ),
+                                    image: new AssetImage('Icone_Png/Chemin/S_Chemin_Noir_1.png' ),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Chemin_Noir_0.png'),
                                     width: 80,
                                     height: 80,
                                   ),
@@ -637,7 +642,157 @@ class SitacPageState extends State<SitacPage> {
                               Row(
                                 children: [
                                   Image(
-                                    image: new AssetImage('Icone_Png/Chemin/Chemin_Prevue.png'),
+                                    image: new AssetImage('Icone_Png/Chemin/S_Fleche_Noir_1.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Fleche_Noir_0.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                children: [
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Chemin_Rouge_1.png' ),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Chemin_Rouge_0.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Fleche_Rouge_1.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Fleche_Rouge_0.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                children: [
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Chemin_Orange_1.png' ),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Chemin_Orange_0.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Fleche_Orange_1.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Fleche_Orange_0.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                children: [
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Chemin_Vert_1.png' ),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Chemin_Vert_0.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Fleche_Vert_1.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Fleche_Vert_0.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                children: [
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Chemin_Bleu_1.png' ),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Chemin_Bleu_0.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Fleche_Bleu_1.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Fleche_Bleu_0.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                children: [
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Chemin_Violet_1.png' ),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Chemin_Violet_0.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Fleche_Violet_1.png'),
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                  Image(
+                                    image: new AssetImage('Icone_Png/Chemin/S_Fleche_Violet_0.png'),
                                     width: 80,
                                     height: 80,
                                   ),
