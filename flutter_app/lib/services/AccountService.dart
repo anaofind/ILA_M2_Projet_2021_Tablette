@@ -98,7 +98,7 @@ class AccountService {
       } catch (error) {
         switch (error.code) {
           case "email-already-in-use":
-            errorMessage = "This email is already is use";
+            errorMessage = "This email is already used";
             break;
           case "invalid-email":
             errorMessage = "Your email address appears to be malformed";

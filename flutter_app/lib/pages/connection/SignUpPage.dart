@@ -146,16 +146,16 @@ class SignUpPageState extends State<SignUpPage> {
     if (formState.validate()) {
       formState.save();
       errorMessage = await accountService.signUp(email, login, password, familyName, name);
-    }
-    if (errorMessage != null) {
-      Alert(
-          context: context,
-          title: "Inscription",
-          desc: errorMessage
-      ).show();
-    } else {
-      if (Navigator.canPop(context)) {
-        Navigator.pop(context);
+      if (errorMessage != null) {
+        Alert(
+            context: context,
+            title: "Inscription",
+            desc: errorMessage
+        ).show();
+      } else {
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context);
+        }
       }
     }
   }
