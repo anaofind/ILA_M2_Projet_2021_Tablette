@@ -1325,10 +1325,16 @@ class SitacPageState extends State<SitacPage> {
                                   itemCount: _monIntervention.getMoyens.length,
                                   itemBuilder: (context, index){
                                     MoyenIntervention moyen = _monIntervention.moyens[index];
-                                    if (moyen != null && moyen.moyen != null && moyen.moyen.couleurDefaut != null && moyen.etat != null) {
+                                    if (moyen != null && moyen.moyen != null && moyen.moyen.couleurDefaut != null && moyen.etat != null && moyen.position.latitude == null && moyen.position.longitude == null) {
                                       String pathImage = SymbolDecider.createIconPathRelatedToObject(moyen);
-                                      return Image(
-                                        image: new AssetImage(pathImage),
+                                      return GestureDetector(
+                                        onTap: () {
+                                          SelectorMoyenSymbol.moyenId = index;
+                                          SelectorMoyenSymbol.pathImage = pathImage;
+                                        },
+                                        child: Image(
+                                          image: new AssetImage(pathImage),
+                                        ),
                                       );
                                     }
                                     return null;

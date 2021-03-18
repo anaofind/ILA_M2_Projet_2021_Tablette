@@ -60,8 +60,16 @@ class MapPageState extends State<MapPage> {
                 onTap:(LatLng latLng) async{
                   if (SelectorMoyenSymbol.isSelected()) {
                     Position position = Position(latLng.latitude, latLng.longitude);
-                    dynamic symbolOrMoyen = SymbolDecider.createObjectRelatedToSymbol(SelectorMoyenSymbol.pathImage, position);
-                    this.interventionService.addMoyenOrSymbolToIntervention(this.intervention.id, symbolOrMoyen);
+                    if (SelectorMoyenSymbol.moyenId > -1) {
+                      if (SelectorMoyenSymbol.moyenId < this.intervention.moyens.length) {
+                        MoyenIntervention moyen = this.intervention.moyens[SelectorMoyenSymbol.moyenId];
+                        moyen.position = position;
+                        this.interventionService.updateIntervention(this.intervention);
+                      }
+                    } else {
+                      dynamic symbolOrMoyen = SymbolDecider.createObjectRelatedToSymbol(SelectorMoyenSymbol.pathImage, position);
+                      this.interventionService.addMoyenOrSymbolToIntervention(this.intervention.id, symbolOrMoyen);
+                    }
                     SelectorMoyenSymbol.deselect();
                   }
                 },
