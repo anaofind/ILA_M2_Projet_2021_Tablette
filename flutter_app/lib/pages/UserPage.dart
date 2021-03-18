@@ -1,8 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/UserData.dart';
 import 'package:flutter_app/services/AccountService.dart';
-
-import '../services/AccountService.dart';
 
 
 class UserPage extends StatefulWidget {
@@ -13,38 +12,46 @@ class UserPage extends StatefulWidget {
 }
 
 class UserPageState extends State<UserPage> {
-  AccountService authService = AccountService();
 
   @override
   Widget build(BuildContext context) {
-    print ("GET USER");
-    UserData user =  AccountService.currentUserData;
-    return Scaffold(
-        resizeToAvoidBottomPadding: false,
-        appBar: AppBar(
-          title: Text('Utilisateur'),
-        ),
-        body: Center(
-          child: Column(
-            children: [
-              Text(
-                  user.email
+    return StreamBuilder<QuerySnapshot>(
+      stream: AccountService.loadCurrentUser(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        UserData userData = UserData.fromSnapshot(snapshot.data.docs[0]);
+        return Scaffold(
+            resizeToAvoidBottomPadding: false,
+            appBar: AppBar(
+              title: Text('Utilisateur'),
+            ),
+            body: Center(
+              child: Column(
+                children: [
+                  Text(
+                      userData.email
+                  ),
+                  Text(
+                      userData.login
+                  ),
+                  Text(
+                      userData.name
+                  ),
+                  Text(
+                      userData.firstName
+                  ),
+                  Text(
+                      userData.role.toString()
+                  ),
+                ],
               ),
-              Text(
-                  user.login
-              ),
-              Text(
-                  user.name
-              ),
-              Text(
-                  user.firstName
-              ),
-              Text(
-                  user.role.toString()
-              ),
-            ],
-          ),
-        )
+            )
+        );
+      }
     );
   }
 }

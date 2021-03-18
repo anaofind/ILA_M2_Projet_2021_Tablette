@@ -145,7 +145,7 @@ class SignUpPageState extends State<SignUpPage> {
     String errorMessage;
     if (formState.validate()) {
       formState.save();
-      errorMessage = await AccountService.signUp(email, login, password, familyName, name);
+      errorMessage = await accountService.signUp(email, login, password, familyName, name);
     }
     if (errorMessage != null) {
       Alert(
