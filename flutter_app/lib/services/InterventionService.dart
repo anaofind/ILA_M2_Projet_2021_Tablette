@@ -142,7 +142,7 @@ class InterventionService {
   }
 
   Stream<DocumentSnapshot> getInterventionById(String id) {
-    return interventions.doc(id).get().asStream();
+    return interventions.doc(id).snapshots();
   }
 
   Future<DocumentSnapshot> getInterventionByName(String nom) {

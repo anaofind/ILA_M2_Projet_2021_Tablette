@@ -1,11 +1,34 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_app/services/InterventionService.dart';
 import 'package:flutter_app/util/ColorConverter.dart';
+import 'package:flutter_app/util/StringHelper.dart';
 
 import 'Moyen.dart';
 import 'MoyenIntervention.dart';
 import 'Position.dart';
 import 'package:uuid/uuid.dart';
+
+class SymbolDecider {
+  static dynamic createObjectRelatedToSymbol(String PathIconPng, Position position){
+
+    //String icon = StringHelper.nomIconPngFromPath(PathIconPng);
+    //SymbolCaracteristics caracteristics = StringHelper.caracteristicsFromString(icon);
+    SymbolCaracteristics caracteristics = StringHelper.caracteristicsFromString(PathIconPng);
+    if(caracteristics.typeSymbol=='M'){
+      return MoyenIntervention.fromCaracteristicsAndPosition(caracteristics, position);}
+    else{
+      return SymbolIntervention.fromCaracteristicsAndPosition(caracteristics, position);
+    }
+
+  }
+  static String createIconPathRelatedToObject(dynamic symbolOrMoyen){
+    SymbolCaracteristics caracteristics = SymbolCaracteristics.fromSymbolOrMoyen(symbolOrMoyen);
+    String pathIcon = StringHelper.fullPathIconfromCaracteristics(caracteristics);
+    return pathIcon;
+  }
+}
 
 class SymbolIntervention {
   String id;
@@ -20,8 +43,8 @@ class SymbolIntervention {
   SymbolIntervention.fromCaracteristicsAndPosition(SymbolCaracteristics caracteristics, Position position){
     this.id = Uuid().v4();
     this.nomSymbol = caracteristics.nomSymbol;
-    this.position = position;
-    this.couleur = ColorConverter.colorFromString(caracteristics.couleur);
+    this.position =position;
+    this.couleur =ColorConverter.colorFromString(caracteristics.couleur);
     this.etat = EtatFromCode(caracteristics.etat);
     this.basePath = caracteristics.basePath;
   }
@@ -90,4 +113,5 @@ class SymbolCaracteristics {
       this.basePath = symbolOrMoyen.basePath;
     };
   }
+
 }
