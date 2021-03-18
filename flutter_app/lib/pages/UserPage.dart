@@ -5,17 +5,13 @@ import 'package:flutter_app/services/AccountService.dart';
 
 
 class UserPage extends StatefulWidget {
-  final UserData userData;
-  UserPage({Key key, this.userData}) : super(key: key);
+  UserPage({Key key}) : super(key: key);
 
   @override
-  UserPageState createState() => UserPageState(this.userData);
+  UserPageState createState() => UserPageState();
 }
 
 class UserPageState extends State<UserPage> {
-
-  final UserData userData;
-  UserPageState(this.userData);
 
   @override
   Widget build(BuildContext context) {

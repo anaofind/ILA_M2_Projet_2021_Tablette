@@ -13,7 +13,7 @@ import 'package:latlong/latlong.dart';
 class MapPage extends StatefulWidget {
   MapPage({Key key, this.intervention}) : super(key: key);
 
-  final Intervention intervention;
+  Intervention intervention;
 
   @override
   MapPageState createState() => MapPageState(this.intervention);
@@ -24,7 +24,7 @@ class MapPageState extends State<MapPage> {
   final interventionService = InterventionService();
 
   final List<Marker> markers = [];
-  final Intervention intervention;
+  Intervention intervention;
   int idSymbolSelected = -1;
   MapPageState(this.intervention);
 
@@ -35,22 +35,20 @@ class MapPageState extends State<MapPage> {
 
   MapController mapController = MapController();
 
-  @override
-  void initState() {
-    this.refreshMarkers();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
       stream: this.interventionService.getInterventionById(intervention.id),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+        print("UPDATE STREAM");
+        if (!snapshot.hasData || snapshot.hasError) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
+        this.intervention = Intervention.fromSnapshot(snapshot.data);
+        this.refreshMarkers();
         return Scaffold(
           body: FlutterMap(
             mapController: this.mapController,
@@ -66,15 +64,12 @@ class MapPageState extends State<MapPage> {
                   dynamic symbolOrMoyen = SymbolDecider.createObjectRelatedToSymbol(SelectorMoyenSymbol.pathImage, position);
                   this.interventionService.addMoyenOrSymbolToIntervention(this.intervention.id, symbolOrMoyen);
                   SelectorMoyenSymbol.deselect();
-                  this.setState(() {
-                    this.refreshMarkers();
-                  });
                 }
               },
             ),
             layers: [
               TileLayerOptions(
-                urlTemplate: "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png",
+                urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 subdomains: ['a', 'b', 'c'],
                 keepBuffer: 6,
                 tileSize: 256,
@@ -93,12 +88,9 @@ class MapPageState extends State<MapPage> {
                     child: Icon(Icons.clear),
                     backgroundColor: Colors.redAccent,
                     onPressed: () {
-                      this.setState(() {
-                        this.intervention.symbols.clear();
-                        this.interventionService.updateIntervention(this.intervention);
-                        this.idSymbolSelected = -1;
-                        this.refreshMarkers();
-                      });
+                      this.intervention.symbols.clear();
+                      this.idSymbolSelected = -1;
+                      this.interventionService.updateIntervention(this.intervention);
                     },
                   ),
                 ],
@@ -170,9 +162,8 @@ class MapPageState extends State<MapPage> {
         ),
       ),
     );
-    this.setState(() {
-      this.markers.add(marker);
-    });
+
+    this.markers.add(marker);
   }
 
   refreshMarkers() {
