@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/lib-ext/dragmarker.dart';
 import 'package:flutter_app/models/Intervention.dart';
 import 'package:flutter_app/models/SymbolIntervention.dart';
 import 'package:flutter_app/models/Position.dart';
@@ -22,7 +23,8 @@ class MapPageState extends State<MapPage> {
 
   final interventionService = InterventionService();
 
-  final List<Marker> markers = [];
+  final List<DragMarker> markers = [];
+  final List<dynamic> moyensOrSymbols = [];
   Intervention intervention;
   int idSymbolSelected = -1;
   MapPageState(this.intervention);
@@ -52,6 +54,9 @@ class MapPageState extends State<MapPage> {
             body: FlutterMap(
               mapController: this.mapController,
               options: MapOptions(
+                plugins: [
+                  DragMarkerPlugin(),
+                ],
                 center: this.currentCenter,
                 zoom: this.currentZoom,
                 maxZoom: this.maxZoom,
@@ -63,7 +68,9 @@ class MapPageState extends State<MapPage> {
                     if (SelectorMoyenSymbol.moyenId > -1) {
                       if (SelectorMoyenSymbol.moyenId < this.intervention.moyens.length) {
                         MoyenIntervention moyen = this.intervention.moyens[SelectorMoyenSymbol.moyenId];
+                        this.intervention.moyens.removeAt(SelectorMoyenSymbol.moyenId);
                         moyen.position = position;
+                        this.intervention.moyens.add(moyen);
                         this.interventionService.updateIntervention(this.intervention);
                       }
                     } else {
@@ -81,8 +88,8 @@ class MapPageState extends State<MapPage> {
                   keepBuffer: 6,
                   tileSize: 256,
                 ),
-                new MarkerLayerOptions(
-                    markers: markers
+                DragMarkerPluginOptions(
+                  markers: this.markers,
                 ),
               ],
             ),
@@ -148,18 +155,21 @@ class MapPageState extends State<MapPage> {
   }
 
   createMarker(LatLng latLng, String pathImage) {
+    print("CREATE DRAG MARKER");
     int id = markers.length;
     Color color = (this.idSymbolSelected == id)? Colors.purple : Colors.red;
-    Marker marker = new Marker(
-      width: 60.0,
-      height: 60.0,
+    DragMarker dm = DragMarker(
       point: latLng,
-      builder: (context) => new Container(
+      width: 80.0,
+      height: 80.0,
+      offset: Offset(0.0, 0.0),
+      builder: (ctx) => Container(
         child: IconButton(
           icon : this.getImage(pathImage, 60),
           color: color,
           iconSize: 60,
           onPressed: () {
+            print("if moyen change etat on click");
             this.setState(() {
               if (idSymbolSelected == id) {
                 idSymbolSelected = -1;
@@ -171,16 +181,36 @@ class MapPageState extends State<MapPage> {
           },
         ),
       ),
+      onDragStart:  (details,point) => print("Start point $point"),
+      onDragEnd:    (details,point) {
+        dynamic symbolOrMoyen = this.moyensOrSymbols[id];
+        Position position = Position(point.latitude, point.longitude);
+        this.interventionService.updatePositionMoyenOrSymbolIntervention(this.intervention.id, symbolOrMoyen, position);
+        SelectorMoyenSymbol.deselect();
+      },
+      feedbackBuilder: (ctx) => Container(
+        child: IconButton(
+          icon : this.getImage(pathImage, 120),
+          color: color,
+          iconSize: 120,
+        ),
+      ),
+      feedbackOffset: Offset(0.0, 0.0),
+      updateMapNearEdge: true,
+      nearEdgeRatio: 2.0,
+      nearEdgeSpeed: 1.0,
     );
 
-    this.markers.add(marker);
+    this.markers.add(dm);
   }
 
   refreshMarkers() {
     markers.clear();
+    moyensOrSymbols.clear();
     for (int i = 0; i<this.intervention.moyens.length; i++) {
       MoyenIntervention moyen = this.intervention.moyens[i];
       if (this.checkMoyen(moyen)) {
+        moyensOrSymbols.add(moyen);
         LatLng position = LatLng(moyen.position.latitude, moyen.position.longitude);
         String pathImage = SymbolDecider.createIconPathRelatedToObject(moyen);
         createMarker(position, pathImage);
@@ -189,6 +219,7 @@ class MapPageState extends State<MapPage> {
     for (int i = 0; i<this.intervention.symbols.length; i++) {
       SymbolIntervention symbol = this.intervention.symbols[i];
       if (this.checkSymbol(symbol)) {
+        moyensOrSymbols.add(symbol);
         LatLng position = LatLng(symbol.position.latitude, symbol.position.longitude);
         String pathImage = SymbolDecider.createIconPathRelatedToObject(symbol);
         createMarker(position, pathImage);
