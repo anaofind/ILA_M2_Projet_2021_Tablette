@@ -28,20 +28,11 @@ class MoyenService {
 
   }
 
-  Future<DocumentSnapshot> getMoyenByCode(String codeMoyen) async{
+  Stream<QuerySnapshot> getMoyenByCode(String codeMoyen) {
 
-     return await moyens.where(
-        "codeMoyen", isEqualTo: codeMoyen)
-        .get()
-        .then((querySnapshot) {
-      if(querySnapshot.size!=0) {
-        print('query '+querySnapshot.docs[0].data()['codeMoyen']);
-        return querySnapshot.docs[0];
-      }
-      else{
-        return null;
-      }
-    });
+     return  moyens.where(
+        "codeMoyen", isEqualTo: codeMoyen).snapshots();
+
 
   }
 
