@@ -4,7 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/main.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
+import 'package:flutter_app/models/Role.dart';
+import 'package:flutter_app/models/UserData.dart';
 import 'package:flutter_app/pages/HomePage.dart';
+import 'package:flutter_app/services/AccountService.dart';
 import 'package:flutter_app/services/NavigatorPage.dart';
 import 'package:flutter_app/services/SelectorIntervention.dart';
 import '../../models/Intervention.dart';
@@ -154,21 +157,28 @@ class _ListInterventionPage extends State<ListInterventionPage> {
     );
   }
 
-  Container _showAddButton() {
-    if(!_isAdmin) {
-      return Container();
-    } else {
-      return Container(
-
-        child: ElevatedButton(
-          child: Text('Nouvelle intervention'),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NewInterventionPage())
-            );
-          },
-        ),
-      );
-    }
+  Widget _showAddButton() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: AccountService.loadCurrentUser(),
+      builder: (context, snapshot) {
+        if (! snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+        UserData userData = UserData.fromSnapshot(snapshot.data.docs[0]);
+        if (userData.role == Role.Operator) {
+          return Container(
+            child: ElevatedButton(
+              child: Text('Nouvelle intervention'),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => NewInterventionPage())
+                );
+              },
+            ),
+          );
+        }
+        return Container();
+      }
+    );
   }
 }
