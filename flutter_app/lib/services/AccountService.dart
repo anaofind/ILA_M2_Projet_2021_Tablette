@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_app/models/Role.dart';
 import 'package:flutter_app/models/UserData.dart';
+import 'package:flutter_app/services/SelectorIntervention.dart';
 
 import '../models/UserData.dart';
 import 'Database.dart';
@@ -155,6 +156,7 @@ class AccountService {
     String errorMessage;
     try {
       await auth.signOut();
+      SelectorIntervention.selectIntervention(null);
     } catch (error) {
       errorMessage = "Unexpected log out error";
     }
