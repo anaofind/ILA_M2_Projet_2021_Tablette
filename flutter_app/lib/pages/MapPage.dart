@@ -5,13 +5,14 @@ import 'package:flutter_app/models/Intervention.dart';
 import 'package:flutter_app/models/SymbolIntervention.dart';
 import 'package:flutter_app/models/Position.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
+import 'package:flutter_app/services/HydrantService.dart';
 import 'package:flutter_app/services/InterventionService.dart';
 import 'package:flutter_app/services/SelectorMoyenSymbol.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
 class MapPage extends StatefulWidget {
-  MapPage({Key key, this.intervention}) : super(key: key);
+  MapPage({Key key, this.intervention}): super(key: key);
 
   Intervention intervention;
 
@@ -20,16 +21,18 @@ class MapPage extends StatefulWidget {
 }
 
 class MapPageState extends State<MapPage> {
-
   final interventionService = InterventionService();
 
   final List<DragMarker> markers = [];
+  final List<DragMarker> markersFixed = [];
   final List<dynamic> moyensOrSymbols = [];
   Intervention intervention;
   int idSymbolSelected = -1;
-  MapPageState(this.intervention);
+  MapPageState(this.intervention) {
+    HydrantService.createHydrantsData(this.currentCenter).then((value) => this.setState(() {}));
+  }
 
-  double currentZoom = 9.0;
+  double currentZoom = 18.0;
   double maxZoom = 18.0;
   double minZoom = 9.0;
   LatLng currentCenter = LatLng(48.0833 , -1.6833);
@@ -83,13 +86,13 @@ class MapPageState extends State<MapPage> {
               ),
               layers: [
                 TileLayerOptions(
-                  urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                  urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?osm_id=216165",
                   subdomains: ['a', 'b', 'c'],
                   keepBuffer: 6,
                   tileSize: 256,
                 ),
                 DragMarkerPluginOptions(
-                  markers: this.markers,
+                    markers: this.markersFixed + this.markers,
                 ),
               ],
             ),
@@ -154,6 +157,24 @@ class MapPageState extends State<MapPage> {
     this.mapController.move(mapController.center, this.currentZoom);
   }
 
+  createMarkerFixed(LatLng latLng, String pathImage) {
+    DragMarker m = DragMarker(
+      point: latLng,
+      width: 80.0,
+      height: 80.0,
+      builder: (ctx) => Container(
+        child: IconButton(
+          icon : this.getImage(pathImage, 80),
+          iconSize: 80,
+        ),
+      ),
+      onDragEnd:    (details,point) {
+        this.setState(() {});
+      }
+    );
+    this.markersFixed.add(m);
+  }
+
   createMarker(LatLng latLng, String pathImage) {
     print("CREATE DRAG MARKER");
     int id = markers.length;
@@ -165,9 +186,9 @@ class MapPageState extends State<MapPage> {
       offset: Offset(0.0, 0.0),
       builder: (ctx) => Container(
         child: IconButton(
-          icon : this.getImage(pathImage, 60),
+          icon : this.getImage(pathImage, 80),
           color: color,
-          iconSize: 60,
+          iconSize: 80,
           onPressed: () {
             print("if moyen change etat on click");
             this.setState(() {
@@ -205,6 +226,12 @@ class MapPageState extends State<MapPage> {
   }
 
   refreshMarkers() {
+    markersFixed.clear();
+    HydrantService.hydrants.forEach((element) {
+      LatLng position = LatLng(element.position.latitude, element.position.longitude);
+      String pathImage = SymbolDecider.createIconPathRelatedToObject(element.getSymbol());
+      this.createMarkerFixed(position, pathImage);
+    });
     markers.clear();
     moyensOrSymbols.clear();
     for (int i = 0; i<this.intervention.moyens.length; i++) {
@@ -213,7 +240,7 @@ class MapPageState extends State<MapPage> {
         moyensOrSymbols.add(moyen);
         LatLng position = LatLng(moyen.position.latitude, moyen.position.longitude);
         String pathImage = SymbolDecider.createIconPathRelatedToObject(moyen);
-        createMarker(position, pathImage);
+        this.createMarker(position, pathImage);
       }
     }
     for (int i = 0; i<this.intervention.symbols.length; i++) {
@@ -222,7 +249,7 @@ class MapPageState extends State<MapPage> {
         moyensOrSymbols.add(symbol);
         LatLng position = LatLng(symbol.position.latitude, symbol.position.longitude);
         String pathImage = SymbolDecider.createIconPathRelatedToObject(symbol);
-        createMarker(position, pathImage);
+        this.createMarker(position, pathImage);
       }
     }
   }
