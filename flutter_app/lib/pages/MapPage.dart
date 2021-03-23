@@ -42,12 +42,6 @@ class MapPageState extends State<MapPage> {
   Future<void> center(Intervention inter) async {
     List<Address> addresses = await Geocoder.local.findAddressesFromQuery(inter.adresse);
     Address first = addresses.first;
-    for(var i=0; i<addresses.length; i++){
-        if(addresses[i].locality == "Rennes"){
-          first = addresses[i];
-          break;
-        }
-    }
     this.currentCenter = LatLng(first.coordinates.latitude, first.coordinates.longitude);
     mapController.move(currentCenter, currentZoom);
   }
