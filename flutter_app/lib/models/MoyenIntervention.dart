@@ -75,14 +75,16 @@ class MoyenIntervention {
         }
     );*/
     moyenService.getMoyenByCode(caracteristics.nomSymbol).forEach((element) {
+      String etat = SymbolIntervention.EtatFromCode(caracteristics.etat);
+      DateTime date = DateTime.now();
       this.id = Uuid().v4();
       this.moyen =  Moyen.fromSnapshot(element.docs[0]);
       this.position =position;
       this.couleur =ColorConverter.colorFromString(caracteristics.couleur);
-      this.etat = SymbolIntervention.EtatFromCode(caracteristics.etat);
+      this.etat = etat;
       this.basePath =caracteristics.basePath;
-      demandeA = DateTime.now();
-      departA = null;
+      demandeA = date;
+      departA = etat==Etat.enCours.toString()?date:null;
       arriveA = null;
     });
   }
