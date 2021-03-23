@@ -183,4 +183,19 @@ class InterventionService {
       }
     });
   }
+
+  Future<void> addListMoyensToIntervention(String idIntervention, List<MoyenIntervention> newMoyens) {
+  Intervention i;
+    List<MoyenIntervention> moyens;
+    interventions.doc(idIntervention).get().then((DocumentSnapshot doc) {
+    if(doc.exists) {
+    i = Intervention.fromSnapshot(doc);
+    moyens = i.moyens;
+    moyens.addAll(newMoyens);
+    return interventions.doc(idIntervention)
+        .update({'moyens': i.ConvertMoyensToMap(moyens)});
+    }
+    });
+  }
+
 }

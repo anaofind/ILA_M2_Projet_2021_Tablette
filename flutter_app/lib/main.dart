@@ -8,6 +8,7 @@ import 'package:flutter_app/pages/HomePage.dart';
 import 'package:flutter_app/pages/SitacPage.dart';
 import 'package:flutter_app/pages/UserPage.dart';
 import 'package:flutter_app/pages/connection/SignInPage.dart';
+import 'package:flutter_app/pages/intervention/ListMoyenInterventionPage.dart';
 import 'package:flutter_app/services/AccountService.dart';
 import 'package:flutter_app/pages/intervention/ListInterventionPage.dart';
 import 'package:flutter_app/services/NavigatorPage.dart';
@@ -80,7 +81,7 @@ class AppHomePageState extends State<AppHomePage> {
         }
         return SitacPage(null);
       case 2:
-        return HomePage();
+        return ListMoyenInterventionPage(this.interventionSelected);
       case 3 :
         return HomePage();
       case 4 :

@@ -123,7 +123,7 @@ class _ListInterventionPage extends State<ListInterventionPage> {
 
                             ],
                             rows: _buildList(context, snapshot.data.docs)
-                          /*snapshot.data.docs.map((DocumentSnapshot document) {
+                          /*snapshot.data.docs.map((DocumentSnapshot document) {showCheckboxColumn
                       /*_laListe.add(
                           Intervention(document.id, document.data()['nom'],
                               document.data()['adresse'], document.data()['codeSinistre'],

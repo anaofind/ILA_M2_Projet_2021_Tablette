@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/lib-ext/dragmarker.dart';
 import 'package:flutter_app/models/Intervention.dart';
+import 'package:flutter_app/models/Moyen.dart';
 import 'package:flutter_app/models/SymbolIntervention.dart';
 import 'package:flutter_app/models/Position.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
@@ -21,21 +22,18 @@ class MapPage extends StatefulWidget {
 
 class MapPageState extends State<MapPage> {
 
+  MapPageState(this.intervention);
   final interventionService = InterventionService();
-
   final List<DragMarker> markers = [];
   final List<dynamic> moyensOrSymbols = [];
   Intervention intervention;
   int idSymbolSelected = -1;
-  MapPageState(this.intervention);
-
   double currentZoom = 9.0;
   double maxZoom = 18.0;
   double minZoom = 9.0;
   LatLng currentCenter = LatLng(48.0833 , -1.6833);
 
   MapController mapController = MapController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -169,14 +167,21 @@ class MapPageState extends State<MapPage> {
           color: color,
           iconSize: 60,
           onPressed: () {
-            print("if moyen change etat on click");
             this.setState(() {
-              if (idSymbolSelected == id) {
-                idSymbolSelected = -1;
-              } else {
-                idSymbolSelected = id;
+              dynamic moyen = this.moyensOrSymbols[id];
+              if(moyen is MoyenIntervention && checkMoyen(moyen)) {
+                switch(moyen.etat) {
+                  case "Etat.prevu" :
+                    moyen.etat = Etat.enCours.toString();
+                    moyen.arriveA = DateTime.now();
+                    break;
+                  case "Etat.enCours" :
+                    moyen.arriveA = null;
+                    moyen.etat = Etat.prevu.toString();
+                    break;
+                }
+                this.interventionService.updateIntervention(this.intervention);
               }
-              this.refreshMarkers();
             });
           },
         ),
