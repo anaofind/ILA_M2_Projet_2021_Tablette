@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/models/Intervention.dart';
+import 'package:flutter_app/models/MissionDrone.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
 import 'package:flutter_app/models/SymbolIntervention.dart';
 import 'package:flutter_app/pages/MapPage.dart';
@@ -27,7 +29,7 @@ class SitacPage extends StatefulWidget {
 class SitacPageState extends State<SitacPage> {
   AccountService authService = AccountService();
   bool isCollapsed = false;
-
+  final GlobalKey _formKey = GlobalKey();
   Intervention _monIntervention;
 
   SitacPageState(Intervention uneI) {
@@ -37,6 +39,8 @@ class SitacPageState extends State<SitacPage> {
   @override
   Widget build(BuildContext context) {
     String id = (this._monIntervention != null)? this._monIntervention.id: ' ';
+    MissionDrone _formResult = new MissionDrone(id);
+
     return StreamBuilder<DocumentSnapshot>(
         stream: InterventionService().getInterventionById(id),
         builder: (context, snapshot) {
@@ -79,7 +83,7 @@ class SitacPageState extends State<SitacPage> {
                       Tab(icon: Image(image: new AssetImage('Icone_Png/PointEau.png'),)),
                       Tab(icon: Image(image: new AssetImage('Icone_Png/Defense/S_Perimetrale_Noir_0.png'),)),
                       Tab(icon: Image(image: new AssetImage('Icone_Png/Chemin/S_Fleche_Noir_1.png'),)),
-                      Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),)),
+                      Tab(icon: Image(image: new AssetImage('Icone_Png/drone.png'),)),
                       Tab(icon: Image(image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Basic.png'),)),
                     ],
                   ),
@@ -825,37 +829,37 @@ class SitacPageState extends State<SitacPage> {
                                   ],
                                 ),
                                 ListView(
+                                  //TODO : SHERVIN SOUFIANE
                                   padding: const EdgeInsets.all(8),
                                   children: <Widget>[
-                                    GestureDetector(
-                                      onTap: () {
-                                        SelectorMoyenSymbol.pathImage = 'Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png';
-                                      },
-                                      child: Image(
-                                        image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),
-                                        width: 100,
-                                        height: 100,
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        SelectorMoyenSymbol.pathImage = 'Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png';
-                                      },
-                                      child: Image(
-                                        image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),
-                                        width: 100,
-                                        height: 100,
-                                      ),
-                                    ),
-
-                                    GestureDetector(
-                                      onTap: () {
-                                        SelectorMoyenSymbol.pathImage = 'Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png';
-                                      },
-                                      child: Image(
-                                        image: new AssetImage('Icone_Png/Infrastructure/Infrastructure_Civil_EnCours.png'),
-                                        width: 100,
-                                        height: 100,
+                                    Form(
+                                      key: _formKey,
+                                      child: ListView(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                        children: [
+                                          TextFormField(
+                                            decoration: const InputDecoration(
+                                              hintText: 'Enter the name of your mission',
+                                              labelText: 'Name',
+                                            ),
+                                            inputFormatters: [LengthLimitingTextInputFormatter(30)],
+                                            initialValue: _formResult.nom_de_la_mission,
+                                            validator: (missionName) {
+                                              if (missionName.isEmpty) {
+                                                return 'Name is required';
+                                              }
+                                              if (missionName.length < 3) {
+                                                return 'Name is too short';
+                                              }
+                                              return null;
+                                            },
+                                            textInputAction: TextInputAction.next,
+                                            autofocus: true,
+                                            onSaved: (missionName) {
+                                              _formResult.nom_de_la_mission = missionName;
+                                            },
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
