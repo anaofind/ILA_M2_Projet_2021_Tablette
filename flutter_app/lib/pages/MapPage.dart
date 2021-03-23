@@ -45,6 +45,7 @@ class MapPageState extends State<MapPage> {
     for(var i=0; i<addresses.length; i++){
         if(addresses[i].locality == "Rennes"){
           first = addresses[i];
+          break;
         }
     }
     this.currentCenter = LatLng(first.coordinates.latitude, first.coordinates.longitude);
