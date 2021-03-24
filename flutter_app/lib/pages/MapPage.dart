@@ -14,6 +14,8 @@ import 'package:geocoder/geocoder.dart';
 import 'package:latlong/latlong.dart';
 import 'package:smart_select/smart_select.dart';
 
+import '../services/HydrantService.dart';
+
 
 
 class MapPage extends StatefulWidget {
@@ -34,21 +36,33 @@ class MapPageState extends State<MapPage> {
   final List<dynamic> moyensOrSymbols = [];
   Intervention intervention;
   int idSymbolSelected = -1;
+
   MapPageState(this.intervention) {
-    HydrantService.createHydrantsData(this.currentCenter).then((value) => this.setState(() {}));
+    adressFound = false;
+    center(this.intervention).then((value) {
+      if (value != null) {
+        this.currentCenter = value;
+      }
+      adressFound = true;
+      HydrantService.createHydrantsData(this.currentCenter).then((value) {
+        this.setState(() {});
+      });
+    });
   }
 
   double currentZoom = 18.0;
   double maxZoom = 18.0;
   double minZoom = 9.0;
   LatLng currentCenter = LatLng(48.0833 , -1.6833);
+  bool adressFound = false;
   MapController mapController = MapController();
 
-  Future<void> center(Intervention inter) async {
+  Future<LatLng> center(Intervention inter) async {
     List<Address> addresses = await Geocoder.local.findAddressesFromQuery(inter.adresse);
-    Address first = addresses.first;
-    this.currentCenter = LatLng(first.coordinates.latitude, first.coordinates.longitude);
-    mapController.move(currentCenter, currentZoom);
+    if (addresses.length > 0) {
+      Address first = addresses.first;
+      return LatLng(first.coordinates.latitude, first.coordinates.longitude);
+    }
   }
 
   @override
@@ -57,14 +71,13 @@ class MapPageState extends State<MapPage> {
         stream: this.interventionService.getInterventionById(intervention.id),
         builder: (context, snapshot) {
           print("REFRESH MAP");
-          if (!snapshot.hasData || snapshot.hasError || ! HydrantService.finished) {
+          if (!snapshot.hasData || snapshot.hasError || ! adressFound || ! HydrantService.finished) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
           this.intervention = Intervention.fromSnapshot(snapshot.data);
           this.refreshMarkers();
-          this.center(intervention);
           return Scaffold(
             body: FlutterMap(
               mapController: this.mapController,
@@ -255,6 +268,7 @@ class MapPageState extends State<MapPage> {
 
   refreshMarkers() {
     markersFixed.clear();
+    print(HydrantService.hydrants.length);
     HydrantService.hydrants.forEach((element) {
       LatLng position = LatLng(element.position.latitude, element.position.longitude);
       SymbolIntervention symbol = element.getSymbol();

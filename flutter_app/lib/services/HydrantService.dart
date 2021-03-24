@@ -16,7 +16,7 @@ class HydrantService {
     finished = false;
     hydrants.clear();
     String query = queryBase;
-    query = addGeofilter(query, latLng, 500);
+    query = addGeofilter(query, latLng, 1000);
     var url = Uri.parse(query);
     var response = await http.get(url);
     if (response.statusCode == 200) {
