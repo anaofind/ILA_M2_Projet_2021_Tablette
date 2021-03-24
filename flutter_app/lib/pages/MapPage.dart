@@ -10,6 +10,7 @@ import 'package:flutter_app/services/InterventionService.dart';
 import 'package:flutter_app/services/SelectorMoyenSymbol.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:smart_select/smart_select.dart';
 
 class MapPage extends StatefulWidget {
   MapPage({Key key, this.intervention}): super(key: key);
@@ -25,6 +26,7 @@ class MapPageState extends State<MapPage> {
 
   final List<DragMarker> markers = [];
   final List<DragMarker> markersFixed = [];
+  final List<DragMarker> markersDialog = [];
   final List<dynamic> moyensOrSymbols = [];
   Intervention intervention;
   int idSymbolSelected = -1;
@@ -92,7 +94,7 @@ class MapPageState extends State<MapPage> {
                   tileSize: 256,
                 ),
                 DragMarkerPluginOptions(
-                    markers: this.markersFixed + this.markers,
+                    markers: this.markersFixed + this.markers + this.markersDialog,
                 ),
               ],
             ),
@@ -175,20 +177,47 @@ class MapPageState extends State<MapPage> {
     this.markersFixed.add(m);
   }
 
+  createMarkerDialog(LatLng latLng, MoyenIntervention moyen) {
+    print("CREATE DIALOG MARKER");
+    int id = markersDialog.length;
+    DragMarker dm = DragMarker(
+      point: latLng,
+      width: 90,
+      height: 90,
+      builder: (ctx) => Container(
+        child: SmartSelect<String>.single(
+            title: 'Etat moyen : ' + moyen.moyen.codeMoyen,
+            value: moyen.etat,
+            choiceItems: [
+              S2Choice<String>(value: "Etat.prevu", title: 'Prevu'),
+              S2Choice<String>(value: 'Etat.enAttente', title: 'En attente'),
+              S2Choice<String>(value: 'Etat.enCours', title: 'En cours'),
+            ],
+            onChange: (state) => setState(() {
+              this.interventionService.updateIntervention(this.intervention);
+              this.markersDialog.clear();
+            })
+        ),
+      ),
+    );
+    this.markersDialog.add(dm);
+  }
+
   createMarker(LatLng latLng, String pathImage) {
     print("CREATE DRAG MARKER");
     int id = markers.length;
+    double sizeMarker = (id != this.idSymbolSelected)? 80.0 : 500.0;
     Color color = (this.idSymbolSelected == id)? Colors.purple : Colors.red;
     DragMarker dm = DragMarker(
       point: latLng,
-      width: 80.0,
-      height: 80.0,
+      width: sizeMarker,
+      height: sizeMarker,
       offset: Offset(0.0, 0.0),
       builder: (ctx) => Container(
         child: IconButton(
-          icon : this.getImage(pathImage, 80),
+          icon : this.getSymbolWidget(id, sizeMarker),
           color: color,
-          iconSize: 80,
+          iconSize: sizeMarker,
           onPressed: () {
             print("if moyen change etat on click");
             this.setState(() {
@@ -209,17 +238,6 @@ class MapPageState extends State<MapPage> {
         this.interventionService.updatePositionMoyenOrSymbolIntervention(this.intervention.id, symbolOrMoyen, position);
         SelectorMoyenSymbol.deselect();
       },
-      feedbackBuilder: (ctx) => Container(
-        child: IconButton(
-          icon : this.getImage(pathImage, 120),
-          color: color,
-          iconSize: 120,
-        ),
-      ),
-      feedbackOffset: Offset(0.0, 0.0),
-      updateMapNearEdge: true,
-      nearEdgeRatio: 2.0,
-      nearEdgeSpeed: 1.0,
     );
 
     this.markers.add(dm);
@@ -229,8 +247,11 @@ class MapPageState extends State<MapPage> {
     markersFixed.clear();
     HydrantService.hydrants.forEach((element) {
       LatLng position = LatLng(element.position.latitude, element.position.longitude);
-      String pathImage = SymbolDecider.createIconPathRelatedToObject(element.getSymbol());
-      this.createMarkerFixed(position, pathImage);
+      SymbolIntervention symbol = element.getSymbol();
+      if (symbol != null) {
+        String pathImage = SymbolDecider.createIconPathRelatedToObject(element.getSymbol());
+        this.createMarkerFixed(position, pathImage);
+      }
     });
     markers.clear();
     moyensOrSymbols.clear();
@@ -276,6 +297,52 @@ class MapPageState extends State<MapPage> {
       }
     }
     return false;
+  }
+
+
+  Widget getSymbolWidget(int idMarker, double size) {
+    print("if moyen change etat on click");
+    if (idMarker >= 0 && idMarker < this.moyensOrSymbols.length) {
+      dynamic moyenOrSymbol = this.moyensOrSymbols[idMarker];
+      String pathImage = SymbolDecider.createIconPathRelatedToObject(moyenOrSymbol);
+      if (idMarker == this.idSymbolSelected && moyenOrSymbol is MoyenIntervention && this.checkMoyen(moyenOrSymbol)) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black,
+              width: 2,
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              this.getImage(pathImage, 150),
+              AlertDialog(
+                title: Center(child: Text("Etat du moyen", style: TextStyle(fontSize: 30),)),
+                content: DropdownButton<String>(
+                  items: <String>["Prevu", "En attente", "En cours"].
+                  map<DropdownMenuItem<String>>((String val) {
+                    return DropdownMenuItem<String>(
+                      value: val,
+                      child: Text(val),
+                    );
+                  }).toList(),
+                  onChanged: (String newVal) {
+                    switch(newVal) {
+                      case "Prevu" : moyenOrSymbol.etat = "Etat.prevu"; break;
+                      case "En attente" : moyenOrSymbol.etat = "Etat.enAttente"; break;
+                      case "En cours" : moyenOrSymbol.etat = "Etat.enCours"; break;
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+      return getImage(pathImage, size);
+    }
   }
 
   Image getImage(String pathImage, double size) {

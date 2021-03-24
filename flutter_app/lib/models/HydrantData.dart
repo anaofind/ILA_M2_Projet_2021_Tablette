@@ -33,15 +33,15 @@ class HydrantData {
   SymbolIntervention getSymbol() {
     switch (type) {
       case 'pillar' :
-
+        return createSymbolNonPerienne();
       case 'underground' :
-
+        return createSymbolPerienne();
       case 'pond' :
-
+        return createSymbolPerienne();
       case 'wall' :
-
+        return createSymbolNonPerienne();
       case 'pipe' :
-
+        return createSymbolNonPerienne();
       case 'column' :
 
       case 'suction_point' :
@@ -52,9 +52,7 @@ class HydrantData {
 
       case 'no' :
 
-      case 'borne' :
-
-      case 'incendie' :
+      case 'borne incendie' :
 
       case 'cc' :
 
@@ -99,7 +97,6 @@ class HydrantData {
       case 'yes' :
 
     }
-    return createSymbolPerienne();
   }
 
   SymbolIntervention createSymbolPerienne() {
