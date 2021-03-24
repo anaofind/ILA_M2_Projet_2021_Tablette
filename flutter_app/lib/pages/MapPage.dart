@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/lib-ext/dragmarker.dart';
@@ -9,8 +10,11 @@ import 'package:flutter_app/services/HydrantService.dart';
 import 'package:flutter_app/services/InterventionService.dart';
 import 'package:flutter_app/services/SelectorMoyenSymbol.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:latlong/latlong.dart';
 import 'package:smart_select/smart_select.dart';
+
+
 
 class MapPage extends StatefulWidget {
   MapPage({Key key, this.intervention}): super(key: key);
@@ -38,9 +42,14 @@ class MapPageState extends State<MapPage> {
   double maxZoom = 18.0;
   double minZoom = 9.0;
   LatLng currentCenter = LatLng(48.0833 , -1.6833);
-
   MapController mapController = MapController();
 
+  Future<void> center(Intervention inter) async {
+    List<Address> addresses = await Geocoder.local.findAddressesFromQuery(inter.adresse);
+    Address first = addresses.first;
+    this.currentCenter = LatLng(first.coordinates.latitude, first.coordinates.longitude);
+    mapController.move(currentCenter, currentZoom);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +64,7 @@ class MapPageState extends State<MapPage> {
           }
           this.intervention = Intervention.fromSnapshot(snapshot.data);
           this.refreshMarkers();
+          this.center(intervention);
           return Scaffold(
             body: FlutterMap(
               mapController: this.mapController,

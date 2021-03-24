@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_app/models/Intervention.dart';
+import 'package:flutter_app/models/Moyen.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
 import 'package:flutter_app/models/SymbolIntervention.dart';
 import 'package:flutter_app/pages/MapPage.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_app/services/AccountService.dart';
 import 'package:flutter_app/services/InterventionService.dart';
 import 'package:flutter_app/services/NavigatorPage.dart';
 import 'package:flutter_app/services/SelectorMoyenSymbol.dart';
+import 'package:flutter_app/util/ColorConverter.dart';
 import 'package:intl/intl.dart';
 
 
@@ -66,6 +68,10 @@ class SitacPageState extends State<SitacPage> {
           }
           print("REFRESH SITAC");
           _monIntervention = Intervention.fromSnapshot(snapshot.data);
+          _monIntervention.getMoyens.forEach((element) {
+            String path = SymbolDecider.createIconPathRelatedToObject(element);
+
+          });
           return MaterialApp(
             home: DefaultTabController(
               length: 8,
@@ -104,19 +110,19 @@ class SitacPageState extends State<SitacPage> {
                                   itemCount: _monIntervention.getMoyens.length,
                                   itemBuilder: (context, index){
                                     MoyenIntervention moyen = _monIntervention.moyens[index];
-                                    if (moyen != null && moyen.moyen != null && moyen.moyen.couleurDefaut != null && moyen.etat != null && moyen.position.latitude == null && moyen.position.longitude == null) {
-                                      String pathImage = SymbolDecider.createIconPathRelatedToObject(moyen);
-                                      return GestureDetector(
+                                    return (moyen != null && moyen.moyen != null && moyen.moyen.couleurDefaut != null
+                                        && moyen.etat != null && moyen.position.latitude == null && moyen.position.longitude == null && moyen.etat!= Etat.enAttente.toString())?
+                                      GestureDetector(
                                         onTap: () {
                                           SelectorMoyenSymbol.moyenId = index;
-                                          SelectorMoyenSymbol.pathImage = pathImage;
+                                          SelectorMoyenSymbol.pathImage = SymbolDecider.createIconPathRelatedToObject(moyen);
                                         },
                                         child: Image(
-                                          image: new AssetImage(pathImage),
+                                          image: new AssetImage(SymbolDecider.createIconPathRelatedToObject(moyen)),
                                         ),
-                                      );
-                                    }
-                                    return null;
+                                      )
+                                    :
+                                    Container();
                                   },
                                 ),
                                 // MOYEN demandé à partir d'infrastructure

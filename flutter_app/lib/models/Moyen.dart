@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum Etat {
   enCours,
-  prevu
+  prevu,
+  enAttente
 }
 class Moyen {
   final String id;

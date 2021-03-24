@@ -27,6 +27,7 @@ dependencies:
   intl: ^0.16.1
   sidenavbar: ^0.0.2
   provider: ^3.1.0
+  geocoder: ^0.2.1
 
   firebase_core: ^0.5.0
   firebase_auth: ^0.18.0+1

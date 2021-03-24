@@ -18,6 +18,7 @@ class InterventionService {
     });*/
     moyens.forEach((moyen) {
       moyen.demandeA = date;
+      moyen.departA = date;
     });
     Intervention intervention = Intervention(null, nom, adresse, codeSinistre, date, moyens);
     return  interventions.add(intervention.toMap());
@@ -38,6 +39,20 @@ class InterventionService {
           });
         });
     return moyensInterventionList;
+  }
+
+  Future<void> addListMoyensToIntervention(String idIntervention, List<MoyenIntervention> newMoyens) {
+    Intervention i;
+    List<MoyenIntervention> moyens;
+    interventions.doc(idIntervention).get().then((DocumentSnapshot doc) {
+      if(doc.exists) {
+        i = Intervention.fromSnapshot(doc);
+        moyens = i.moyens;
+        moyens.addAll(newMoyens);
+        return interventions.doc(idIntervention)
+            .update({'moyens': i.ConvertMoyensToMap(moyens)});
+      }
+    });
   }
 
   Future<void> addMoyenToIntervention(String idIntervention, MoyenIntervention moyen) {
@@ -150,6 +165,27 @@ class InterventionService {
         });
         return interventions.doc(idIntervention)
             .update({'symbols': i.ConvertSymbolsToMap(symbols)});
+      }
+    });
+  }
+
+  Future<void> updateEtatMoyensInterventionToPrevu(String idIntervention, List<MoyenIntervention> moyensToUpdate) {
+    Intervention i;
+    List<MoyenIntervention> moyens;
+    interventions.doc(idIntervention).get().then((DocumentSnapshot doc) {
+      if(doc.exists) {
+        i = Intervention.fromSnapshot(doc);
+        moyens = i.moyens;
+        moyens.forEach((m) {
+          moyensToUpdate.forEach((mu) {
+            if(m.id == mu.id){
+              m.etat=Etat.prevu.toString();
+              m.departA=DateTime.now();
+            }
+          });
+        });
+        return interventions.doc(idIntervention)
+            .update({'moyens': i.ConvertMoyensToMap(moyens)});
       }
     });
   }
