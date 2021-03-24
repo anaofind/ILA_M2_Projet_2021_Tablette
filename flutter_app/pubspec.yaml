@@ -34,7 +34,7 @@ dependencies:
   cloud_firestore: ^0.14.0+2
 
   rflutter_alert: ^1.0.1
-
+  editable: ^1.0.0
   flutter_map: ^0.11.0
   latlong: ^0.6.1
 dev_dependencies:

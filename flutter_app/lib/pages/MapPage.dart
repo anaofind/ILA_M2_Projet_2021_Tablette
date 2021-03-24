@@ -24,6 +24,7 @@ class MapPageState extends State<MapPage> {
   final interventionService = InterventionService();
 
   final List<DragMarker> markers = [];
+  final List<DragMarker> markersDrone = [];
   final List<dynamic> moyensOrSymbols = [];
   Intervention intervention;
   int idSymbolSelected = -1;
@@ -203,7 +204,26 @@ class MapPageState extends State<MapPage> {
 
     this.markers.add(dm);
   }
+  createMarkerDrone(LatLng latLng) {
+    print("CREATE DRAG MARKER");
+    int num = markersDrone.length+1;
+    Color color = Colors.purple;
+    DragMarker dm = DragMarker(
+      point: latLng,
+      width: 80.0,
+      height: 80.0,
+      offset: Offset(0.0, 0.0),
+      builder: (ctx) => Container(
+        child: IconButton(
+          icon : Text("P"+ num.toString()),
+          color: color,
+          iconSize: 60
+        ),
+      ),
+    );
 
+    this.markers.add(dm);
+  }
   refreshMarkers() {
     markers.clear();
     moyensOrSymbols.clear();
