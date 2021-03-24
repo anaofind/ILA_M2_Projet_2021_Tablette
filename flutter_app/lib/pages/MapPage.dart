@@ -14,6 +14,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:latlong/latlong.dart';
 import 'package:smart_select/smart_select.dart';
 
+import '../models/MoyenIntervention.dart';
 import '../services/HydrantService.dart';
 
 
@@ -106,6 +107,9 @@ class MapPageState extends State<MapPage> {
                       this.interventionService.addMoyenOrSymbolToIntervention(this.intervention.id, symbolOrMoyen);
                     }
                     SelectorMoyenSymbol.deselect();
+                  } else {
+                    this.idSymbolSelected = -1;
+                    this.setState(() {});
                   }
                 },
               ),
@@ -229,18 +233,17 @@ class MapPageState extends State<MapPage> {
   createMarker(LatLng latLng, String pathImage) {
     print("CREATE DRAG MARKER");
     int id = markers.length;
-    double sizeMarker = (id != this.idSymbolSelected)? 80.0 : 500.0;
+    double widthMarker = (id != this.idSymbolSelected)? 80.0 : 300.0;
+    double heightMarker = (id != this.idSymbolSelected)? 80.0 : 300.0;
     Color color = (this.idSymbolSelected == id)? Colors.purple : Colors.red;
     DragMarker dm = DragMarker(
       point: latLng,
-      width: sizeMarker,
-      height: sizeMarker,
+      width: widthMarker,
+      height: heightMarker,
       offset: Offset(0.0, 0.0),
       builder: (ctx) => Container(
         child: IconButton(
-          icon : this.getSymbolWidget(id, sizeMarker),
-          color: color,
-          iconSize: sizeMarker,
+          icon : this.getSymbolWidget(id, widthMarker),
           onPressed: () {
             print("if moyen change etat on click");
             this.setState(() {
@@ -330,44 +333,74 @@ class MapPageState extends State<MapPage> {
       dynamic moyenOrSymbol = this.moyensOrSymbols[idMarker];
       String pathImage = SymbolDecider.createIconPathRelatedToObject(moyenOrSymbol);
       if (idMarker == this.idSymbolSelected && moyenOrSymbol is MoyenIntervention && this.checkMoyen(moyenOrSymbol)) {
-        return Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.black,
-              width: 2,
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              this.getImage(pathImage, 150),
-              AlertDialog(
-                title: Center(child: Text("Etat du moyen", style: TextStyle(fontSize: 30),)),
-                content: DropdownButton<String>(
-                  items: <String>["Prevu", "En attente", "En cours"].
-                  map<DropdownMenuItem<String>>((String val) {
-                    return DropdownMenuItem<String>(
-                      value: val,
-                      child: Text(val),
-                    );
-                  }).toList(),
-                  onChanged: (String newVal) {
-                    switch(newVal) {
-                      case "Prevu" : moyenOrSymbol.etat = "Etat.prevu"; break;
-                      case "En attente" : moyenOrSymbol.etat = "Etat.enAttente"; break;
-                      case "En cours" : moyenOrSymbol.etat = "Etat.enCours"; break;
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
+        return this.getMoyenSelectedWidget(moyenOrSymbol, pathImage);
       }
       return getImage(pathImage, size);
     }
   }
+
+  Widget getMoyenSelectedWidget(MoyenIntervention moyen, String pathImage) {
+    List<DropdownMenuItem<String>> items = <String>["Prevu", "En attente", "En cours"].map<DropdownMenuItem<String>>((String val) {
+      return DropdownMenuItem<String>(
+        value: val,
+        child: Text(val),
+      );
+    }).toList();
+    int idValue = 0;
+    switch (moyen.etat) {
+      case 'Etat.prevu' :
+        idValue = 0;
+        break;
+      case 'Etat.enAttente' :
+        idValue = 1;
+        break;
+      case 'Etat.enCours' :
+        idValue = 2;
+        break;
+    }
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+          width: 2,
+        ),
+        color: Colors.white.withOpacity(0.5),
+      ),
+      child: Column(
+        children: [
+          Flexible(
+              flex: 1,
+              child: this.getImage(pathImage, 100)
+          ),
+          Flexible(
+            flex: 5,
+            child: AlertDialog(
+              title: Center(child: Text("Etat du moyen", style: TextStyle(fontSize: 20),)),
+              content: DropdownButton<String>(
+                items: items,
+                value: items[idValue].value,
+                onChanged: (String newVal) {
+                  switch(newVal) {
+                    case "Prevu" :
+                      moyen.etat = "Etat.prevu";
+                      break;
+                    case "En attente" :
+                      moyen.etat = "Etat.enAttente";
+                      break;
+                    case "En cours" :
+                      moyen.etat = "Etat.enCours";
+                      break;
+                  }
+                  this.interventionService.updateIntervention(intervention);
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   Image getImage(String pathImage, double size) {
     if (pathImage != null) {
