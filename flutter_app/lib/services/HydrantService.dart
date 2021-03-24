@@ -10,8 +10,10 @@ class HydrantService {
 
   static List<HydrantData> hydrants = [];
   static int nbHydrantByBloc = 100;
+  static bool finished = false;
 
   static Future<void> createHydrantsData(LatLng latLng) async {
+    finished = false;
     hydrants.clear();
     String query = queryBase;
     query = addGeofilter(query, latLng, 500);
@@ -34,6 +36,7 @@ class HydrantService {
         });
       };
     }
+    finished = true;
     print ('FINISHED');
   }
 

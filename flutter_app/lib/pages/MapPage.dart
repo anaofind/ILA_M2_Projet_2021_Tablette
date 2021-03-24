@@ -46,7 +46,7 @@ class MapPageState extends State<MapPage> {
         stream: this.interventionService.getInterventionById(intervention.id),
         builder: (context, snapshot) {
           print("REFRESH MAP");
-          if (!snapshot.hasData || snapshot.hasError) {
+          if (!snapshot.hasData || snapshot.hasError || ! HydrantService.finished) {
             return Center(
               child: CircularProgressIndicator(),
             );
