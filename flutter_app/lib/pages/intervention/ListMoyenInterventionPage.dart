@@ -322,6 +322,12 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
             );
           }
           this.intervention = Intervention.fromSnapshot(snapshot.data);
+          //
+          List<MoyenIntervention> moyensEnAttenteNotif = new List<MoyenIntervention>();
+          List<MoyenIntervention> moyensTous =this.intervention.moyens;
+          moyensTous.forEach((m) { if(m.etat == Etat.enAttente.toString()) {moyensEnAttenteNotif.add(m);}});
+          int nbEnAttente = moyensEnAttenteNotif.length;
+          //
       return StreamBuilder<QuerySnapshot>(
           stream: AccountService.loadCurrentUser(),
           builder: (context, snapshot) {
@@ -330,7 +336,7 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
             }else{
               UserData userData = UserData.fromSnapshot(snapshot.data.docs[0]);
 
-              return userData.role == Role.Operator?operatorVue(userData , context):intervenerVue(userData, context);
+              return userData.role == Role.Operator?operatorVue(userData , context, nbEnAttente):intervenerVue(userData, context);
 
             }
 
@@ -352,7 +358,8 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
     ):Container();
   }
 
-  Widget operatorVue(UserData userData, BuildContext context) {
+  Widget operatorVue(UserData userData, BuildContext context, int nbMoyensEnAttente) {
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -365,7 +372,33 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
             bottom: TabBar(
               tabs: [
                 Tab(text: 'Tous les moyens'),
-                Tab(text: 'Moyens  à valider'),
+                Tab(text: 'Moyens  à valider', icon: new Stack(
+                  children: <Widget>[
+                    new Icon(Icons.notifications),
+                    new Positioned(
+                      right: 0,
+                      child: new Container(
+                        padding: EdgeInsets.all(1),
+                        decoration: new BoxDecoration(
+                          color: nbMoyensEnAttente==0?Colors.grey:Colors.red,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        constraints: BoxConstraints(
+                          minWidth: 12,
+                          minHeight: 12,
+                        ),
+                        child: new Text(
+                          nbMoyensEnAttente.toString(),
+                          style: new TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )
+                  ],
+                ),),
 
               ],
             ),
@@ -446,7 +479,7 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
                     }
                     moyens = Intervention.fromSnapshot(snapshot.data).moyens;
                     moyensEnAttente=List();
-                    moyens.forEach((m) { if(m.etat == Etat.enAttente.toString()) {print ("equallll");moyensEnAttente.add(m);}});
+                    moyens.forEach((m) { if(m.etat == Etat.enAttente.toString()) {moyensEnAttente.add(m);}});
                     return moyensEnAttente.length>0? ListView(
                       padding: EdgeInsets.all(20.0),
                       children: <Widget>[
@@ -500,8 +533,7 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
                                     onPressed: () {
                                       List<MoyenIntervention> toUpdate=List();
                                       //ici traitement pour valider
-                                      mapMoyens.forEach((k,v) {print('moyen '+k.moyen.codeMoyen+' couleur '+
-                                          ColorConverter.stringFromColor(k.couleur)+ ' coché '+ v.toString() );
+                                      mapMoyens.forEach((k,v) {
                                       if(v==true){toUpdate.add(k);}
                                       });
                                       if(toUpdate.length>0) {
