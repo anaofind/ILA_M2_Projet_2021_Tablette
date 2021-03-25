@@ -14,9 +14,6 @@ import 'package:geocoder/geocoder.dart';
 import 'package:latlong/latlong.dart';
 import 'package:smart_select/smart_select.dart';
 
-import '../models/MoyenIntervention.dart';
-import '../services/HydrantService.dart';
-
 
 
 class MapPage extends StatefulWidget {
@@ -108,8 +105,11 @@ class MapPageState extends State<MapPage> {
                     }
                     SelectorMoyenSymbol.deselect();
                   } else {
-                    this.idSymbolSelected = -1;
-                    this.setState(() {});
+                    if (this.idSymbolSelected >= 0) {
+                      this.setState(() {
+                        this.idSymbolSelected = -1;
+                      });
+                    }
                   }
                 },
               ),
