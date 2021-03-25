@@ -1012,7 +1012,8 @@ class SitacPageState extends State<SitacPage> {
                                         key: _editableKey,
                                         columns: headers,
                                         rows: myrows,
-                                      ),),
+                                      ),
+                                    ),
 
                                     Form(
                                       key: _formKey,
