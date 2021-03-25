@@ -172,7 +172,7 @@ class NewInterventionPageState extends State<NewInterventionPage> {
                                         newMoyens.add(MoyenIntervention(
                                             _selectedMoyen,
                                             Etat.enCours.toString(), null, null,
-                                            null, _selectedColor, IconBasePathGetter.getImageBasePath(_selectedMoyen.codeMoyen)));
+                                            null, null, _selectedColor, IconBasePathGetter.getImageBasePath(_selectedMoyen.codeMoyen)));
                                         Fluttertoast.showToast(
                                             msg: "Moyen ajouté",
                                             toastLength: Toast.LENGTH_SHORT,

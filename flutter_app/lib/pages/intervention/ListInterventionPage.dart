@@ -92,58 +92,41 @@ class _ListInterventionPage extends State<ListInterventionPage> {
                   child: Column(
                     children: <Widget>[
                       Container(
-                        child: DataTable(
-                            sortColumnIndex: _currentSortColumn,
-                            sortAscending: _isAscending,
-                            showCheckboxColumn: false,
-                            columns: const <DataColumn>[
-                              DataColumn(
-                                label: Text(
-                                  'Nom',
-                                  style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                              sortColumnIndex: _currentSortColumn,
+                              sortAscending: _isAscending,
+                              showCheckboxColumn: false,
+                              columns: const <DataColumn>[
+                                DataColumn(
+                                  label: Text(
+                                    'Nom',
+                                    style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Code sinistre',
-                                  style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                                DataColumn(
+                                  label: Text(
+                                    'Code sinistre',
+                                    style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Adresse',
-                                  style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                                DataColumn(
+                                  label: Text(
+                                    'Adresse',
+                                    style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Date',
-                                  style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                ),)
+                                DataColumn(
+                                  label: Text(
+                                    'Date',
+                                    style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                                  ),)
 
-                            ],
-                            rows: _buildList(context, snapshot.data.docs)
-                          /*snapshot.data.docs.map((DocumentSnapshot document) {
-                      /*_laListe.add(
-                          Intervention(document.id, document.data()['nom'],
-                              document.data()['adresse'], document.data()['codeSinistre'],
-                              document.data()['date'].toDate(), document.data()['moyens'].cast<List<MoyenIntervention>>())
-                      );*/
-                      return DataRow(
-                          cells: <DataCell>[
-                            DataCell(Text(document.data()['nom'])),
-                            DataCell(Text(document.data()['codeSinistre'])),
-                            DataCell(Text(document.data()['adresse'])),
-                            DataCell(Text(document.data()['date'].toDate().toString())),
-                          ],
-                          onSelectChanged: (ind) {
-                            setState(() {
-                              showIntervention(document);
-                            });
-                          }
-                      );
-                    }
-                    ).toList(),*/
+                              ],
+                              rows: _buildList(context, snapshot.data.docs)
+
+                          ),
                         ),
                       ),
                       _showAddButton()
