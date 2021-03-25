@@ -189,6 +189,28 @@ class InterventionService {
       }
     });
   }
+  Future<void> updateEtatMoyensInterventionToRetourne(String idIntervention, List<MoyenIntervention> moyensToUpdate) {
+    Intervention i;
+    List<MoyenIntervention> moyens;
+    interventions.doc(idIntervention).get().then((DocumentSnapshot doc) {
+      if(doc.exists) {
+        i = Intervention.fromSnapshot(doc);
+        moyens = i.moyens;
+        moyens.forEach((m) {
+          moyensToUpdate.forEach((mu) {
+            if(m.id == mu.id){
+              m.etat=Etat.retourne.toString();
+              m.retourneA=DateTime.now();
+              m.position.latitude = null;
+              m.position.longitude = null;
+            }
+          });
+        });
+        return interventions.doc(idIntervention)
+            .update({'moyens': i.ConvertMoyensToMap(moyens)});
+      }
+    });
+  }
   /*
   Future<List<String>> loadAllSinistres() async{
     QuerySnapshot snapshots = await sinistres.get();

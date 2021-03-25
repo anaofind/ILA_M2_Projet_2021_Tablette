@@ -4,6 +4,7 @@ import 'package:flutter_app/models/Intervention.dart';
 import 'package:flutter_app/pages/MissionPage.dart';
 import 'package:flutter_app/services/InterventionService.dart';
 import 'package:flutter_app/services/NavigatorPage.dart';
+import 'package:flutter_app/services/SelectorIntervention.dart';
 
 
 class DronePage extends StatefulWidget {
@@ -20,7 +21,6 @@ class DronePageState extends State<DronePage> {
   Intervention intervention;
   final InterventionService interventionService = InterventionService();
 
-  int idMissionSelected = 0;
   List<String> missions = [];
 
   DronePageState(this.intervention) {
@@ -36,7 +36,7 @@ class DronePageState extends State<DronePage> {
     return StreamBuilder<DocumentSnapshot>(
         stream: this.interventionService.getInterventionById(idIntervention),
         builder: (context, snapshot) {
-          print("REFRESH MAP");
+          print("REFRESH DRONE");
           if (!snapshot.hasData || snapshot.hasError) {
             return Center(
               child: CircularProgressIndicator(),
@@ -102,7 +102,7 @@ class DronePageState extends State<DronePage> {
                                   color: Colors.black,
                                   width: 1,
                                 ),
-                                color: (this.idMissionSelected == index)? Colors.black12: Colors.white,
+                                color: (SelectorIntervention.idMissionSelected == index)? Colors.black12: Colors.white,
                               ),
                               child : Center(
                                   child: Text(
@@ -115,7 +115,8 @@ class DronePageState extends State<DronePage> {
                           ),
                           onTap: () {
                             this.setState(() {
-                              this.idMissionSelected = index;
+                              SelectorIntervention.idMissionSelected = index;
+                              print(index);
                             });
                           },
                         );
@@ -124,7 +125,9 @@ class DronePageState extends State<DronePage> {
                   ),
                   Flexible(
                     flex: 4,
-                    child : MissionPage(this.missions[this.idMissionSelected]),
+                    child : Center(
+                        child: MissionPage()
+                    ),
                   )
                 ],
               )

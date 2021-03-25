@@ -340,7 +340,7 @@ class MapPageState extends State<MapPage> {
   }
 
   Widget getMoyenSelectedWidget(MoyenIntervention moyen, String pathImage) {
-    List<DropdownMenuItem<String>> items = <String>["Prevu", "En attente", "En cours"].map<DropdownMenuItem<String>>((String val) {
+    List<DropdownMenuItem<String>> items = <String>["Prevu", "En attente", "En cours", "Retourne"].map<DropdownMenuItem<String>>((String val) {
       return DropdownMenuItem<String>(
         value: val,
         child: Text(val),
@@ -356,6 +356,9 @@ class MapPageState extends State<MapPage> {
         break;
       case 'Etat.enCours' :
         idValue = 2;
+        break;
+      case 'Etat.retourne' :
+        idValue = 3;
         break;
     }
     return Container(
@@ -389,6 +392,13 @@ class MapPageState extends State<MapPage> {
                       break;
                     case "En cours" :
                       moyen.etat = "Etat.enCours";
+                      moyen.arriveA = DateTime.now();
+                      break;
+                    case "Retourne" :
+                      moyen.etat = "Etat.retourne";
+                      moyen.retourneA = DateTime.now();
+                      moyen.position.latitude = null;
+                      moyen.position.longitude = null;
                       break;
                   }
                   this.interventionService.updateIntervention(intervention);

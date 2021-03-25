@@ -82,7 +82,7 @@ class SymbolIntervention {
   static String CodeFromEtat(String etat){
     String ret;
     if(etat == 'Etat.prevu' || etat == 'Etat.enAttente'){ret =  '0';}
-    if(etat == 'Etat.enCours' ){ret =  '1';}
+    if(etat == 'Etat.enCours' || etat == 'Etat.retourne' ){ret =  '1';}
     /*switch(etat) {
       case 'Etat.prevu': {ret =  '0';}break;
       case 'Etat.enCours': {ret =  '1';}break;

@@ -68,10 +68,6 @@ class SitacPageState extends State<SitacPage> {
           }
           print("REFRESH SITAC");
           _monIntervention = Intervention.fromSnapshot(snapshot.data);
-          _monIntervention.getMoyens.forEach((element) {
-            String path = SymbolDecider.createIconPathRelatedToObject(element);
-
-          });
           return MaterialApp(
             home: DefaultTabController(
               length: 8,
@@ -111,7 +107,8 @@ class SitacPageState extends State<SitacPage> {
                                   itemBuilder: (context, index){
                                     MoyenIntervention moyen = _monIntervention.moyens[index];
                                     return (moyen != null && moyen.moyen != null && moyen.moyen.couleurDefaut != null
-                                        && moyen.etat != null && moyen.position.latitude == null && moyen.position.longitude == null && moyen.etat!= Etat.enAttente.toString())?
+                                        && moyen.etat != null && moyen.position.latitude == null && moyen.position.longitude == null
+                                        && moyen.etat!= Etat.enAttente.toString() && moyen.etat!= Etat.retourne.toString())?
                                       GestureDetector(
                                         onTap: () {
                                           SelectorMoyenSymbol.moyenId = index;

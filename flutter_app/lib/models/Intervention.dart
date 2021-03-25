@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_app/models/Mission.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
 
 import 'SymbolIntervention.dart';
@@ -12,8 +13,9 @@ class Intervention {
   final DateTime date;
   List<MoyenIntervention> moyens;
   List<SymbolIntervention> symbols;
+  List<Mission> missions;
 
-  Intervention(this.id, this.nom, this.adresse, this.codeSinistre, this.date, this.moyens): symbols = List();
+  Intervention(this.id, this.nom, this.adresse, this.codeSinistre, this.date, this.moyens): symbols = List(), missions = List();
 
   List<Map> ConvertMoyensToMap(List<MoyenIntervention> moyens) {
     List<Map> moyensIntervention = [];
@@ -31,6 +33,14 @@ class Intervention {
     });
     return symbolsIntervention;
   }
+  List<Map> ConvertMissionsToMap(List<Mission> missions) {
+    List<Map> missionsIntervention = [];
+    missions.forEach((Mission mission) {
+      Map step = mission.toMap();
+      missionsIntervention.add(step);
+    });
+    return missionsIntervention;
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -40,6 +50,7 @@ class Intervention {
       'date': date,
       'moyens': ConvertMoyensToMap(moyens),
       'symbols': ConvertSymbolsToMap(symbols),
+      'missions': ConvertMissionsToMap(missions)
     };
   }
 
@@ -51,7 +62,8 @@ class Intervention {
         codeSinistre = snapshot.data()['codeSinistre'],
         date = snapshot.data()['date'].toDate(),
         moyens =new List<MoyenIntervention>.from(snapshot.data()['moyens'].map((s) => MoyenIntervention.fromMap(s)).toList()),
-        symbols =new List<SymbolIntervention>.from(snapshot.data()['symbols'].map((s) => SymbolIntervention.fromMap(s)).toList());
+        symbols =new List<SymbolIntervention>.from(snapshot.data()['symbols'].map((s) => SymbolIntervention.fromMap(s)).toList()),
+        missions = (snapshot.data()['missions'] != null)? new List<Mission>.from(snapshot.data()['missions'].map((s) => Mission.fromMap(s)).toList()): [];
 
 
   String get getNom {
@@ -73,4 +85,9 @@ class Intervention {
   List<MoyenIntervention> get getMoyens{
     return this.moyens;
   }
+
+  List<Mission> get getMissions{
+    return this.missions;
+  }
+
 }

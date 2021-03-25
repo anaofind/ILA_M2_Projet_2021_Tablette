@@ -38,18 +38,115 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
   List<MoyenIntervention> moyensIntervention = new List<MoyenIntervention>();
   List<MoyenIntervention> moyens = new List<MoyenIntervention>();
   List<MoyenIntervention> moyensEnAttente = new List<MoyenIntervention>();
-  List<bool> selectedList = List();
   Map<MoyenIntervention, bool> mapMoyens=Map<MoyenIntervention, bool>();
+  Map<MoyenIntervention, bool> mapM=Map<MoyenIntervention, bool>();
 
 
-  List<DataRow> _buildList(BuildContext context, List<MoyenIntervention> moyens) {
-    return  moyens.map((data) => _buildListItem(context, data)).toList();
+  List<DataColumn> columnsList() {
+  return const <DataColumn>[
+    DataColumn(
+      label: Text(
+        'Moyen',
+        style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+      ),
+    ),
+    DataColumn(
+      label: Text(
+        'Date demande',
+        style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+      ),
+    ),
+    DataColumn(
+      label: Text(
+        'Date validation',
+        style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+      ),
+    ),
+    DataColumn(
+      label: Text(
+        'Date engagement',
+        style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+      ),
+    ),
+    DataColumn(
+      label: Text(
+        'Date retour',
+        style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+      ),
+    ),
+    DataColumn(
+      label: Text(
+        'Etat',
+        style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+      ),
+    ),
+
+  ];
   }
 
-  DataRow _buildListItem(BuildContext context, MoyenIntervention data) {
+  List<DataRow> _buildListWithoutSelect(BuildContext context, List<MoyenIntervention> m) {
+    return  moyens.map((data) => _buildListItemWithoutSelect(context, data)).toList();
+  }
+
+  DataRow _buildListItemWithoutSelect(BuildContext context, MoyenIntervention data) {
     String depart = data.departA == null ? "Pas encore" : DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.departA);
     String arrivee = data.arriveA == null ? "Pas encore" : DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.arriveA);
+    String retour = data.retourneA == null ? "Pas encore" : DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.retourneA);
     return DataRow(cells: [
+      DataCell(
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(data.moyen.codeMoyen),
+              CircleAvatar(backgroundColor: data.couleur, radius: 10,)
+            ],
+          )
+      ),
+      DataCell(Text(DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.demandeA))),
+      DataCell(Text(depart)),
+      DataCell(Text(arrivee)),
+      DataCell(Text(retour)),
+      DataCell(Text(data.etat)),
+    ]);
+  }
+
+  List<DataRow> _buildList(BuildContext context, List<MoyenIntervention> m) {
+
+    List<DataRow> rows = List();
+    Map<MoyenIntervention, bool> mapMoyensWhendel=Map<MoyenIntervention, bool>();
+    bool bol;MoyenIntervention moy;
+
+    mapM.length==0?m.forEach((mo) { mapM[mo] = false;}): {
+      if(mapM.length<m.length){
+        m.asMap().forEach((index, value) {
+          bol =false;
+          mapM.forEach((k,v) {
+            if(k.id == value.id){bol = true; moy = k;
+            }});
+          if(bol == true){mapMoyensWhendel[value] = mapM[moy];}
+          else{mapMoyensWhendel[value] =false;}
+
+        })
+      }
+      else{
+        mapM.forEach((key, value) {
+          bol =false;
+          m.forEach((md) { if(key.id == md.id){bol = true; moy = md;}});
+          if(bol == true){mapMoyensWhendel[moy] = value;}
+        }),
+
+      },
+      mapM = mapMoyensWhendel
+    };
+    mapM.forEach((k,v) {rows.add(_buildListItem(context, k, v));});
+    return rows;
+    //return  moyens.map((data) => _buildListItem(context, data)).toList();
+  }
+
+  DataRow _buildListItem(BuildContext context, MoyenIntervention data, bool s) {
+    String depart = data.departA == null ? "Pas encore" : DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.departA);
+    String arrivee = data.arriveA == null ? "Pas encore" : DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.arriveA);
+    String retour = data.retourneA == null ? "Pas encore" : DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.retourneA);
+    return (data.etat == Etat.enCours.toString() && data.arriveA !=null)?DataRow(cells: [
       DataCell(
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -61,6 +158,27 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
       DataCell(Text(DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.demandeA))),
       DataCell(Text(depart)),
       DataCell(Text(arrivee)),
+      DataCell(Text(retour)),
+      DataCell(Text(data.etat)),
+    ],selected: s,
+        onSelectChanged: (bool value) {
+
+          setState(() {
+            mapM[data] = value;
+          });
+        }):DataRow(cells: [
+      DataCell(
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(data.moyen.codeMoyen),
+              CircleAvatar(backgroundColor: data.couleur, radius: 10,)
+            ],
+          )
+      ),
+      DataCell(Text(DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.demandeA))),
+      DataCell(Text(depart)),
+      DataCell(Text(arrivee)),
+      DataCell(Text(retour)),
       DataCell(Text(data.etat)),
     ],);
   }
@@ -69,23 +187,29 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
   List<DataRow> _buildListWithSelect(BuildContext context, List<MoyenIntervention> m) {
     List<DataRow> rows = List();
     Map<MoyenIntervention, bool> mapMoyensWhendel=Map<MoyenIntervention, bool>();
-    bool bol;
+    bool bol;MoyenIntervention moy;
 
     mapMoyens.length==0?m.forEach((mo) { mapMoyens[mo] = false;}): {
-
       if(mapMoyens.length<m.length){
         m.asMap().forEach((index, value) {
-          if(index>=mapMoyens.length){mapMoyens[value] =false;}
+          bol =false;
+          mapMoyens.forEach((k,v) {
+            if(k.id == value.id){bol = true; moy = k;
+            }});
+          if(bol == true){mapMoyensWhendel[value] = mapMoyens[moy];}
+          else{mapMoyensWhendel[value] =false;}
+
         })
       }
       else{
         mapMoyens.forEach((key, value) {
           bol =false;
-          m.forEach((md) { if(key.id == md.id){bol = true;}});
-          if(bol == true){mapMoyensWhendel[key] = value;}
+          m.forEach((md) { if(key.id == md.id){bol = true; moy = md;}});
+          if(bol == true){mapMoyensWhendel[moy] = value;}
         }),
-        mapMoyens = mapMoyensWhendel
-      }
+
+      },
+      mapMoyens = mapMoyensWhendel
     };
     mapMoyens.forEach((k,v) {rows.add(_buildListItemWithSelect(context, k, v));});
     return rows;
@@ -93,6 +217,7 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
   DataRow _buildListItemWithSelect(BuildContext context, MoyenIntervention data, bool s){
     String depart = data.departA == null ? "Pas encore" : DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.departA);
     String arrivee = data.arriveA == null ? "Pas encore" : DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.arriveA);
+    String retour = data.retourneA == null ? "Pas encore" : DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.retourneA);
 
     return DataRow(cells: [
       DataCell(
@@ -106,6 +231,7 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
       DataCell(Text(DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.demandeA))),
       DataCell(Text(depart)),
       DataCell(Text(arrivee)),
+      DataCell(Text(retour)),
       DataCell(Text(data.etat)),
     ],
         selected: s,
@@ -144,12 +270,6 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
 
                 title: Text('Moyens'),
                 actions: <Widget>[
-                  FlatButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Annuler'),
-                  ),
                   FlatButton(
                     onPressed: () {
                       Navigator.of(context).pop(moyensIntervention);
@@ -251,7 +371,7 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
                                         moyensIntervention.add(MoyenIntervention(
                                             _selectedMoyen,
                                             Etat.enAttente.toString(), DateTime.now(), null,
-                                            null, _selectedColor, IconBasePathGetter.getImageBasePath(_selectedMoyen.codeMoyen)));
+                                            null, null, _selectedColor, IconBasePathGetter.getImageBasePath(_selectedMoyen.codeMoyen)));
                                         Fluttertoast.showToast(
                                             msg: "Moyen ajouté",
                                             toastLength: Toast.LENGTH_SHORT,
@@ -347,13 +467,45 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
 
 
   }
-  Widget _showAddButton(UserData userData) {
-    return userData.role == Role.Intervener? Center(
-      child: ElevatedButton(
-        child: Text('Ajouter des moyens'),
-        onPressed: () {
-          selectionMoyen();
-        },
+  Widget _showButtons(UserData userData) {
+    return userData.role == Role.Intervener? Container(
+      child: Row(mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            child: Text('Renvoyer'),
+            onPressed: () {
+              List<MoyenIntervention> toUpdate=List();
+              //ici traitement pour renvoyer
+              mapM.forEach((k,v) {
+                if(v==true && k.etat==Etat.enCours.toString()){toUpdate.add(k);}
+              });
+              if(toUpdate.length>0) {
+                interventionService
+                    .updateEtatMoyensInterventionToRetourne(
+                    this.intervention.id, toUpdate);
+              }else{
+                Fluttertoast.showToast(
+                    msg: "Au moins un moyen en cours doit être séléctionné",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.TOP,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0
+                );
+              }
+            },
+          ),
+          SizedBox(
+            width: 60,
+          ),
+          ElevatedButton(
+            child: Text('Ajouter des moyens'),
+            onPressed: () {
+              selectionMoyen();
+            },
+          ),
+        ],
       ),
     ):Container();
   }
@@ -422,46 +574,18 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
                             child: Column(
                               children: <Widget>[
                                 Container(
-                                  child: DataTable(
-                                      showCheckboxColumn: false,
-                                      columns: const <DataColumn>[
-                                        DataColumn(
-                                          label: Text(
-                                            'Moyen',
-                                            style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Text(
-                                            'Date demande',
-                                            style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Text(
-                                            'Date validation',
-                                            style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Text(
-                                            'Date engagement',
-                                            style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Text(
-                                            'Etat',
-                                            style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: DataTable(
+                                        columnSpacing: 40,
+                                        showCheckboxColumn: false,
+                                        columns: columnsList(),
+                                        rows: _buildListWithoutSelect(context, moyens)
 
-                                      ],
-                                      rows: _buildList(context, moyens)
-
+                                    ),
                                   ),
                                 ),
-                                _showAddButton(userData)
+                                _showButtons(userData)
                               ],
                             )
                         )
@@ -488,43 +612,15 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
                             child: Column(
                               children: <Widget>[
                                 Container(
-                                  child: DataTable(
-                                    //showCheckboxColumn: false,
-                                      columns: const <DataColumn>[
-                                        DataColumn(
-                                          label: Text(
-                                            'Moyen',
-                                            style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Text(
-                                            'Date demande',
-                                            style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Text(
-                                            'Date validation',
-                                            style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Text(
-                                            'Date engagement',
-                                            style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Text(
-                                            'Etat',
-                                            style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: DataTable(
+                                      columnSpacing: 40,
+                                      //showCheckboxColumn: false,
+                                        columns: columnsList(),
+                                        rows: _buildListWithSelect(context, moyensEnAttente)
 
-                                      ],
-                                      rows: _buildListWithSelect(context, moyensEnAttente)
-
+                                    ),
                                   ),
                                 ),
                                 Center(
@@ -570,7 +666,11 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
   Widget intervenerVue(UserData userData, BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Page blanche'),
+        title: Text('Moyens' + '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' +
+            '' +  DateFormat('yyyy-MM-dd  kk:mm:ss').format(this.intervention.getDate) +
+            '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' + this.intervention.getNom +
+            '\n\t\t\t\t\t\t\t\t\t\t\t\t' + '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' +
+            '' + this.intervention.getAdresse),
       ),
       body: StreamBuilder<DocumentSnapshot>(
           stream: interventionService.getInterventionById(this.intervention.id),
@@ -589,46 +689,18 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
                     child: Column(
                       children: <Widget>[
                         Container(
-                          child: DataTable(
-                              showCheckboxColumn: false,
-                              columns: const <DataColumn>[
-                                DataColumn(
-                                  label: Text(
-                                    'Moyen',
-                                    style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Date demande',
-                                    style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Date validation',
-                                    style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Date engagement',
-                                    style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Etat',
-                                    style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                  ),
-                                ),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                                columnSpacing: 40,
+                                //showCheckboxColumn: false,
+                                columns: columnsList(),
+                                rows: _buildList(context, moyens)
 
-                              ],
-                              rows: _buildList(context, moyens)
-
+                            ),
                           ),
                         ),
-                        _showAddButton(userData)
+                        _showButtons(userData)
                       ],
                     )
                 )
