@@ -33,6 +33,7 @@ class SitacPageState extends State<SitacPage> {
   Intervention _monIntervention;
   bool isSwitched = false;
   final _editableKey = GlobalKey<EditableState>();
+
   //TODO: pour la table -> List<PointDrone> points = [];
   List headers = [
     {"title": 'Point', 'index': 1, 'key': 'point'},
@@ -1012,7 +1013,19 @@ class SitacPageState extends State<SitacPage> {
                                         key: _editableKey,
                                         columns: headers,
                                         rows: myrows,
-                                      ),
+                                        columnRatio: 0.08,
+                                          trHeight: 40,
+                                          zebraStripe: true,
+                                        stripeColor2: Colors.lightGreen[200],
+                                        borderColor: Colors.blueGrey,
+                                        thStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: Colors.red),
+                                        thAlignment: TextAlign.center,
+                                        tdEditableMaxLines:20,
+                                        tdStyle: TextStyle(fontWeight: FontWeight.normal),
+                                        thVertAlignment: CrossAxisAlignment.end,
+                                        //showCreateButton: true,
+                                        tdAlignment: TextAlign.center,
+                                       ),
                                     ),
 
                                     Form(
@@ -1053,13 +1066,24 @@ class SitacPageState extends State<SitacPage> {
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             TextFormField(
-                                              textInputAction:
-                                              TextInputAction.next,
-                                              validator: (input) {
-                                                if (input.isEmpty) {
+                                              decoration: const InputDecoration(
+                                                icon: Icon(Icons.wysiwyg_outlined),
+                                                hintText: 'Donner un nom à la mission du drone',
+                                                labelText: 'Nom de la mission',
+                                              ),
+                                              onSaved: (String value) {
+                                                print('Value = "$value"');
+                                                if (value.isEmpty) {
                                                   return 'Veillez saisir le nom de l\'intervention';
                                                 }
                                               },
+                                             /*
+                                              // ignore: missing_return
+                                              validator: (String value) {
+                                                if (value.isEmpty) {
+                                                  return 'Veillez saisir le nom de l\'intervention';
+                                                }
+                                              },*/
                                             ),
                                             Row(children: <Widget>[
                                               Text("Segment"),
