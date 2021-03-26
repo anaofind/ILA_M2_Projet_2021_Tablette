@@ -33,8 +33,6 @@ class MissionFormPageState extends State<MissionFormPage> {
   String nameMission;
   bool segment = false;
 
-  bool isSwitched = false;
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   //TODO: pour la table -> List<PointDrone> points = [];
@@ -60,13 +58,12 @@ class MissionFormPageState extends State<MissionFormPage> {
             return CircularProgressIndicator();
           }
           this.intervention = Intervention.fromSnapshot(snapshot.data);
-          this.refreshTabInterestPoint();
 
           return ListView(
             //TODO : SHERVIN SOUFIANE
             padding: const EdgeInsets.all(8),
             children: [
-              SizedBox(
+              /*SizedBox(
                 height: 200,
                 width: 150,
                 child: Editable(
@@ -86,8 +83,20 @@ class MissionFormPageState extends State<MissionFormPage> {
                   //showCreateButton: true,
                   tdAlignment: TextAlign.center,
                 ),
+              ), */
+              Center(
+                child: Text(
+                  "Points d'intérêt :",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold),
+                ),
               ),
-
+              Container(
+                padding: new EdgeInsets.symmetric(vertical: 10.0),
+                child: Table(
+                  children : InterestPointRows(),
+                ),
+              ),
               Form(
                 key: _formKey,
                 child: Column(
@@ -110,8 +119,8 @@ class MissionFormPageState extends State<MissionFormPage> {
                             return 'Veillez saisir le nom de l\'intervention';
                           }
                         },
-                        onSaved: (String value) {
-                          this.intervention.futureMission.name = value;
+                        onSaved: (value) {
+                          nameMission = value;
                         },
                       ),
                       Row(children: <Widget>[
@@ -121,6 +130,7 @@ class MissionFormPageState extends State<MissionFormPage> {
                           onChanged: (value) {
                             this.intervention.futureMission.segment = ! value;
                             print (this.intervention.futureMission.segment);
+                            this.interventionService.updateIntervention(intervention);
                             setState(() {});
                           },
                           inactiveTrackColor:
@@ -141,6 +151,8 @@ class MissionFormPageState extends State<MissionFormPage> {
                         onPressed: () async {
                           final formState = _formKey.currentState;
                           if (formState.validate()) {
+                            formState.save();
+                            this.intervention.futureMission.name = nameMission;
                             if (this.intervention.futureMission.interestPoints.isNotEmpty) {
                               String idMission = this.intervention.futureMission.id;
                               await MissionService.addMission(this.intervention);
@@ -167,15 +179,87 @@ class MissionFormPageState extends State<MissionFormPage> {
     );
   }
 
-  void refreshTabInterestPoint() {
-    this.rows.clear();
+  List<TableRow> InterestPointRows() {
+    List<TableRow> rows = [];
+    rows.add(TableRow(
+      children: [
+        TableCell(
+          child: Container(
+              padding: new EdgeInsets.symmetric(vertical: 5.0),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                color: Colors.black12,
+              ),
+              child: Center(child: Text('Points'))
+          ),
+        ),
+        TableCell(
+          child: Container(
+            padding: new EdgeInsets.symmetric(vertical: 5.0),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.black,
+                width: 1,
+              ),
+              color: Colors.black12,
+            ),
+            child: Center(
+                child: Text('Photos')
+            ),
+          ),
+        ),
+      ],
+    ),);
     for (int i = 0; i<this.intervention.futureMission.interestPoints.length; i++) {
       InterestPoint interestPoint = this.intervention.futureMission.interestPoints[i];
-      String photo = (interestPoint.photo)? 'oui' : 'non';
-      this.rows.add({
-        'point' : i.toString(),
-        'photo' : photo
-      });
+      bool photo = interestPoint.photo;
+      rows.add(TableRow(
+        children: [
+          TableCell(
+            child: Container(
+              height: 30,
+              padding: new EdgeInsets.symmetric(vertical: 5.0),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1,
+                ),
+              ),
+              child: Center(
+                child: Text((i+1).toString()),
+              ),
+            ),
+          ),
+          TableCell(
+              child: GestureDetector(
+                child: Container(
+                  padding: new EdgeInsets.symmetric(vertical: 5.0),
+                  height: 30,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 1,
+                    ),
+                  ),
+                  child: Center(
+                    child: Icon(
+                        Icons.photo_camera,
+                      color: (photo)? Colors.blue: Colors.grey,
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  interestPoint.photo = ! photo;
+                  this.interventionService.updateIntervention(this.intervention);
+                },
+              )
+          )
+        ]
+      ));
     }
+    return rows;
   }
 }
