@@ -134,7 +134,9 @@ class SitacPageState extends State<SitacPage> {
                       _monIntervention.getAdresse),
                   backgroundColor: Colors.red,
                 ),
+                resizeToAvoidBottomPadding: false,
                 body: Column(
+
                   children: [
                     Expanded(
                       child: Row(

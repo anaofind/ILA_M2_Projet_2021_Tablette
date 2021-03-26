@@ -28,27 +28,11 @@ class MissionFormPageState extends State<MissionFormPage> {
   MissionFormPageState(this.intervention);
 
 
-  final _editableKey = GlobalKey<EditableState>();
-
   String nameMission;
   bool segment = false;
   bool streamVideo = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  //TODO: pour la table -> List<PointDrone> points = [];
-  List headers = [
-    {"title": 'Point', 'index': 1, 'key': 'point'},
-    {"title": 'Photo', 'index': 2, 'key': 'photo'}
-  ];
-
-  List rows = [];
-
-  void _addNewRow() {
-    setState(() {
-      _editableKey.currentState.createRow();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,27 +48,6 @@ class MissionFormPageState extends State<MissionFormPage> {
             //TODO : SHERVIN SOUFIANE
             padding: const EdgeInsets.all(8),
             children: [
-              /*SizedBox(
-                height: 200,
-                width: 150,
-                child: Editable(
-                  key: _editableKey,
-                  rows: this.rows,
-                  columns: headers,
-                  columnRatio: 0.08,
-                  trHeight: 40,
-                  zebraStripe: true,
-                  stripeColor2: Colors.lightGreen[200],
-                  borderColor: Colors.blueGrey,
-                  thStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: Colors.red),
-                  thAlignment: TextAlign.center,
-                  tdEditableMaxLines:20,
-                  tdStyle: TextStyle(fontWeight: FontWeight.normal),
-                  thVertAlignment: CrossAxisAlignment.end,
-                  //showCreateButton: true,
-                  tdAlignment: TextAlign.center,
-                ),
-              ), */
               Center(
                 child: Text(
                   "Points d'intérêt :",
