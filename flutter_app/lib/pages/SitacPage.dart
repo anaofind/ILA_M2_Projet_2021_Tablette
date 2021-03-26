@@ -1515,7 +1515,7 @@ class SitacPageState extends State<SitacPage> {
                             ),
                           ),
                           Flexible(
-                              flex: 4,
+                              flex: 3,
                               child:
                               MapPage(intervention: this._monIntervention)),
                         ],

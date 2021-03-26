@@ -32,6 +32,7 @@ class MissionFormPageState extends State<MissionFormPage> {
 
   String nameMission;
   bool segment = false;
+  bool stream = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -102,7 +103,25 @@ class MissionFormPageState extends State<MissionFormPage> {
                 child: Column(
                     mainAxisAlignment:
                     MainAxisAlignment.start,
-                    children: <Widget>[
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Vidéo en direct',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
+                          Checkbox(
+                            value: this.stream,
+                            onChanged: (value) {
+                              this.setState(() {
+                                this.stream = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
                       Text(
                         'Nom de la mission :',
                         style: TextStyle(
