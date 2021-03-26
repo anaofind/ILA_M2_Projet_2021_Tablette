@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/Intervention.dart';
+import 'package:flutter_app/models/Mission.dart';
 import 'package:flutter_app/pages/MissionPage.dart';
 import 'package:flutter_app/services/InterventionService.dart';
+import 'package:flutter_app/services/MissionService.dart';
 import 'package:flutter_app/services/NavigatorPage.dart';
 import 'package:flutter_app/services/SelectorIntervention.dart';
 
@@ -21,14 +23,7 @@ class DronePageState extends State<DronePage> {
   Intervention intervention;
   final InterventionService interventionService = InterventionService();
 
-  List<String> missions = [];
-
-  DronePageState(this.intervention) {
-    for (int i = 0; i<10; i++) {
-      this.missions.add('Mission ' + (i+1).toString());
-    }
-  }
-
+  DronePageState(this.intervention);
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +57,7 @@ class DronePageState extends State<DronePage> {
             );
           }
 
-          if (this.missions.length == 0) {
+          if (this.intervention.missions.length == 0) {
             return Center (
               child: Column(
                 children: [
@@ -92,8 +87,9 @@ class DronePageState extends State<DronePage> {
                   Flexible(
                     flex: 1,
                     child: ListView.builder(
-                      itemCount: this.missions.length,
+                      itemCount: this.intervention.missions.length,
                       itemBuilder: (context, index) {
+                        String idMission = this.intervention.missions[index];
                         return GestureDetector(
                           child: Container(
                               padding: new EdgeInsets.symmetric(vertical: 40.0),
@@ -102,20 +98,29 @@ class DronePageState extends State<DronePage> {
                                   color: Colors.black,
                                   width: 1,
                                 ),
-                                color: (SelectorIntervention.idMissionSelected == index)? Colors.black12: Colors.white,
+                                color: (SelectorIntervention.idMissionSelected == idMission)? Colors.black12: Colors.white,
                               ),
                               child : Center(
-                                  child: Text(
-                                      this.missions[index],
-                                    style: TextStyle(
-                                      fontSize: 30,
-                                    ),
+                                  child: StreamBuilder<QuerySnapshot>(
+                                    stream: MissionService.getMissionById(idMission),
+                                    builder: (context, snapshot) {
+                                      if (! snapshot.hasData) {
+                                        return CircularProgressIndicator();
+                                      }
+                                      Mission mission = Mission.fromSnapshot(snapshot.data.docs[0]);
+                                      return Text(
+                                        mission.name,
+                                        style: TextStyle(
+                                          fontSize: 30,
+                                        ),
+                                      );
+                                    }
                                   )
                               )
                           ),
                           onTap: () {
                             this.setState(() {
-                              SelectorIntervention.idMissionSelected = index;
+                              SelectorIntervention.idMissionSelected = idMission;
                               print(index);
                             });
                           },

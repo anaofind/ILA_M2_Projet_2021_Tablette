@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_app/models/Mission.dart';
+
 import 'package:flutter_app/models/MoyenIntervention.dart';
+import 'package:flutter_app/models/Drone.dart';
+import 'package:flutter_app/models/Position.dart';
+
 
 import 'SymbolIntervention.dart';
 
@@ -14,8 +17,9 @@ class Intervention {
   List<MoyenIntervention> moyens;
   List<SymbolIntervention> symbols;
   List<String> missions;
+  Drone drone;
 
-  Intervention(this.id, this.nom, this.adresse, this.codeSinistre, this.date, this.moyens): symbols = List(), missions = List();
+  Intervention(this.id, this.nom, this.adresse, this.codeSinistre, this.date, this.moyens, this.drone): symbols = List(), missions = List();
 
   List<Map> ConvertMoyensToMap(List<MoyenIntervention> moyens) {
     List<Map> moyensIntervention = [];
@@ -50,7 +54,9 @@ class Intervention {
       'date': date,
       'moyens': ConvertMoyensToMap(moyens),
       'symbols': ConvertSymbolsToMap(symbols),
-      'missions': ConvertMissionsToMap(missions)
+      'missions': ConvertMissionsToMap(missions),
+      'latitudeDrone' : (drone != null)? drone.position.latitude: null,
+      'longitudeDrone' : (drone != null)? drone.position.longitude: null
     };
   }
 
@@ -63,8 +69,8 @@ class Intervention {
         date = snapshot.data()['date'].toDate(),
         moyens =new List<MoyenIntervention>.from(snapshot.data()['moyens'].map((s) => MoyenIntervention.fromMap(s)).toList()),
         symbols =new List<SymbolIntervention>.from(snapshot.data()['symbols'].map((s) => SymbolIntervention.fromMap(s)).toList()),
-        missions = (snapshot.data()['missions'] != null)? new List<String>.from(snapshot.data()['missions'].map((s) => s['id']).toList()): [];
-
+        missions = (snapshot.data()['missions'] != null)? new List<String>.from(snapshot.data()['missions'].map((s) => s['id']).toList()): [],
+        drone = (snapshot.data()['latitudeDrone'] != null && snapshot.data()['longitudeDrone'] != null)? Drone(Position(snapshot.data()['latitudeDrone'],snapshot.data()['longitudeDrone'])): null;
 
   String get getNom {
     return this.nom;

@@ -1,10 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/models/Mission.dart';
+import 'package:flutter_app/services/MissionService.dart';
 
 import 'package:flutter_app/services/SelectorIntervention.dart';
 import 'package:flutter_app/services/AccountService.dart';
-
-import 'NewInterventionPage.dart';
-
 
 class MissionPage extends StatefulWidget {
 
@@ -19,12 +19,21 @@ class MissionPageState extends State<MissionPage> {
   @override
   Widget build(BuildContext context) {
     print ('REFRESH MISSION');
-    return Scaffold(
-        body: Center(
-          child: Text(
-              'Mission ' + (SelectorIntervention.idMissionSelected+1).toString()
-          ),
-        )
+    return StreamBuilder<QuerySnapshot> (
+        stream: MissionService.getMissionById(SelectorIntervention.idMissionSelected),
+        builder: (context, snapshot) {
+          if (! snapshot.hasData) {
+            return CircularProgressIndicator();
+          }
+          Mission mission = Mission.fromSnapshot(snapshot.data.docs[0]);
+          return Scaffold(
+              body: Center(
+                child: Text(
+                    mission.name,
+                ),
+              )
+          );
+      }
     );
   }
 }
