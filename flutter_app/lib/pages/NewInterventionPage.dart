@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/models/AddressSuggestion.dart';
 import 'package:flutter_app/models/Intervention.dart';
 import 'package:flutter_app/models/Moyen.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
@@ -11,6 +12,8 @@ import 'package:flutter_app/services/SinistreService.dart';
 import 'package:flutter_app/util/ColorConverter.dart';
 import 'package:flutter_app/util/IconBasePathGetter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'AddressSearch.dart';
 
 
 class NewInterventionPage extends StatefulWidget {
@@ -30,6 +33,15 @@ class NewInterventionPageState extends State<NewInterventionPage> {
   Sinistre _selectedSinistre;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String nomIntervention, adresseIntervention;
+
+  //
+  final _controller = TextEditingController();
+  //
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Future<void> initState() {
@@ -225,7 +237,7 @@ class NewInterventionPageState extends State<NewInterventionPage> {
         child: Row(
             children: <Widget>[
               Expanded(
-                flex: 3, // 40%
+                flex: 5, // 40%
                 child: Container(
                   margin: const EdgeInsets.all(32.0),
                   child:   Column(
@@ -257,6 +269,22 @@ class NewInterventionPageState extends State<NewInterventionPage> {
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 TextFormField(
+                                  controller: _controller,
+                                  readOnly: true,
+                                    decoration: InputDecoration(
+                                        icon: Icon(Icons.search)),
+                                  onTap: () async {
+                                    final Feature result = await showSearch(
+                                      context: context,
+                                      delegate: AddressSearch(),
+                                    );
+                                    // This will change the text displayed in the TextField
+                                    if (result != null) {
+                                      setState(() {
+                                        _controller.text = result.properties.label;
+                                      });
+                                    }
+                                  },
                                   validator: (input) {
                                     if (input.isEmpty) {
                                       return 'Veillez saisir une adresse';
