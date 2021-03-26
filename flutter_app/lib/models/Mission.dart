@@ -48,16 +48,35 @@ class Mission {
   }
 
 
+  static List<Map<String, dynamic>> convertInterestPointsToMap(List<InterestPoint> list) {
+    List<Map<String, dynamic>> listMap = [];
+    list.forEach((element) {
+      listMap.add(element.toMap());
+    });
+    return listMap;
+  }
+
+
   Map<String, dynamic> toMap() {
     return {
       'id' : this.id,
       'name' : this.name,
-      'interestPoints' : this.interestPoints,
+      'interestPoints' : convertInterestPointsToMap(this.interestPoints),
       'photos' : this.photos,
       'segment': this.segment,
       'streamVideo': this.streamVideo
     };
   }
+
+  Mission.fromMap(Map<String, dynamic> map) :
+        assert(map != null),
+        id = map['id'],
+        name = map['name'],
+        interestPoints = convertInterestPointsToList(map['interestPoints']),
+        photos = convertPhotosToList(map['photos']),
+        video = map['video'],
+        segment = map['segment'],
+        streamVideo = map['streamVideo'];
 
   Mission.fromSnapshot(DocumentSnapshot snapshot) :
         assert(snapshot != null),

@@ -7,6 +7,7 @@ import 'package:flutter_app/services/InterventionService.dart';
 import 'package:flutter_app/services/MissionService.dart';
 import 'package:flutter_app/services/NavigatorPage.dart';
 import 'package:flutter_app/services/SelectorIntervention.dart';
+import 'package:flutter_app/services/SelectorSitac.dart';
 
 
 class DronePage extends StatefulWidget {
@@ -63,13 +64,16 @@ class DronePageState extends State<DronePage> {
                 children: [
                   Spacer(),
                   Text(
-                    'Aucune mission associée à cette intervention',
+                    'Aucune mission associée à cette intervention : ' + this.intervention.nom,
                   ),
                   ElevatedButton(
                     child: Text(
                         'Créer une mission'
                     ),
-                    onPressed: () => NavigatorPage.navigateTo(1),
+                    onPressed: () {
+                      SelectorSitac.indexTabBar = 6;
+                      NavigatorPage.navigateTo(1);
+                    },
                   ),
                   Spacer(),
                 ],

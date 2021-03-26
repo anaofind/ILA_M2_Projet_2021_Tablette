@@ -12,6 +12,8 @@ import 'package:flutter_app/services/InterventionService.dart';
 import 'package:flutter_app/services/MissionService.dart';
 import 'package:flutter_app/services/NavigatorPage.dart';
 import 'package:flutter_app/services/SelectorMoyenSymbol.dart';
+import 'package:flutter_app/services/SelectorSitac.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:intl/intl.dart';
 import 'package:editable/editable.dart';
 
@@ -95,9 +97,13 @@ class SitacPageState extends State<SitacPage> {
           return MaterialApp(
             home: DefaultTabController(
               length: 8,
+              initialIndex: SelectorSitac.indexTabBar,
               child: Scaffold(
                 appBar: AppBar(
                   bottom: TabBar(
+                    onTap: (index) {
+                      SelectorSitac.indexTabBar = index;
+                    },
                     tabs: [
                       Tab(
                           icon: Image(
@@ -1104,16 +1110,25 @@ class SitacPageState extends State<SitacPage> {
                                               color: Colors.greenAccent,
                                               textColor: Colors.white,
                                               onPressed: () async {
-                                                await MissionService.addMission(_monIntervention, Mission(
-                                                  name: 'Mission ' + (this._monIntervention.missions.length+1).toString()
-                                                ));
+                                                if (_monIntervention.futureMission.interestPoints.isNotEmpty) {
+                                                  await MissionService.addMission(_monIntervention);
+                                                } else {
+                                                  Alert(
+                                                      context: context,
+                                                      title: "Aucun point d'intérêt",
+                                                      desc: "Veillez ajouter des points d'intérêt sur la carte"
+                                                  ).show();
+                                                }
                                               },
                                             ),
                                             FlatButton(
                                               child: Text('Annuler', style: TextStyle(fontSize: 20.0),),
                                               color: Colors.redAccent,
                                               textColor: Colors.white,
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                this._monIntervention.futureMission = Mission();
+                                                InterventionService().updateIntervention(this._monIntervention);
+                                              },
                                             ),
                                           ]),
                                     )

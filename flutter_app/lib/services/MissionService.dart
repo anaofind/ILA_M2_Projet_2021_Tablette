@@ -7,9 +7,10 @@ class MissionService {
 
   static CollectionReference missions = FirebaseFirestore.instance.collection('missions');
 
-  static Future<void> addMission(Intervention intervention, Mission mission) {
-    missions.add(mission.toMap()).then((m) {
-      intervention.missions.add(mission.id);
+  static Future<void> addMission(Intervention intervention) async{
+    missions.add(intervention.futureMission.toMap()).then((m) {
+      intervention.missions.add(intervention.futureMission.id);
+      intervention.futureMission = Mission();
       InterventionService().updateIntervention(intervention);
     });
   }

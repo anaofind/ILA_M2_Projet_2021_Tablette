@@ -5,15 +5,15 @@ import 'package:flutter_app/lib-ext/dragmarker.dart';
 import 'package:flutter_app/models/Intervention.dart';
 import 'package:flutter_app/models/SymbolIntervention.dart';
 import 'package:flutter_app/models/Position.dart';
+import 'package:flutter_app/models/InterestPoint.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
 import 'package:flutter_app/services/HydrantService.dart';
 import 'package:flutter_app/services/InterventionService.dart';
 import 'package:flutter_app/services/SelectorMoyenSymbol.dart';
+import 'package:flutter_app/services/SelectorSitac.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:latlong/latlong.dart';
-import 'package:smart_select/smart_select.dart';
-
 
 
 class MapPage extends StatefulWidget {
@@ -92,28 +92,34 @@ class MapPageState extends State<MapPage> {
                 minZoom: this.minZoom,
                 interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
                 onTap:(LatLng latLng) async{
-                  if (SelectorMoyenSymbol.isSelected()) {
-                    Position position = Position(latLng.latitude, latLng.longitude);
-                    if (SelectorMoyenSymbol.moyenId > -1) {
-                      if (SelectorMoyenSymbol.moyenId < this.intervention.moyens.length) {
-                        MoyenIntervention moyen = this.intervention.moyens[SelectorMoyenSymbol.moyenId];
-                        this.intervention.moyens.removeAt(SelectorMoyenSymbol.moyenId);
-                        moyen.position = position;
-                        this.intervention.moyens.add(moyen);
-                        this.interventionService.updateIntervention(this.intervention);
-                      }
-                    } else {
-                      dynamic symbolOrMoyen = SymbolDecider.createObjectRelatedToSymbol(SelectorMoyenSymbol.pathImage, position);
-                      this.interventionService.addMoyenOrSymbolToIntervention(this.intervention.id, symbolOrMoyen);
-                    }
-                    SelectorMoyenSymbol.deselect();
+                  Position position = Position(latLng.latitude, latLng.longitude);
+                  if (SelectorSitac.indexTabBar == 6) {
+                    this.intervention.futureMission.interestPoints.add(InterestPoint(position));
+                    this.interventionService.updateIntervention(this.intervention);
                   } else {
-                    if (this.idSymbolSelected >= 0) {
-                      this.setState(() {
-                        this.idSymbolSelected = -1;
-                      });
+                    if (SelectorMoyenSymbol.isSelected()) {
+                      if (SelectorMoyenSymbol.moyenId > -1) {
+                        if (SelectorMoyenSymbol.moyenId < this.intervention.moyens.length) {
+                          MoyenIntervention moyen = this.intervention.moyens[SelectorMoyenSymbol.moyenId];
+                          this.intervention.moyens.removeAt(SelectorMoyenSymbol.moyenId);
+                          moyen.position = position;
+                          this.intervention.moyens.add(moyen);
+                          this.interventionService.updateIntervention(this.intervention);
+                        }
+                      } else {
+                        dynamic symbolOrMoyen = SymbolDecider.createObjectRelatedToSymbol(SelectorMoyenSymbol.pathImage, position);
+                        this.interventionService.addMoyenOrSymbolToIntervention(this.intervention.id, symbolOrMoyen);
+                      }
+                      SelectorMoyenSymbol.deselect();
+                    } else {
+                      if (this.idSymbolSelected >= 0) {
+                        this.setState(() {
+                          this.idSymbolSelected = -1;
+                        });
+                      }
                     }
                   }
+
                 },
               ),
               layers: [
@@ -124,7 +130,7 @@ class MapPageState extends State<MapPage> {
                   tileSize: 256,
                 ),
                 DragMarkerPluginOptions(
-                    markers: this.markersFixed + this.markers + this.markersDialog,
+                    markers: this.markersFixed + this.markers + this.markersDrone,
                 ),
               ],
             ),
@@ -138,11 +144,18 @@ class MapPageState extends State<MapPage> {
                       backgroundColor: Colors.redAccent,
                       onPressed: () {
                         this.idSymbolSelected = -1;
-                        this.intervention.symbols.clear();
-                        this.intervention.moyens.forEach((element) {
-                          element.position.latitude = null;
-                          element.position.longitude = null;
-                        });
+                        if (SelectorSitac.indexTabBar == 6) {
+                          this.intervention.futureMission.interestPoints.clear();
+                        } else {
+                          if (SelectorSitac.indexTabBar == 0) {
+                            this.intervention.moyens.forEach((element) {
+                              element.position.latitude = null;
+                              element.position.longitude = null;
+                            });
+                          } else {
+                            this.intervention.symbols.clear();
+                          }
+                        }
                         this.interventionService.updateIntervention(this.intervention);
                       },
                     ),
@@ -207,30 +220,40 @@ class MapPageState extends State<MapPage> {
     this.markersFixed.add(m);
   }
 
-  createMarkerDialog(LatLng latLng, MoyenIntervention moyen) {
-    print("CREATE DIALOG MARKER");
-    int id = markersDialog.length;
+  createMarkerDrone(LatLng latLng) {
+    print("CREATE DRAG MARKER");
+    int num = markersDrone.length+1;
+    InterestPoint interestPoint = this.intervention.futureMission.interestPoints[num-1];
+    Color color = Colors.purple;
     DragMarker dm = DragMarker(
       point: latLng,
-      width: 90,
-      height: 90,
+      width: 60.0,
+      height: 60.0,
+      offset: Offset(0.0, 0.0),
       builder: (ctx) => Container(
-        child: SmartSelect<String>.single(
-            title: 'Etat moyen : ' + moyen.moyen.codeMoyen,
-            value: moyen.etat,
-            choiceItems: [
-              S2Choice<String>(value: "Etat.prevu", title: 'Prevu'),
-              S2Choice<String>(value: 'Etat.enAttente', title: 'En attente'),
-              S2Choice<String>(value: 'Etat.enCours', title: 'En cours'),
-            ],
-            onChange: (state) => setState(() {
-              this.interventionService.updateIntervention(this.intervention);
-              this.markersDialog.clear();
-            })
+        decoration: new BoxDecoration(
+          color: Colors.black.withOpacity(0.5),
+          shape: BoxShape.circle,
+        ),
+        child: IconButton(
+            icon : Text(
+                "P"+ num.toString(),
+              style: TextStyle(
+                color: Colors.white
+              ),
+            ),
+            color: color,
+            iconSize: 60
         ),
       ),
+      onDragEnd: (details,point) {
+        Position position = Position(point.latitude, point.longitude);
+        interestPoint.position = position;
+        this.interventionService.updateIntervention(this.intervention);
+      }
     );
-    this.markersDialog.add(dm);
+
+    this.markersDrone.add(dm);
   }
 
   createMarker(LatLng latLng, String pathImage) {
@@ -271,26 +294,7 @@ class MapPageState extends State<MapPage> {
 
     this.markers.add(dm);
   }
-  createMarkerDrone(LatLng latLng) {
-    print("CREATE DRAG MARKER");
-    int num = markersDrone.length+1;
-    Color color = Colors.purple;
-    DragMarker dm = DragMarker(
-      point: latLng,
-      width: 80.0,
-      height: 80.0,
-      offset: Offset(0.0, 0.0),
-      builder: (ctx) => Container(
-        child: IconButton(
-          icon : Text("P"+ num.toString()),
-          color: color,
-          iconSize: 60
-        ),
-      ),
-    );
 
-    this.markers.add(dm);
-  }
   refreshMarkers() {
     markersFixed.clear();
     print(HydrantService.hydrants.length);
@@ -322,6 +326,11 @@ class MapPageState extends State<MapPage> {
         this.createMarker(position, pathImage);
       }
     }
+    this.markersDrone.clear();
+    this.intervention.futureMission.interestPoints.forEach((element) {
+      LatLng position = LatLng(element.position.latitude, element.position.longitude);
+      this.createMarkerDrone(position);
+    });
   }
 
   bool checkMoyen(MoyenIntervention moyen) {

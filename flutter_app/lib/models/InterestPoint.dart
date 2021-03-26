@@ -2,7 +2,10 @@ import 'package:flutter_app/models/Position.dart';
 
 class InterestPoint {
   Position position;
-  bool photo;
+  bool photo = false;
+
+  InterestPoint(this.position);
+
 
   Map<String, dynamic> toMap() {
     return {
@@ -14,6 +17,7 @@ class InterestPoint {
 
   InterestPoint.fromMap(Map<String, dynamic> map) :
       assert(map != null),
-      position = Position( map['latitude'], map['longitude']);
+      position = Position( map['latitude'], map['longitude']),
+      photo = map['photo'];
 
 }
