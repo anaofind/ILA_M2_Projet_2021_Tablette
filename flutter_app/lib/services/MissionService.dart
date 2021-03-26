@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_app/models/Intervention.dart';
-import 'package:flutter_app/models/Mission.dart';
 import 'package:flutter_app/services/InterventionService.dart';
 
 class MissionService {
@@ -13,10 +12,13 @@ class MissionService {
       'photos': [],
       'video': []
     }).then((m) {
-      Mission mission = Mission(id: m.id);
-      intervention.missions.add(mission);
+      intervention.missions.add(m.id);
       InterventionService().updateIntervention(intervention);
     });
+  }
+
+  static Stream<DocumentSnapshot> getMissionById(String id) {
+    return missions.doc(id).snapshots();
   }
 
 }

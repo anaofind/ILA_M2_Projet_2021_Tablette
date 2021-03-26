@@ -13,7 +13,7 @@ class Intervention {
   final DateTime date;
   List<MoyenIntervention> moyens;
   List<SymbolIntervention> symbols;
-  List<Mission> missions;
+  List<String> missions;
 
   Intervention(this.id, this.nom, this.adresse, this.codeSinistre, this.date, this.moyens): symbols = List(), missions = List();
 
@@ -33,10 +33,10 @@ class Intervention {
     });
     return symbolsIntervention;
   }
-  List<Map> ConvertMissionsToMap(List<Mission> missions) {
+  List<Map> ConvertMissionsToMap(List<String> missions) {
     List<Map> missionsIntervention = [];
-    missions.forEach((Mission mission) {
-      Map step = mission.toMap();
+    missions.forEach((String idMission) {
+      Map step = {'id' : idMission};
       missionsIntervention.add(step);
     });
     return missionsIntervention;
@@ -63,7 +63,7 @@ class Intervention {
         date = snapshot.data()['date'].toDate(),
         moyens =new List<MoyenIntervention>.from(snapshot.data()['moyens'].map((s) => MoyenIntervention.fromMap(s)).toList()),
         symbols =new List<SymbolIntervention>.from(snapshot.data()['symbols'].map((s) => SymbolIntervention.fromMap(s)).toList()),
-        missions = (snapshot.data()['missions'] != null)? new List<Mission>.from(snapshot.data()['missions'].map((s) => Mission.fromMap(s)).toList()): [];
+        missions = (snapshot.data()['missions'] != null)? new List<String>.from(snapshot.data()['missions'].map((s) => s['id']).toList()): [];
 
 
   String get getNom {
@@ -86,7 +86,7 @@ class Intervention {
     return this.moyens;
   }
 
-  List<Mission> get getMissions{
+  List<String> get getMissions{
     return this.missions;
   }
 

@@ -1,22 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_app/models/InterestPoint.dart';
 import 'package:flutter_app/models/Position.dart';
 
 class Mission {
 
   final String id;
-  List<Position> positions;
-  List<String> photos;
+  List<InterestPoint> interestPoints = [];
+  List<String> photos = [];
   String video;
+  bool segment = false;
+  bool streamVideo = false;
 
-  Mission({this.id, this.video}): this.positions = [],  this.photos = [];
+
+  Mission({this.id, this.video, this.photos, this.interestPoints, this.segment, this.streamVideo});
 
 
-  static List<Position> convertPositionsToList(List<Map<String, dynamic>> listMap) {
-    List<Position> positions = [];
-    listMap.forEach((mapPosition) {
-      Position position = Position( mapPosition['latitude'], mapPosition['longitude']);
-      positions.add(position);
+  static List<InterestPoint> convertInterestPointsToList(List<Map<String, dynamic>> listMap) {
+    List<InterestPoint> interestPoints = [];
+    listMap.forEach((mapInterestPoint) {
+      InterestPoint interestPoint = InterestPoint.fromMap(mapInterestPoint);
+      interestPoints.add(interestPoint);
     });
-    return positions;
+    return interestPoints;
   }
 
   static List<String> convertPhotosToList(List<Map<String, dynamic>> listMap) {
@@ -31,21 +36,32 @@ class Mission {
 
   Map<String, dynamic> toMap() {
     return {
-      'id' : this.id
+      'id' : this.id,
+      'interestPoints' : this.interestPoints,
+      'photos' : this.photos,
+      'segment': this.segment,
+      'streamVideo': this.streamVideo
     };
   }
-
-  Mission.fromMapId(Map<String, dynamic> map)
-      : assert(map != null),
-        id = map['id']
-  ;
 
   Mission.fromMap(Map<String, dynamic> map)
       : assert(map != null),
         id = map['id'],
-        positions = convertPositionsToList(map['positions']),
+        interestPoints = convertInterestPointsToList(map['interestPoints']),
         photos = convertPhotosToList(map['photos']),
-        video = map['video']
+        video = map['video'],
+        segment = map['segment'],
+        streamVideo = map['streamVideo']
   ;
+
+  Mission.fromSnapshot(DocumentSnapshot snapshot) :
+        assert(snapshot != null),
+        id = snapshot.data()['id'],
+        interestPoints = convertInterestPointsToList(snapshot.data()['interestPoints']),
+        photos = convertPhotosToList(snapshot.data()['photos']),
+        video = snapshot.data()['video'],
+        segment = snapshot.data()['segment'],
+        streamVideo = snapshot.data()['streamVideo'];
+
 
 }
