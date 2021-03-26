@@ -32,7 +32,7 @@ class MissionFormPageState extends State<MissionFormPage> {
 
   String nameMission;
   bool segment = false;
-  bool stream = false;
+  bool streamVideo = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -105,6 +105,7 @@ class MissionFormPageState extends State<MissionFormPage> {
                     MainAxisAlignment.start,
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             'Vidéo en direct',
@@ -113,10 +114,10 @@ class MissionFormPageState extends State<MissionFormPage> {
                             ),
                           ),
                           Checkbox(
-                            value: this.stream,
+                            value: this.streamVideo,
                             onChanged: (value) {
                               this.setState(() {
-                                this.stream = value;
+                                this.streamVideo = value;
                               });
                             },
                           ),
@@ -142,27 +143,29 @@ class MissionFormPageState extends State<MissionFormPage> {
                           nameMission = value;
                         },
                       ),
-                      Row(children: <Widget>[
-                        Text("Segment"),
-                        Switch(
-                          value: ! this.intervention.futureMission.segment,
-                          onChanged: (value) {
-                            this.intervention.futureMission.segment = ! value;
-                            print (this.intervention.futureMission.segment);
-                            this.interventionService.updateIntervention(intervention);
-                            setState(() {});
-                          },
-                          inactiveTrackColor:
-                          Colors.lightGreenAccent,
-                          inactiveThumbColor:
-                          Colors.lightGreen,
-                          activeTrackColor:
-                          Colors.lightBlue, // red
-                          activeColor: Colors
-                              .lightBlueAccent, // yellow
-                        ),
-                        Text("Zone"),
-                      ]),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Segment"),
+                            Switch(
+                              value: ! this.intervention.futureMission.segment,
+                              onChanged: (value) {
+                                this.intervention.futureMission.segment = ! value;
+                                print (this.intervention.futureMission.segment);
+                                this.interventionService.updateIntervention(intervention);
+                                setState(() {});
+                              },
+                              inactiveTrackColor:
+                              Colors.lightGreenAccent,
+                              inactiveThumbColor:
+                              Colors.lightGreen,
+                              activeTrackColor:
+                              Colors.lightBlue, // red
+                              activeColor: Colors
+                                  .lightBlueAccent, // yellow
+                            ),
+                            Text("Zone"),
+                          ]),
                       FlatButton(
                         child: Text('Démarrer', style: TextStyle(fontSize: 20.0),),
                         color: Colors.greenAccent,
@@ -172,6 +175,7 @@ class MissionFormPageState extends State<MissionFormPage> {
                           if (formState.validate()) {
                             formState.save();
                             this.intervention.futureMission.name = nameMission;
+                            this.intervention.futureMission.streamVideo = streamVideo;
                             if (this.intervention.futureMission.interestPoints.isNotEmpty) {
                               String idMission = this.intervention.futureMission.id;
                               await MissionService.addMission(this.intervention);
@@ -236,47 +240,47 @@ class MissionFormPageState extends State<MissionFormPage> {
       InterestPoint interestPoint = this.intervention.futureMission.interestPoints[i];
       bool photo = interestPoint.photo;
       rows.add(TableRow(
-        children: [
-          TableCell(
-            child: Container(
-              height: 30,
-              padding: new EdgeInsets.symmetric(vertical: 5.0),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1,
+          children: [
+            TableCell(
+              child: Container(
+                height: 30,
+                padding: new EdgeInsets.symmetric(vertical: 5.0),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 1,
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Text((i+1).toString()),
+                child: Center(
+                  child: Text((i+1).toString()),
+                ),
               ),
             ),
-          ),
-          TableCell(
-              child: GestureDetector(
-                child: Container(
-                  padding: new EdgeInsets.symmetric(vertical: 5.0),
-                  height: 30,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1,
+            TableCell(
+                child: GestureDetector(
+                  child: Container(
+                    padding: new EdgeInsets.symmetric(vertical: 5.0),
+                    height: 30,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1,
+                      ),
                     ),
-                  ),
-                  child: Center(
-                    child: Icon(
+                    child: Center(
+                      child: Icon(
                         Icons.photo_camera,
-                      color: (photo)? Colors.blue: Colors.grey,
+                        color: (photo)? Colors.blue: Colors.grey,
+                      ),
                     ),
                   ),
-                ),
-                onTap: () {
-                  interestPoint.photo = ! photo;
-                  this.interventionService.updateIntervention(this.intervention);
-                },
-              )
-          )
-        ]
+                  onTap: () {
+                    interestPoint.photo = ! photo;
+                    this.interventionService.updateIntervention(this.intervention);
+                  },
+                )
+            )
+          ]
       ));
     }
     return rows;
