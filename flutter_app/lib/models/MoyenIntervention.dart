@@ -20,11 +20,12 @@ class MoyenIntervention {
   DateTime demandeA;
   DateTime departA;
   DateTime arriveA;
+  DateTime retourneA;
   Color couleur;
   Position position;
   String basePath;
 
-  MoyenIntervention(this.moyen, this.etat, this.demandeA, this.departA, this.arriveA, this.couleur, this.basePath):id = Uuid().v4(), position = null;
+  MoyenIntervention(this.moyen, this.etat, this.demandeA, this.departA, this.arriveA, this.retourneA, this.couleur, this.basePath):id = Uuid().v4(), position = null;
 
 
   Map<String, dynamic> toMap() {
@@ -37,6 +38,7 @@ class MoyenIntervention {
       'demandeA': demandeA,
       'departA': departA,
       'arriveA': arriveA,
+      'retourneA': retourneA,
       'couleur': ColorConverter.stringFromColor(couleur),
       'latitude': position!=null?position.latitude:null,
       'longitude': position!=null?position.longitude:null,
@@ -51,6 +53,7 @@ class MoyenIntervention {
         demandeA = map['demandeA'].toDate(),
         departA = map['departA']!=null?map['departA'].toDate():null,
         arriveA = map['arriveA']!=null?map['arriveA'].toDate():null,
+        retourneA = map['retourneA']!=null?map['retourneA'].toDate():null,
         couleur = ColorConverter.colorFromString(map['couleur']),
         position = Position( map['latitude'], map['longitude']),
         basePath = map['basePath'];
@@ -75,15 +78,18 @@ class MoyenIntervention {
         }
     );*/
     moyenService.getMoyenByCode(caracteristics.nomSymbol).forEach((element) {
+      String etat = SymbolIntervention.EtatFromCode(caracteristics.etat);
+      DateTime date = DateTime.now();
       this.id = Uuid().v4();
       this.moyen =  Moyen.fromSnapshot(element.docs[0]);
       this.position =position;
       this.couleur =ColorConverter.colorFromString(caracteristics.couleur);
-      this.etat = SymbolIntervention.EtatFromCode(caracteristics.etat);
+      this.etat = etat;
       this.basePath =caracteristics.basePath;
-      demandeA = DateTime.now();
-      departA = null;
+      demandeA = date;
+      departA = etat==Etat.enCours.toString()?date:null;
       arriveA = null;
+      retourneA = null;
     });
   }
 

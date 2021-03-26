@@ -73,17 +73,20 @@ class SymbolIntervention {
   static String EtatFromCode(String code){
     String ret;
     switch(code) {
-      case '0': {ret =  Etat.prevu.toString();}break;
+      //case '0': {ret =  Etat.prevu.toString();}break;
+      case '0': {ret =  Etat.enAttente.toString();}break;
       case '1': {ret =  Etat.enCours.toString();}break;
     }
     return ret;
   }
   static String CodeFromEtat(String etat){
     String ret;
-    switch(etat) {
+    if(etat == 'Etat.prevu' || etat == 'Etat.enAttente'){ret =  '0';}
+    if(etat == 'Etat.enCours' || etat == 'Etat.retourne' ){ret =  '1';}
+    /*switch(etat) {
       case 'Etat.prevu': {ret =  '0';}break;
       case 'Etat.enCours': {ret =  '1';}break;
-    }
+    }*/
     return ret;
   }
 
