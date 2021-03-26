@@ -57,7 +57,7 @@ class DronePageState extends State<DronePage> {
               ),
             );
           }
-
+          this.intervention = Intervention.fromSnapshot(snapshot.data);
           if (this.intervention.missions.length == 0) {
             return Center (
               child: Column(
@@ -80,7 +80,6 @@ class DronePageState extends State<DronePage> {
               ),
             );
           }
-          this.intervention = Intervention.fromSnapshot(snapshot.data);
 
           return Scaffold(
               appBar: AppBar(

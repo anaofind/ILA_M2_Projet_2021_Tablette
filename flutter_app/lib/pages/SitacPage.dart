@@ -2,20 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_app/models/Intervention.dart';
-import 'package:flutter_app/models/Mission.dart';
 import 'package:flutter_app/models/Moyen.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
 import 'package:flutter_app/models/SymbolIntervention.dart';
 import 'package:flutter_app/pages/MapPage.dart';
+import 'package:flutter_app/pages/MissionFormPage.dart';
 import 'package:flutter_app/services/AccountService.dart';
 import 'package:flutter_app/services/InterventionService.dart';
-import 'package:flutter_app/services/MissionService.dart';
 import 'package:flutter_app/services/NavigatorPage.dart';
 import 'package:flutter_app/services/SelectorMoyenSymbol.dart';
 import 'package:flutter_app/services/SelectorSitac.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:intl/intl.dart';
-import 'package:editable/editable.dart';
 
 class SitacPage extends StatefulWidget {
   //SitacPage({Key key}) : super(key: key);
@@ -32,30 +29,7 @@ class SitacPage extends StatefulWidget {
 class SitacPageState extends State<SitacPage> {
   AccountService authService = AccountService();
   bool isCollapsed = false;
-  final GlobalKey _formKey = GlobalKey();
   Intervention _monIntervention;
-  bool isSwitched = false;
-  final _editableKey = GlobalKey<EditableState>();
-
-  //TODO: pour la table -> List<PointDrone> points = [];
-  List headers = [
-    {"title": 'Point', 'index': 1, 'key': 'point'},
-    {"title": 'Photo', 'index': 2, 'key': 'photo'}
-  ];
-  List myrows = [
-    {"point": '123', "photo": 'oui'},
-    {"point": '456', "photo": 'non'}
-  ];
-  void _addNewRow() {
-    setState(() {
-      _editableKey.currentState.createRow();
-    });
-  }
-  ///Print only edited rows.
-  void _printEditedRows() {
-    List editedRows = _editableKey.currentState.editedRows;
-    print(editedRows);
-  }
 
   SitacPageState(Intervention uneI) {
     _monIntervention = uneI;
@@ -1000,140 +974,7 @@ class SitacPageState extends State<SitacPage> {
                                     ),
                                   ],
                                 ),
-                                ListView(
-                                  //TODO : SHERVIN SOUFIANE
-                                  padding: const EdgeInsets.all(8),
-                                  children: [
-
-                                    SizedBox(
-                                      height: 200,
-                                      width: 150,
-                                      child: Editable(
-                                        key: _editableKey,
-                                        columns: headers,
-                                        rows: myrows,
-                                        columnRatio: 0.08,
-                                          trHeight: 40,
-                                          zebraStripe: true,
-                                        stripeColor2: Colors.lightGreen[200],
-                                        borderColor: Colors.blueGrey,
-                                        thStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: Colors.red),
-                                        thAlignment: TextAlign.center,
-                                        tdEditableMaxLines:20,
-                                        tdStyle: TextStyle(fontWeight: FontWeight.normal),
-                                        thVertAlignment: CrossAxisAlignment.end,
-                                        //showCreateButton: true,
-                                        tdAlignment: TextAlign.center,
-                                       ),
-                                    ),
-
-                                    Form(
-                                      key: _formKey,
-                                      child: Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            /*Editable(
-                                                  key: _editableKey,
-                                                  columns: headers,
-                                                  rows: myrows,
-                                                  showCreateButton: true,
-                                                  tdStyle:
-                                                      TextStyle(fontSize: 20),
-                                                  showSaveIcon: false,
-                                                  borderColor:
-                                                      Colors.grey.shade300,
-                                        trHeight: 80,
-                                        thStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                                        thAlignment: TextAlign.center,
-                                        thVertAlignment: CrossAxisAlignment.end,
-                                        thPaddingBottom: 3,
-                                        saveIconColor: Colors.black,
-                                        tdAlignment: TextAlign.left,
-                                        tdEditableMaxLines: 100, // don't limit and allow data to wrap
-                                        tdPaddingTop: 0,
-                                        tdPaddingBottom: 14,
-                                        tdPaddingLeft: 10,
-                                        tdPaddingRight: 8,
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.blue),
-                                            borderRadius: BorderRadius.all(Radius.circular(0))),
-                                                ),*/
-                                            Text(
-                                              'Nom de la mission :',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            TextFormField(
-                                              decoration: const InputDecoration(
-                                                icon: Icon(Icons.wysiwyg_outlined),
-                                                hintText: 'Donner un nom à la mission du drone',
-                                                labelText: 'Nom de la mission',
-                                              ),
-                                              onSaved: (String value) {
-                                                print('Value = "$value"');
-                                                if (value.isEmpty) {
-                                                  return 'Veillez saisir le nom de l\'intervention';
-                                                }
-                                              },
-                                             /*
-                                              // ignore: missing_return
-                                              validator: (String value) {
-                                                if (value.isEmpty) {
-                                                  return 'Veillez saisir le nom de l\'intervention';
-                                                }
-                                              },*/
-                                            ),
-                                            Row(children: <Widget>[
-                                              Text("Segment"),
-                                              Switch(
-                                                value: isSwitched,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    isSwitched = value;
-                                                    print(isSwitched);
-                                                  });
-                                                },
-                                                inactiveTrackColor:
-                                                Colors.lightGreenAccent,
-                                                inactiveThumbColor:
-                                                Colors.lightGreen,
-                                                activeTrackColor:
-                                                Colors.lightBlue, // red
-                                                activeColor: Colors
-                                                    .lightBlueAccent, // yellow
-                                              ),
-                                              Text("Zone"),
-                                            ]),
-                                            FlatButton(
-                                              child: Text('Démarrer', style: TextStyle(fontSize: 20.0),),
-                                              color: Colors.greenAccent,
-                                              textColor: Colors.white,
-                                              onPressed: () async {
-                                                if (_monIntervention.futureMission.interestPoints.isNotEmpty) {
-                                                  await MissionService.addMission(_monIntervention);
-                                                } else {
-                                                  Alert(
-                                                      context: context,
-                                                      title: "Aucun point d'intérêt",
-                                                      desc: "Veillez ajouter des points d'intérêt sur la carte"
-                                                  ).show();
-                                                }
-                                              },
-                                            ),
-                                            FlatButton(
-                                              child: Text('Annuler', style: TextStyle(fontSize: 20.0),),
-                                              color: Colors.redAccent,
-                                              textColor: Colors.white,
-                                              onPressed: () {
-                                                this._monIntervention.futureMission = Mission();
-                                                InterventionService().updateIntervention(this._monIntervention);
-                                              },
-                                            ),
-                                          ]),
-                                    )
-                                  ],
-                                ),
+                                MissionFormPage(_monIntervention),
                                 ListView(
                                   //scrollDirection: Axis.horizontal,
                                   padding: const EdgeInsets.all(8),

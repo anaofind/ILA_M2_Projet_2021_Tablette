@@ -232,14 +232,14 @@ class MapPageState extends State<MapPage> {
       offset: Offset(0.0, 0.0),
       builder: (ctx) => Container(
         decoration: new BoxDecoration(
-          color: Colors.black.withOpacity(0.5),
+          color: (interestPoint.photo)? Colors.yellow.withOpacity(0.5) : Colors.black.withOpacity(0.5),
           shape: BoxShape.circle,
         ),
         child: IconButton(
             icon : Text(
                 "P"+ num.toString(),
               style: TextStyle(
-                color: Colors.white
+                color: (interestPoint.photo)? Colors.black : Colors.white
               ),
             ),
             color: color,
