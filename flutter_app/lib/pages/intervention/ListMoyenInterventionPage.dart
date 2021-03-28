@@ -146,7 +146,7 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
     String depart = data.departA == null ? "Pas encore" : DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.departA);
     String arrivee = data.arriveA == null ? "Pas encore" : DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.arriveA);
     String retour = data.retourneA == null ? "Pas encore" : DateFormat('yyyy-MM-dd  kk:mm:ss').format(data.retourneA);
-    return (data.etat == Etat.enCours.toString() && data.arriveA !=null)?DataRow(cells: [
+    return (data.etat == Etat.enCours.toString())?DataRow(cells: [
       DataCell(
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

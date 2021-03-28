@@ -3,21 +3,21 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/models/Intervention.dart';
 import 'package:flutter_app/models/UserData.dart';
+import 'package:flutter_app/pages/DronePage.dart';
 import 'package:flutter_app/pages/HomePage.dart';
 import 'package:flutter_app/pages/SitacPage.dart';
 import 'package:flutter_app/pages/UserPage.dart';
+import 'package:flutter_app/pages/DronePage.dart';
 import 'package:flutter_app/pages/connection/SignInPage.dart';
 import 'package:flutter_app/pages/intervention/ListMoyenInterventionPage.dart';
 import 'package:flutter_app/services/AccountService.dart';
 import 'package:flutter_app/pages/intervention/ListInterventionPage.dart';
-import 'package:flutter_app/services/HydrantService.dart';
 import 'package:flutter_app/services/NavigatorPage.dart';
 import 'package:flutter_app/services/SelectorIntervention.dart';
 import 'package:provider/provider.dart';
 
-import 'models/Intervention.dart';
-import 'services/AccountService.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -87,7 +87,7 @@ class AppHomePageState extends State<AppHomePage> {
         }
         return ListMoyenInterventionPage(null);//ListMoyenInterventionPage(this.interventionSelected);
       case 3 :
-        return HomePage();
+        return DronePage(this.interventionSelected);
       case 4 :
         return UserPage();
       default:

@@ -20,7 +20,7 @@ class InterventionService {
       moyen.demandeA = date;
       moyen.departA = date;
     });
-    Intervention intervention = Intervention(null, nom, adresse, codeSinistre, date, moyens);
+    Intervention intervention = Intervention(null, nom, adresse, codeSinistre, date, moyens, null);
     return  interventions.add(intervention.toMap());
   }
 

@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_app/models/MissionDrone.dart';
+
 import 'package:flutter_app/models/MoyenIntervention.dart';
+import 'package:flutter_app/models/Drone.dart';
+import 'package:flutter_app/models/Position.dart';
+import 'package:flutter_app/models/Mission.dart';
 
 import 'SymbolIntervention.dart';
 
@@ -13,8 +16,11 @@ class Intervention {
   final DateTime date;
   List<MoyenIntervention> moyens;
   List<SymbolIntervention> symbols;
+  List<String> missions;
+  Mission futureMission = Mission();
+  Drone drone;
 
-  Intervention(this.id, this.nom, this.adresse, this.codeSinistre, this.date, this.moyens): symbols = List();
+  Intervention(this.id, this.nom, this.adresse, this.codeSinistre, this.date, this.moyens, this.drone): symbols = List(), missions = List();
 
   List<Map> ConvertMoyensToMap(List<MoyenIntervention> moyens) {
     List<Map> moyensIntervention = [];
@@ -32,6 +38,14 @@ class Intervention {
     });
     return symbolsIntervention;
   }
+  List<Map> ConvertMissionsToMap(List<String> missions) {
+    List<Map> missionsIntervention = [];
+    missions.forEach((String idMission) {
+      Map step = {'id' : idMission};
+      missionsIntervention.add(step);
+    });
+    return missionsIntervention;
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -41,6 +55,10 @@ class Intervention {
       'date': date,
       'moyens': ConvertMoyensToMap(moyens),
       'symbols': ConvertSymbolsToMap(symbols),
+      'missions': ConvertMissionsToMap(missions),
+      'latitudeDrone' : (drone != null)? drone.position.latitude: null,
+      'longitudeDrone' : (drone != null)? drone.position.longitude: null,
+      'futureMission' : this.futureMission.toMap()
     };
   }
 
@@ -52,8 +70,10 @@ class Intervention {
         codeSinistre = snapshot.data()['codeSinistre'],
         date = snapshot.data()['date'].toDate(),
         moyens =new List<MoyenIntervention>.from(snapshot.data()['moyens'].map((s) => MoyenIntervention.fromMap(s)).toList()),
-        symbols =new List<SymbolIntervention>.from(snapshot.data()['symbols'].map((s) => SymbolIntervention.fromMap(s)).toList());
-
+        symbols =new List<SymbolIntervention>.from(snapshot.data()['symbols'].map((s) => SymbolIntervention.fromMap(s)).toList()),
+        missions = (snapshot.data()['missions'] != null)? new List<String>.from(snapshot.data()['missions'].map((s) => s['id']).toList()): [],
+        drone = (snapshot.data()['latitudeDrone'] != null && snapshot.data()['longitudeDrone'] != null)? Drone(Position(snapshot.data()['latitudeDrone'],snapshot.data()['longitudeDrone'])): null,
+        futureMission = (snapshot.data()['futureMission'] != null)? Mission.fromMap(snapshot.data()['futureMission']): Mission();
 
   String get getNom {
     return this.nom;
@@ -74,4 +94,9 @@ class Intervention {
   List<MoyenIntervention> get getMoyens{
     return this.moyens;
   }
+
+  List<String> get getMissions{
+    return this.missions;
+  }
+
 }
