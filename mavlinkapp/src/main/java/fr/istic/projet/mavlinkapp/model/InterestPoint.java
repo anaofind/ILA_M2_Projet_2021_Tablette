@@ -1,16 +1,14 @@
 package fr.istic.projet.mavlinkapp.model;
 
-import javax.swing.text.Position;
-
 public class InterestPoint {
-    Position position;
+    PositionDrone position;
     boolean photo = false;
 
-    public Position getPosition() {
+    public PositionDrone getPosition() {
         return position;
     }
 
-    public void setPosition(Position position) {
+    public void setPosition(PositionDrone position) {
         this.position = position;
     }
 
