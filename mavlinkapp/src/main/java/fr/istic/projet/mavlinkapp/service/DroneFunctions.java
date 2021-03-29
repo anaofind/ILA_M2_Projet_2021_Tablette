@@ -36,7 +36,10 @@ public class DroneFunctions {
                 position -> java.lang.System.out.println(position.getLongitudeDeg() + " " +position.getLatitudeDeg()));
         /*drone.getMission().getMissionProgress()
                 .subscribe(onNext -> publishImages(drone, missionmessage, missionItems.get(onNext.getCurrent())));
-*/
+        */
+
+
+
         CountDownLatch latch = new CountDownLatch(1);
         drone.getMission()
                 .getMissionProgress()
@@ -53,5 +56,11 @@ public class DroneFunctions {
     public static Mission.MissionItem generateMissionItem(double latitudeDeg, double longitudeDeg) {
         return new Mission.MissionItem(latitudeDeg, longitudeDeg, 10f, 10f, true, Float.NaN, Float.NaN,
                 Mission.MissionItem.CameraAction.NONE, Float.NaN, 1.0);
+    }
+
+    public void Cancel(){
+        drone.getMission().cancelMissionDownload();
+        drone.getMission().cancelMissionUpload();
+        drone.getMission().clearMission();
     }
 }
