@@ -2,17 +2,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/lib-ext/dragmarker.dart';
+import 'package:flutter_app/models/AddressSuggestion.dart';
 import 'package:flutter_app/models/Intervention.dart';
 import 'package:flutter_app/models/SymbolIntervention.dart';
 import 'package:flutter_app/models/Position.dart';
 import 'package:flutter_app/models/InterestPoint.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
+import 'package:flutter_app/services/AddressService.dart';
 import 'package:flutter_app/services/HydrantService.dart';
 import 'package:flutter_app/services/InterventionService.dart';
 import 'package:flutter_app/services/SelectorMoyenSymbol.dart';
 import 'package:flutter_app/services/SelectorSitac.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:latlong/latlong.dart';
 
 
@@ -59,10 +60,10 @@ class MapPageState extends State<MapPage> {
   MapController mapController = MapController();
 
   Future<LatLng> center(Intervention inter) async {
-    List<Address> addresses = await Geocoder.local.findAddressesFromQuery(inter.adresse);
+    List<Feature> addresses = await AddressService().fetchSuggestions(this.intervention.adresse);
     if (addresses.length > 0) {
-      Address first = addresses.first;
-      return LatLng(first.coordinates.latitude, first.coordinates.longitude);
+      Feature first = addresses.first;
+      return LatLng(first.geometry.coordinates[1], first.geometry.coordinates[0]);
     }
   }
 
@@ -327,10 +328,12 @@ class MapPageState extends State<MapPage> {
       }
     }
     this.markersDrone.clear();
-    this.intervention.futureMission.interestPoints.forEach((element) {
-      LatLng position = LatLng(element.position.latitude, element.position.longitude);
-      this.createMarkerDrone(position);
-    });
+    if (SelectorSitac.indexTabBar == 6) {
+      this.intervention.futureMission.interestPoints.forEach((element) {
+        LatLng position = LatLng(element.position.latitude, element.position.longitude);
+        this.createMarkerDrone(position);
+      });
+    }
   }
 
   bool checkMoyen(MoyenIntervention moyen) {

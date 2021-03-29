@@ -77,6 +77,7 @@ class SitacPageState extends State<SitacPage> {
                   bottom: TabBar(
                     onTap: (index) {
                       SelectorSitac.indexTabBar = index;
+                      this.setState(() {});
                     },
                     tabs: [
                       Tab(
