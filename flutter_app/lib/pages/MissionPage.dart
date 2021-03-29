@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/Mission.dart';
+import 'package:flutter_app/models/Position.dart';
 import 'package:flutter_app/services/MissionService.dart';
 
 import 'package:flutter_app/services/SelectorIntervention.dart';
@@ -14,8 +15,6 @@ class MissionPage extends StatefulWidget {
 
 class MissionPageState extends State<MissionPage> {
 
-  List<String> linkImages = [];
-
   @override
   Widget build(BuildContext context) {
     print ('REFRESH MISSION');
@@ -25,10 +24,7 @@ class MissionPageState extends State<MissionPage> {
           if (! snapshot.hasData) {
             return CircularProgressIndicator();
           }
-
           Mission mission = Mission.fromSnapshot(snapshot.data.docs[0]);
-          this.searchLinksPhoto(mission);
-
           return Scaffold(
               body: Column(
                 children: [
@@ -84,12 +80,12 @@ class MissionPageState extends State<MissionPage> {
                                           ),
                                           color: Colors.white
                                       ),
-                                      child: Center(child: Text('Nombre de photos : ${this.linkImages.length}'))
+                                      child: Center(child: Text('Nombre de photos : ${mission.photos.length}'))
                                   ),
                                 ),
                                 Flexible(
                                     flex: 4,
-                                    child: this.getPhotosWidget()
+                                    child: this.getPhotosWidget(mission)
                                 ),
                               ],
                             ),
@@ -156,76 +152,107 @@ class MissionPageState extends State<MissionPage> {
     );
   }
 
-  Future<void> searchLinksPhoto(Mission mission) async{
-    this.linkImages.clear();
+  Future<List<InfoPhoto>> searchInfoPhotos(Mission mission) async{
+    List<InfoPhoto> infoPhotos = [];
     if (mission.photos != null) {
-      mission.photos.forEach((element) {
-        this.linkImages.add(element);
-      });
+      for (int i = 0; i<mission.photos.length; i++) {
+        String link = mission.photos[i];
+        Reference reference = await MissionService.getPhotoByLink(link);
+        FullMetadata metadata = await reference.getMetadata();
+        DateTime date = metadata.timeCreated;
+        String name = metadata.name;
+        double longitude = double.parse(metadata.customMetadata['longitude']);
+        double latitude = double.parse(metadata.customMetadata['latitude']);
+        Position position = Position(latitude, longitude);
+        InfoPhoto info = InfoPhoto(name, link, position, date);
+        infoPhotos.add(info);
+      }
     }
-    /*
-    this.linkImages.add('https://d1fmx1rbmqrxrr.cloudfront.net/cnet/optim/i/edit/2019/04/eso1644bsmall__w770.jpg');
-    this.linkImages.add('https://d1fmx1rbmqrxrr.cloudfront.net/cnet/optim/i/edit/2019/04/eso1644bsmall__w770.jpg');
-    this.linkImages.add('https://d1fmx1rbmqrxrr.cloudfront.net/cnet/optim/i/edit/2019/04/eso1644bsmall__w770.jpg');
-    this.linkImages.add('https://d1fmx1rbmqrxrr.cloudfront.net/cnet/optim/i/edit/2019/04/eso1644bsmall__w770.jpg');
-    this.linkImages.add('https://d1fmx1rbmqrxrr.cloudfront.net/cnet/optim/i/edit/2019/04/eso1644bsmall__w770.jpg');
-    this.linkImages.add('https://d1fmx1rbmqrxrr.cloudfront.net/cnet/optim/i/edit/2019/04/eso1644bsmall__w770.jpg');
-     */
+    return infoPhotos;
   }
 
-  Widget getPhotosWidget() {
-    return ListView.builder (
-        shrinkWrap: true,
-        itemCount: this.linkImages.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Row(
-            children: [
-              Flexible (
-                flex: 1,
-                child: Container(
-                  margin: new EdgeInsets.only(
-                    bottom: 15,
-                    left: 15,
-                  ),
-                  height: 160,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 1,
+  Widget getPhotosWidget(Mission mission) {
+    return FutureBuilder (
+      future: this.searchInfoPhotos(mission),
+      builder: (context, snapshot) {
+        if (! snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+
+        List<InfoPhoto> infoPhotos = snapshot.data;
+
+        return ListView.builder (
+            shrinkWrap: true,
+            itemCount: infoPhotos.length,
+            itemBuilder: (BuildContext context, int index) {
+              InfoPhoto infoPhoto = infoPhotos[index];
+              return Row(
+                children: [
+                  Flexible (
+                    flex: 1,
+                    child: Container(
+                      margin: new EdgeInsets.only(
+                        bottom: 15,
+                        left: 15,
                       ),
-                      color: Colors.white
-                  ),
-                  child: Center(
-                    child: Image.network(
-                      this.linkImages[index],
-                      width: 160,
                       height: 160,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 1,
+                          ),
+                          color: Colors.white
+                      ),
+                      child: Center(
+                        child: Image.network(
+                          infoPhoto.link,
+                          width: 160,
+                          height: 160,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                child: Container(
-                  margin: new EdgeInsets.only(
-                      bottom: 15,
-                      left: 15,
-                      right: 15
-                  ),
-                  height: 160,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 1,
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      margin: new EdgeInsets.only(
+                          bottom: 15,
+                          left: 15,
+                          right: 15
                       ),
-                      color: Colors.white
+                      height: 160,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 1,
+                          ),
+                          color: Colors.white
+                      ),
+                      child: Column (
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(child: Text(infoPhoto.name.toString())),
+                          Center(child: Text(infoPhoto.date.toString())),
+                          Center(child: Text('( ${infoPhoto.position.latitude} , ${infoPhoto.position.longitude} )')),
+                        ],
+                      )
+                    ),
                   ),
-                ),
-              ),
-            ],
-          );
-        }
+                ],
+              );
+            }
+        );
+      }
     );
   }
 
+}
+
+
+class InfoPhoto {
+  final String name;
+  final String link;
+  final Position position;
+  final DateTime date;
+  InfoPhoto(this.name, this.link, this.position, this.date);
 }

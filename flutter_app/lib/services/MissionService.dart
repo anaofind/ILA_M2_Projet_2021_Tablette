@@ -26,8 +26,8 @@ class MissionService {
     return missions.doc(uid).snapshots();
   }
 
-  static Future<ListResult> getPhotos(String id) async{
-    return await storage.ref('images').child(id).listAll();
+  static Future<Reference> getPhotoByLink(String link) async{
+    return await storage.refFromURL(link);
   }
 
 }
