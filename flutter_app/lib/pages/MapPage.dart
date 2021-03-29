@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/lib-ext/dragmarker.dart';
 import 'package:flutter_app/models/AddressSuggestion.dart';
+import 'package:flutter_app/models/Drone.dart';
 import 'package:flutter_app/models/Intervention.dart';
 import 'package:flutter_app/models/SymbolIntervention.dart';
 import 'package:flutter_app/models/Position.dart';
@@ -221,7 +222,7 @@ class MapPageState extends State<MapPage> {
     this.markersFixed.add(m);
   }
 
-  createMarkerDrone(LatLng latLng) {
+  createMarkerInterestPoint(LatLng latLng) {
     print("CREATE DRAG MARKER");
     int num = markersDrone.length+1;
     InterestPoint interestPoint = this.intervention.futureMission.interestPoints[num-1];
@@ -252,6 +253,31 @@ class MapPageState extends State<MapPage> {
         interestPoint.position = position;
         this.interventionService.updateIntervention(this.intervention);
       }
+    );
+
+    this.markersDrone.add(dm);
+  }
+
+  createMarkerDrone(LatLng latLng) {
+    DragMarker dm = DragMarker(
+      point: latLng,
+      width: 80,
+      height: 80,
+      offset: Offset(0.0, 0.0),
+      builder: (ctx) => Container(
+        child: IconButton(
+          icon : Image(
+            image : AssetImage('Icone_Png/drone.png'),
+            width: 80,
+            height: 80,
+          ),
+          onPressed: () {
+          },
+        ),
+      ),
+      onDragEnd:    (details,point) {
+        this.setState(() {});
+      },
     );
 
     this.markersDrone.add(dm);
@@ -331,8 +357,13 @@ class MapPageState extends State<MapPage> {
     if (SelectorSitac.indexTabBar == 6) {
       this.intervention.futureMission.interestPoints.forEach((element) {
         LatLng position = LatLng(element.position.latitude, element.position.longitude);
-        this.createMarkerDrone(position);
+        this.createMarkerInterestPoint(position);
       });
+      Drone drone = this.intervention.drone;
+      if (drone != null && drone.position != null && drone.position.longitude != null && drone.position.latitude != null) {
+        LatLng position = LatLng(drone.position.latitude, drone.position.longitude);
+        this.createMarkerDrone(position);
+      }
     }
   }
 
