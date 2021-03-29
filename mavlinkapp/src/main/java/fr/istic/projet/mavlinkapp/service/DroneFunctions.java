@@ -31,6 +31,12 @@ public class DroneFunctions {
                 .andThen(drone.getAction().arm())
                 .andThen(drone.getMission().startMission().doOnComplete(() -> logger.debug("Mission started")))
                 .subscribe();
+
+        drone.getTelemetry().getPosition().subscribe(
+                position -> java.lang.System.out.println(position.getLongitudeDeg() + " " +position.getLatitudeDeg()));
+        /*drone.getMission().getMissionProgress()
+                .subscribe(onNext -> publishImages(drone, missionmessage, missionItems.get(onNext.getCurrent())));
+*/
         CountDownLatch latch = new CountDownLatch(1);
         drone.getMission()
                 .getMissionProgress()
@@ -41,6 +47,7 @@ public class DroneFunctions {
             latch.await();
         } catch (InterruptedException ignored) {
             // This is expected
+
         }
     }
     public static Mission.MissionItem generateMissionItem(double latitudeDeg, double longitudeDeg) {

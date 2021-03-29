@@ -1,5 +1,6 @@
 package fr.istic.projet.mavlinkapp.service;
 
+import fr.istic.projet.mavlinkapp.model.InterestPoint;
 import fr.istic.projet.mavlinkapp.model.MissionDrone;
 import fr.istic.projet.mavlinkapp.model.PositionDrone;
 import org.slf4j.Logger;
@@ -29,10 +30,17 @@ public class MissionController {
     public MissionDrone sendMissionCoordonates(@Validated @RequestBody MissionDrone mission) throws InterruptedException {
         laMission = mission;
         //launch drone to explore mission's intersts point
-        drone.go(mission.getInterestPoints());
-        Thread.sleep(50);
+       /* for (InterestPoint ip:
+             laMission.getInterestPoints()) {
+            java.lang.System.out.println(ip.getPosition().getLatitude() + " - " + ip.getPosition().getLongitude()+" !!!!!");
+        }*/
+        MyRunnable myRunnable = new MyRunnable(drone);
+        Thread t = new Thread(myRunnable);
+        t.start();
+        Thread.sleep(500);
+
         //send images took by drone in rest's meth to app java which will store image in firebase
-        return mission;
+        return laMission;
     }
 
     @GetMapping
@@ -50,4 +58,25 @@ public class MissionController {
         mission.addPhoto("path/to/img/");
         mission.getInterestPoints().get(mission.getPhotos().size()-1).setPhoto(true);
     }
+    public class MyRunnable implements Runnable {
+
+        private DroneFunctions drone;
+
+        public MyRunnable(DroneFunctions drone) {
+            this.drone = drone;
+        }
+
+        public void run() {
+            // code in the other thread, can reference "var" variable
+            try {
+                drone.go(laMission.getInterestPoints());
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }
 }
+
