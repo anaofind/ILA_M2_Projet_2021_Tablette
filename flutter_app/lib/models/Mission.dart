@@ -30,6 +30,9 @@ class Mission {
 
 
   static List<InterestPoint> convertInterestPointsToList(List<dynamic> listMap) {
+    if (listMap == null) {
+      return null;
+    }
     List<InterestPoint> interestPoints = [];
     listMap.forEach((mapInterestPoint) {
       InterestPoint interestPoint = InterestPoint.fromMap(mapInterestPoint);
@@ -39,6 +42,9 @@ class Mission {
   }
 
   static List<String> convertPhotosToList(List<dynamic> listMap) {
+    if (listMap == null) {
+      return [];
+    }
     List<String> photos = [];
     listMap.forEach((mapPhoto) {
       String urlPhoto = mapPhoto['url'];

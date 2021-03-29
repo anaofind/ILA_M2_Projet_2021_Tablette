@@ -134,7 +134,15 @@ class DronePageState extends State<DronePage> {
                   Flexible(
                     flex: 4,
                     child : Center(
-                        child: MissionPage()
+                        child: Container(
+                            margin: EdgeInsets.all(15),
+                            child: (SelectorIntervention.idMissionSelected != null)? MissionPage() :
+                            Center (
+                              child: Text(
+                                'Séléctionnez une mission',
+                              ),
+                            ),
+                        )
                     ),
                   )
                 ],
