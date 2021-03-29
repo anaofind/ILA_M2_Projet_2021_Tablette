@@ -16,14 +16,12 @@ public class Mission {
     String video;
     boolean segment = true;
     boolean streamVideo = false;
-    Timestamp lastUpdateStorage;
     
     public Mission(){};
     
  
     public Mission(String id, String name, List<InterestPoint> interestPoints, List<HashMap<String, String>> photos, 
-    		String video,
-			boolean segment, boolean streamVideo) {
+    		String video, boolean segment, boolean streamVideo) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -92,11 +90,4 @@ public class Mission {
         this.streamVideo = streamVideo;
     }
 
-	public Timestamp getLastUpdateStorage() {
-		return lastUpdateStorage;
-	}
-
-	public void setLastUpdateStorage(Timestamp lastUpdateStorage) {
-		this.lastUpdateStorage = lastUpdateStorage;
-	}
 }
