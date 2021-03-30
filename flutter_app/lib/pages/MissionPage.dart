@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/models/Mission.dart';
 import 'package:flutter_app/models/Position.dart';
 import 'package:flutter_app/services/MissionService.dart';
+import 'package:intl/intl.dart';
 
 import 'package:flutter_app/services/SelectorIntervention.dart';
 
@@ -159,7 +160,7 @@ class MissionPageState extends State<MissionPage> {
         String link = mission.photos[i];
         Reference reference = await MissionService.getPhotoByLink(link);
         FullMetadata metadata = await reference.getMetadata();
-        DateTime date = metadata.timeCreated;
+        DateTime date = convertToDateLocal(metadata.timeCreated);
         String name = metadata.name;
         double longitude = double.parse(metadata.customMetadata['longitude']);
         double latitude = double.parse(metadata.customMetadata['latitude']);
@@ -169,6 +170,10 @@ class MissionPageState extends State<MissionPage> {
       }
     }
     return infoPhotos;
+  }
+
+  DateTime convertToDateLocal(DateTime date) {
+    return date.add(Duration(hours: 2));
   }
 
   Widget getPhotosWidget(Mission mission) {
