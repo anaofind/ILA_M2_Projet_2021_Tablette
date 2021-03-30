@@ -5,6 +5,7 @@ import java.util.List;
 
 public class MissionDrone {
     String id;
+    String idIntervention;
     String name;
     List<InterestPoint> interestPoints = new ArrayList<>();
     List<String> photos = new ArrayList<>();
@@ -66,5 +67,13 @@ public class MissionDrone {
 
     public void setStreamVideo(boolean streamVideo) {
         this.streamVideo = streamVideo;
+    }
+
+    public String getIdIntervention() {
+        return idIntervention;
+    }
+
+    public void setIdIntervention(String idIntervention) {
+        this.idIntervention = idIntervention;
     }
 }

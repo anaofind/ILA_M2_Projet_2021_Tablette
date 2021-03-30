@@ -43,60 +43,8 @@ public class MissionController {
     @PostMapping
     public MissionDrone sendMissionCoordonates(@Validated @RequestBody MissionDrone mission) {
         java.lang.System.out.println("submit ip");
-        HttpClient client = new DefaultHttpClient();
-        CurrentPosition cp = new CurrentPosition();
-        cp.setId("TcBJNzRWH9GYOEyKd4OJ");
-        cp.setLongitude(4.2565535);
-        cp.setLatitude(7.2585204);
-        HttpResponse response;
-        HttpPost post = new HttpPost("http://148.60.11.47:8080/api/updateDronePosition");
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonRes = "";
-        try {
 
-            java.lang.System.out.println("t1");
-            jsonRes = mapper.writeValueAsString(cp);
-            StringEntity se = new StringEntity(jsonRes);
-            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-            post.setEntity(se);
-            response = (HttpResponse) client.execute(post);
-            java.lang.System.out.println("done");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        /*HttpURLConnection con = null;
-        try {
-            java.lang.System.out.println("t2");
-            URL url = new URL("http://148.60.11.47:8080/api/updateDronePosition");
-            con = (HttpURLConnection)url.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json; utf-8");
-            con.setDoOutput(true);
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            java.lang.System.out.println("t3");
-            OutputStream os = con.getOutputStream();
-            byte[] input = jsonRes.getBytes("utf-8");
-            os.write(input, 0, input.length);
-            java.lang.System.out.println("done");
-        }  catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            java.lang.System.out.println("e1");
-        } catch (IOException e) {
-            e.printStackTrace();
-            java.lang.System.out.println("e2");
-        }*/
-
-        /*laMission = mission;
+        laMission = mission;
         MyRunnable myRunnable = new MyRunnable(drone);
         Thread t = new Thread(myRunnable);
         t.start();
@@ -106,29 +54,6 @@ public class MissionController {
         return laMission;
     }
 
-    @PostMapping("/update")
-    public MissionDrone updateDronePosition(@Validated @RequestBody CurrentPosition pos) throws InterruptedException {
-        java.lang.System.out.println("called");
-
-        //send images took by drone in rest's meth to app java which will store image in firebase
-        return laMission;
-    }
-
-    @GetMapping
-    public List<Mission> findAllMission() {
-        return new ArrayList<>();
-    }
-
-    public static void publishImages(System drone, MissionDrone mission, MissionItem missionItem) {
-        //right code to take photo here
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(new File("res/chat.jpg"));
-        } catch (IOException e) {
-        }
-        mission.addPhoto("path/to/img/");
-        mission.getInterestPoints().get(mission.getPhotos().size()-1).setPhoto(true);
-    }
     public class MyRunnable implements Runnable {
 
         private DroneFunctions drone;
@@ -140,7 +65,7 @@ public class MissionController {
         public void run() {
             // code in the other thread, can reference "var" variable
             try {
-                drone.go(laMission.getInterestPoints());
+                drone.go(laMission.getIdIntervention(), laMission.getInterestPoints());
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -148,6 +73,18 @@ public class MissionController {
         }
 
 
+    }
+
+
+    public static void publishImages(System drone, MissionDrone mission, MissionItem missionItem) {
+        //right code to take photo here
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(new File("res/chat.jpg"));
+        } catch (IOException e) {
+        }
+        mission.addPhoto("path/to/img/");
+        mission.getInterestPoints().get(mission.getPhotos().size()-1).setPhoto(true);
     }
 }
 
