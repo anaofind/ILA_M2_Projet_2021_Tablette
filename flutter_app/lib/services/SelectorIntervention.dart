@@ -6,6 +6,7 @@ class SelectorIntervention {
   static String idMissionSelected;
 
   static selectIntervention(Intervention intervention) {
+    idMissionSelected = null;
     selectInterventionFunction(intervention);
   }
 

@@ -6,4 +6,9 @@ class Position {
   Position(this.latitude, this.longitude);
 
 
+  @override
+  String toString() {
+    return '( $latitude , $longitude )';
+  }
+
 }

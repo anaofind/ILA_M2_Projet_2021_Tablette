@@ -111,11 +111,17 @@ class DronePageState extends State<DronePage> {
                                         return CircularProgressIndicator();
                                       }
                                       Mission mission = Mission.fromSnapshot(snapshot.data.docs[0]);
-                                      return Text(
-                                        mission.name,
-                                        style: TextStyle(
-                                          fontSize: 30,
-                                        ),
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            mission.name,
+                                            style: TextStyle(
+                                              fontSize: 30,
+                                            ),
+                                          ),
+                                          this.getIconState(mission),
+                                        ],
                                       );
                                     }
                                   )
@@ -134,13 +140,44 @@ class DronePageState extends State<DronePage> {
                   Flexible(
                     flex: 4,
                     child : Center(
-                        child: MissionPage()
+                        child: Container(
+                            margin: EdgeInsets.all(15),
+                            child: (SelectorIntervention.idMissionSelected != null)? MissionPage() :
+                            Center (
+                              child: Text(
+                                'Séléctionnez une mission',
+                              ),
+                            ),
+                        )
                     ),
                   )
                 ],
               )
           );
         }
+    );
+  }
+
+  Widget getIconState(Mission mission) {
+    IconData iconData;
+    Color color;
+    switch (mission.state) {
+      case StateMission.Waiting :
+        iconData = Icons.not_started_sharp;
+        color = Colors.blue;
+        break;
+      case StateMission.Running :
+        return CircularProgressIndicator();
+        break;
+      case StateMission.Ending :
+        iconData = Icons.flag;
+        color = Colors.green;
+        break;
+    }
+
+    return Icon (
+      iconData,
+      color: color,
     );
   }
 }
