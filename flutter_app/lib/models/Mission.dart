@@ -11,6 +11,7 @@ class Mission {
   String video;
   bool segment = true;
   bool streamVideo = false;
+  StateMission state;
 
 
   Mission({this.name, this.interestPoints, this.segment, this.streamVideo}):id = Uuid().v4() {
@@ -62,6 +63,17 @@ class Mission {
     return listMap;
   }
 
+  static StateMission stateToString(String stateString) {
+    switch(stateString) {
+      case "StateMission.Waiting" :
+        return StateMission.Waiting;
+      case "StateMission.Running" :
+        return StateMission.Running;
+      case "StateMission.Ending" :
+        return StateMission.Ending;
+    }
+    return null;
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -70,7 +82,8 @@ class Mission {
       'interestPoints' : convertInterestPointsToMap(this.interestPoints),
       'photos' : this.photos,
       'segment': this.segment,
-      'streamVideo': this.streamVideo
+      'streamVideo': this.streamVideo,
+      'state' : this.state
     };
   }
 
@@ -82,7 +95,8 @@ class Mission {
         photos = convertPhotosToList(map['photos']),
         video = map['video'],
         segment = map['segment'],
-        streamVideo = map['streamVideo'];
+        streamVideo = map['streamVideo'],
+        state = stateToString(map['state']);
 
   Mission.fromSnapshot(DocumentSnapshot snapshot) :
         assert(snapshot != null),
@@ -92,7 +106,13 @@ class Mission {
         photos = convertPhotosToList(snapshot.data()['photos']),
         video = snapshot.data()['video'],
         segment = snapshot.data()['segment'],
-        streamVideo = snapshot.data()['streamVideo'];
+        streamVideo = snapshot.data()['streamVideo'],
+        state = (snapshot.data()['state'] != null)? stateToString(snapshot.data()['state']): StateMission.Waiting;
+}
 
 
+enum StateMission {
+  Waiting,
+  Running,
+  Ending
 }
