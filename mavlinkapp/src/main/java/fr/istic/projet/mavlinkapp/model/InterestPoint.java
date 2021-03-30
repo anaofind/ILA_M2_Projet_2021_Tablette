@@ -1,15 +1,15 @@
 package fr.istic.projet.mavlinkapp.model;
 
 public class InterestPoint {
-    PositionDrone position;
+    PositionDrone posDrone = new PositionDrone();
     boolean photo = false;
 
     public PositionDrone getPosition() {
-        return position;
+        return posDrone;
     }
 
     public void setPosition(PositionDrone position) {
-        this.position = position;
+        this.posDrone = position;
     }
 
     public boolean isPhoto() {

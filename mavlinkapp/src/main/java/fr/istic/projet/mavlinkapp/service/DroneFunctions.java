@@ -34,7 +34,8 @@ public class DroneFunctions {
 
         drone.getTelemetry().getPosition().subscribe(
                 position -> java.lang.System.out.println(position.getLongitudeDeg() + " " +position.getLatitudeDeg()));
-        /*drone.getMission().getMissionProgress()
+        /*
+                drone.getMission().getMissionProgress()
                 .subscribe(onNext -> publishImages(drone, missionmessage, missionItems.get(onNext.getCurrent())));
         */
         //https://istic-vpn.univ-rennes1.fr/sslvpn/portal.html#/
