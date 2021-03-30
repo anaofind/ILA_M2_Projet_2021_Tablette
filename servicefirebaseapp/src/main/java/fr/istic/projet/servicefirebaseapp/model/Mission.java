@@ -16,12 +16,13 @@ public class Mission {
     String video;
     boolean segment = true;
     boolean streamVideo = false;
+    String state;
     
     public Mission(){};
     
  
     public Mission(String id, String name, List<InterestPoint> interestPoints, List<HashMap<String, String>> photos, 
-    		String video, boolean segment, boolean streamVideo) {
+    		String video, boolean segment, boolean streamVideo, String state) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -30,6 +31,7 @@ public class Mission {
 		this.video = video;
 		this.segment = segment;
 		this.streamVideo = streamVideo;
+		this.state = state;
 	}
 
 	public String getId() {
@@ -60,7 +62,17 @@ public class Mission {
         return photos;
     }
 
-    public void addPhoto(String photo) {
+    public String getState() {
+		return state;
+	}
+
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+
+	public void addPhoto(String photo) {
     	HashMap<String, String> map = new HashMap<>();
     	map.put("url", photo);
         this.photos.add(map);
