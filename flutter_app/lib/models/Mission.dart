@@ -12,9 +12,10 @@ class Mission {
   bool segment = true;
   bool streamVideo = false;
   StateMission state;
+  String idIntervention;
 
 
-  Mission({this.name, this.interestPoints, this.segment, this.streamVideo}):id = Uuid().v4() {
+  Mission({this.idIntervention, this.name, this.interestPoints, this.segment, this.streamVideo}):id = Uuid().v4() {
     if (this.name == null) {
       this.name = this.id;
     }
@@ -83,7 +84,8 @@ class Mission {
       'photos' : this.photos,
       'segment': this.segment,
       'streamVideo': this.streamVideo,
-      'state' : this.state
+      'state' : this.state,
+      'video' : this.video
     };
   }
 
@@ -96,7 +98,8 @@ class Mission {
         video = map['video'],
         segment = map['segment'],
         streamVideo = map['streamVideo'],
-        state = stateToString(map['state']);
+        state = stateToString(map['state']),
+        idIntervention = map['idIntervention'];
 
   Mission.fromSnapshot(DocumentSnapshot snapshot) :
         assert(snapshot != null),
@@ -107,7 +110,8 @@ class Mission {
         video = snapshot.data()['video'],
         segment = snapshot.data()['segment'],
         streamVideo = snapshot.data()['streamVideo'],
-        state = (snapshot.data()['state'] != null)? stateToString(snapshot.data()['state']): StateMission.Waiting;
+        state = (snapshot.data()['state'] != null)? stateToString(snapshot.data()['state']): StateMission.Waiting,
+        idIntervention = (snapshot.data()['idIntervention'] != null)? snapshot.data()['idIntervention']: '';
 }
 
 

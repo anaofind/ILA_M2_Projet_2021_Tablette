@@ -13,7 +13,7 @@ class MissionService {
   static Future<void> addMission(Intervention intervention) async{
     missions.add(intervention.futureMission.toMap()).then((m) {
       intervention.missions.add(intervention.futureMission.id);
-      intervention.futureMission = Mission();
+      intervention.futureMission = Mission(idIntervention: intervention.id);
       InterventionService().updateIntervention(intervention);
     });
   }

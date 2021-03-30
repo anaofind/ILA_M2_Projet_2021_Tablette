@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/models/Mission.dart';
 import 'package:flutter_app/models/Position.dart';
 import 'package:flutter_app/pages/MissionPhotosPage.dart';
+import 'package:flutter_app/pages/MissionVideoPage.dart';
 import 'package:flutter_app/services/MissionService.dart';
 import 'package:intl/intl.dart';
 
@@ -164,7 +165,9 @@ class MissionPageState extends State<MissionPage> {
                     color: Colors.black,
                     width: 1,
                   ),
-                  color: Colors.black
+              ),
+              child: FractionallySizedBox(
+                  child: MissionVideoPage(mission)
               ),
             )
         ),
