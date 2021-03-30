@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import fr.istic.projet.servicefirebaseapp.model.DroneInfosBody;
 import fr.istic.projet.servicefirebaseapp.model.FileDTO;
 import fr.istic.projet.servicefirebaseapp.model.MissionBody;
 
@@ -38,9 +39,17 @@ public class FirebaseController {
 	  log.info("REST request to upload file");
       //upload file
       FileDTO fileDTO = firebaseService.uploadFile(missionInfos.getId(), 
-    		  missionInfos.getLatitude(), missionInfos.getLongitude());
+    		  missionInfos.getLatitude(), missionInfos.getLongitude(), missionInfos.getBytes());
       return new ResponseEntity<>(fileDTO, null, HttpStatus.OK);
   }
+    
+    @PostMapping("/updateDronePosition")
+	  public ResponseEntity<DroneInfosBody> updateDronePosition(@Validated @RequestBody DroneInfosBody droneInfos) throws Exception {
+	  log.info("REST request to update drone position");
+     firebaseService.updateDronePositionIntervention(droneInfos.getId(), 
+    		droneInfos.getLatitude(), droneInfos.getLongitude());
+    return new ResponseEntity<>(droneInfos, null, HttpStatus.OK);
+}
 
 
 //    @GetMapping("/downloadFile/{fileName}/{destination}")

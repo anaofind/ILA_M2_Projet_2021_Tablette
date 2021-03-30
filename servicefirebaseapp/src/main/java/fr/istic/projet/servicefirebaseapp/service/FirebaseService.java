@@ -22,8 +22,10 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 
 import fr.istic.projet.servicefirebaseapp.model.FileDTO;
+import fr.istic.projet.servicefirebaseapp.model.Intervention;
 import fr.istic.projet.servicefirebaseapp.model.Mission;
 import fr.istic.projet.servicefirebaseapp.model.MissionInfos;
+import fr.istic.projet.servicefirebaseapp.model.Position;
 import fr.istic.projet.servicefirebaseapp.util.ParameterStringBuilder;
 
 import org.apache.commons.io.FileUtils;
@@ -193,8 +195,8 @@ public class FirebaseService  {
     	}
     }
     
-    public FileDTO uploadFile(String idMission, double latitude, double longitude) throws IOException, InterruptedException, ExecutionException {
-    	byte[] bytes = getImageForPosition(latitude, longitude); 
+    public FileDTO uploadFile(String idMission, double latitude, double longitude, byte[] bytes) throws IOException, InterruptedException, ExecutionException {
+    	//byte[] bytes = getImageForPosition(latitude, longitude); 
     	String url ="";
         String nomPhoto= RandomStringUtils.randomAlphabetic(8)+".png";
         String objectName = "images/"+idMission+"/"+nomPhoto;
@@ -345,6 +347,36 @@ public class FirebaseService  {
             "Updated custom metadata for object " + " in bucket " + bucketName);
       }
 
-    
+  public void updateDronePositionIntervention(String idIntervention, double latitude, double longitude) throws InterruptedException, ExecutionException {
+	CollectionReference interventions = this.database.collection("interventions");
+	DocumentReference docRef = interventions.document(idIntervention);
+	
+	ApiFuture<DocumentSnapshot> future = docRef.get();
+	DocumentSnapshot document = future.get();
+	if (document.exists()) {
+	// (async) Update one field
+	ApiFuture<WriteResult> futurelat = docRef.update("latitudeDrone", latitude);
+	ApiFuture<WriteResult> futurelon = docRef.update("longitudeDrone", longitude);
+	
+	log.info("Position drone updated");
+	} else {
+	 log.info("document not found");
+	}
+//	ApiFuture<DocumentSnapshot> future = docRef.get();
+//	DocumentSnapshot document = future.get();
+//	Intervention intervention= null;
+//	if (document.exists()) {
+//	  intervention = document.toObject(Intervention.class);
+//	  intervention.setLatitudeDrone(latitude);
+//	  intervention.setLongitudeDrone(longitude);
+//
+//	  ApiFuture<WriteResult> futureUpdate = interventions.document(idIntervention)
+//				.set(intervention);
+//		log.info("Position drone updated");
+//	} else {
+//	 log.info("document not found");
+//	}
+	
+}
 
 }

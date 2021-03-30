@@ -1,18 +1,18 @@
 package fr.istic.projet.servicefirebaseapp.model;
 
-public class MissionBody {
+public class DroneInfosBody {
 	private String id;
 	private double latitude;
 	private double longitude;
-	private byte[] bytes;
+
 	
 	
-	public MissionBody(String id, double latitude, double longitude, byte[] bytes) {
+	public DroneInfosBody(String id, double latitude, double longitude) {
 		super();
 		this.id = id;
 		this.latitude = latitude;
 		this.longitude = longitude;
-		this.bytes = bytes;
+		
 	}
 	public double getLatitude() {
 		return latitude;
@@ -28,11 +28,5 @@ public class MissionBody {
 	}
 	public String getId() {
 		return id;
-	}
-	public byte[] getBytes() {
-		return bytes;
-	}
-	public void setBytes(byte[] bytes) {
-		this.bytes = bytes;
 	}
 }
