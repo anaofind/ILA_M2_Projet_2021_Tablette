@@ -37,7 +37,7 @@ public class DroneFunctions {
         /*drone.getMission().getMissionProgress()
                 .subscribe(onNext -> publishImages(drone, missionmessage, missionItems.get(onNext.getCurrent())));
         */
-
+        //https://istic-vpn.univ-rennes1.fr/sslvpn/portal.html#/
 
 
         CountDownLatch latch = new CountDownLatch(1);

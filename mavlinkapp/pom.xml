@@ -33,7 +33,6 @@
 			<artifactId>mavsdk</artifactId>
 			<version>0.5.1</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>
