@@ -5,8 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.istic.projet.mavlinkapp.model.CurrentPosition;
 import fr.istic.projet.mavlinkapp.model.MissionDrone;
 import fr.istic.projet.mavlinkapp.model.PositionDrone;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.validation.DefaultBindingErrorProcessor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.mavsdk.System;
@@ -15,14 +23,12 @@ import io.mavsdk.mission.Mission.MissionItem;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,20 +43,30 @@ public class MissionController {
     @PostMapping
     public MissionDrone sendMissionCoordonates(@Validated @RequestBody MissionDrone mission) {
         java.lang.System.out.println("submit ip");
-
+        HttpClient client = new DefaultHttpClient();
         CurrentPosition cp = new CurrentPosition();
-        cp.setId("id intervention");
+        cp.setId("TcBJNzRWH9GYOEyKd4OJ");
         cp.setLongitude(4.2565535);
         cp.setLatitude(7.2585204);
+        HttpResponse response;
+        HttpPost post = new HttpPost("http://148.60.11.47:8080/api/updateDronePosition");
         ObjectMapper mapper = new ObjectMapper();
         String jsonRes = "";
         try {
+
             java.lang.System.out.println("t1");
             jsonRes = mapper.writeValueAsString(cp);
-        } catch (JsonProcessingException e) {
+            StringEntity se = new StringEntity(jsonRes);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(se);
+            response = (HttpResponse) client.execute(post);
+            java.lang.System.out.println("done");
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        HttpURLConnection con = null;
+
+        /*HttpURLConnection con = null;
         try {
             java.lang.System.out.println("t2");
             URL url = new URL("http://148.60.11.47:8080/api/updateDronePosition");
@@ -78,7 +94,7 @@ public class MissionController {
         } catch (IOException e) {
             e.printStackTrace();
             java.lang.System.out.println("e2");
-        }
+        }*/
 
         /*laMission = mission;
         MyRunnable myRunnable = new MyRunnable(drone);
