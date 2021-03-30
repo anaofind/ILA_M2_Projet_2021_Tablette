@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/Mission.dart';
 import 'package:flutter_app/models/Position.dart';
+import 'package:flutter_app/pages/MissionPhotosPage.dart';
 import 'package:flutter_app/services/MissionService.dart';
 import 'package:intl/intl.dart';
 
@@ -92,7 +93,15 @@ class MissionPageState extends State<MissionPage> {
         double longitude = double.parse(metadata.customMetadata['longitude']);
         double latitude = double.parse(metadata.customMetadata['latitude']);
         Position position = Position(latitude, longitude);
-        InfoPhoto info = InfoPhoto(name, link, position, date);
+        int size = metadata.size;
+        InfoPhoto info = InfoPhoto (
+            name: name,
+            link: link,
+            position: position,
+            date: date,
+            size: size,
+            missionName: mission.name
+        );
         infoPhotos.add(info);
       }
     }
@@ -212,10 +221,17 @@ class MissionPageState extends State<MissionPage> {
                                     color: Colors.white
                                 ),
                                 child: Center(
-                                  child: Image.network(
-                                    infoPhoto.link,
-                                    width: 160,
-                                    height: 160,
+                                  child: GestureDetector(
+                                    child: Image.network(
+                                      infoPhoto.link,
+                                      width: 160,
+                                      height: 160,
+                                    ),
+                                    onTap: () {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) => MissionPhotosPage(infoPhotos, index))
+                                      );
+                                    },
                                   ),
                                 ),
                               ),
@@ -241,7 +257,7 @@ class MissionPageState extends State<MissionPage> {
                                     children: [
                                       Center(child: Text(infoPhoto.name.toString())),
                                       Center(child: Text(infoPhoto.date.toString())),
-                                      Center(child: Text('( ${infoPhoto.position.latitude} , ${infoPhoto.position.longitude} )')),
+                                      Center(child: Text(infoPhoto.position.toString())),
                                     ],
                                   )
                               ),
@@ -265,5 +281,7 @@ class InfoPhoto {
   final String link;
   final Position position;
   final DateTime date;
-  InfoPhoto(this.name, this.link, this.position, this.date);
+  final String missionName;
+  final int size;
+  InfoPhoto({this.missionName, this.size, this.name, this.link, this.position, this.date});
 }
