@@ -1,6 +1,8 @@
 package fr.istic.projet.mavlinkapp.service;
 
-import fr.istic.projet.mavlinkapp.model.InterestPoint;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.istic.projet.mavlinkapp.model.CurrentPosition;
 import fr.istic.projet.mavlinkapp.model.MissionDrone;
 import fr.istic.projet.mavlinkapp.model.PositionDrone;
 import org.slf4j.Logger;
@@ -15,6 +17,12 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,17 +35,64 @@ public class MissionController {
 
     MissionDrone laMission = new MissionDrone();
     @PostMapping
-    public MissionDrone sendMissionCoordonates(@Validated @RequestBody MissionDrone mission) throws InterruptedException {
-        laMission = mission;
-        //launch drone to explore mission's intersts point
-       /* for (InterestPoint ip:
-             laMission.getInterestPoints()) {
-            java.lang.System.out.println(ip.getPosition().getLatitude() + " - " + ip.getPosition().getLongitude()+" !!!!!");
-        }*/
+    public MissionDrone sendMissionCoordonates(@Validated @RequestBody MissionDrone mission) {
+        java.lang.System.out.println("submit ip");
+
+        CurrentPosition cp = new CurrentPosition();
+        cp.setId("id intervention");
+        cp.setLongitude(4.2565535);
+        cp.setLatitude(7.2585204);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonRes = "";
+        try {
+            java.lang.System.out.println("t1");
+            jsonRes = mapper.writeValueAsString(cp);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        HttpURLConnection con = null;
+        try {
+            java.lang.System.out.println("t2");
+            URL url = new URL("http://148.60.11.47:8080/api/updateDronePosition");
+            con = (HttpURLConnection)url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json; utf-8");
+            con.setDoOutput(true);
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            java.lang.System.out.println("t3");
+            OutputStream os = con.getOutputStream();
+            byte[] input = jsonRes.getBytes("utf-8");
+            os.write(input, 0, input.length);
+            java.lang.System.out.println("done");
+        }  catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            java.lang.System.out.println("e1");
+        } catch (IOException e) {
+            e.printStackTrace();
+            java.lang.System.out.println("e2");
+        }
+
+        /*laMission = mission;
         MyRunnable myRunnable = new MyRunnable(drone);
         Thread t = new Thread(myRunnable);
         t.start();
-        Thread.sleep(500);
+        //Thread.sleep(500);
+
+        //send images took by drone in rest's meth to app java which will store image in firebase*/
+        return laMission;
+    }
+
+    @PostMapping("/update")
+    public MissionDrone updateDronePosition(@Validated @RequestBody CurrentPosition pos) throws InterruptedException {
+        java.lang.System.out.println("called");
 
         //send images took by drone in rest's meth to app java which will store image in firebase
         return laMission;
