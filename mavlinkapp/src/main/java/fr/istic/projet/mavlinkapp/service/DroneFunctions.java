@@ -51,6 +51,7 @@ public class DroneFunctions {
                     posCourante.setLongitude(position.getLongitudeDeg());
                     String jsonRes = "";
                     sendToWebservice(posCourante, "http://148.60.11.47/api/mission");
+                    sendVid(idIntervention, posCourante);
                 }
         );
 
@@ -110,5 +111,15 @@ public class DroneFunctions {
         SeleniumGoogleEarth sge = new SeleniumGoogleEarth(position.getLatitude(),position.getLongitude());
         CurrentPicture cpp = new CurrentPicture(cp, sge.takePic());
         sendToWebservice(cpp,"http://148.60.11.47/api/uploadFile");
+    }
+    
+     public void sendVid(String idIntervention, CurrentPosition position) throws IOException, InterruptedException {
+        CurrentPosition cp = new CurrentPosition();
+        cp.setId(idIntervention);
+        cp.setLatitude(position.getLatitude());
+        cp.setLongitude(position.getLongitude());
+        SeleniumGoogleEarth sge = new SeleniumGoogleEarth(position.getLatitude(),position.getLongitude());
+        CurrentPicture cpp = new CurrentPicture(cp, sge.takePic());
+        sendToWebservice(cpp,"http://148.60.11.47/api/streamVideo");
     }
 }
