@@ -89,4 +89,3 @@ public class MissionController {
         mission.getInterestPoints().get(mission.getPhotos().size()-1).setPhoto(true);
     }
 }
-
