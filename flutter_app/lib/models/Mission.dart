@@ -11,7 +11,7 @@ class Mission {
   String video;
   bool segment = true;
   bool streamVideo = false;
-  StateMission state;
+  StateMission state = StateMission.Waiting;
   String idIntervention;
 
 
@@ -30,6 +30,16 @@ class Mission {
     }
   }
 
+  Mission duplicate() {
+    Mission mission = Mission(
+      idIntervention: this.idIntervention,
+      name: this.name,
+      segment: this.segment,
+      streamVideo: this.streamVideo,
+      interestPoints: this.interestPoints.toList(),
+    );
+    return mission;
+  }
 
   static List<InterestPoint> convertInterestPointsToList(List<dynamic> listMap) {
     if (listMap == null) {

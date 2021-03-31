@@ -27,12 +27,9 @@ class MissionFormPageState extends State<MissionFormPage> {
 
   MissionFormPageState(this.intervention);
 
-
-  String nameMission;
-  bool segment = false;
-  bool streamVideo = false;
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool streamVideo = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +40,6 @@ class MissionFormPageState extends State<MissionFormPage> {
             return CircularProgressIndicator();
           }
           this.intervention = Intervention.fromSnapshot(snapshot.data);
-
           return ListView(
             //TODO : SHERVIN SOUFIANE
             padding: const EdgeInsets.all(8),
@@ -77,11 +73,10 @@ class MissionFormPageState extends State<MissionFormPage> {
                             ),
                           ),
                           Checkbox(
-                            value: this.streamVideo,
+                            value: this.intervention.futureMission.streamVideo,
                             onChanged: (value) {
-                              this.setState(() {
-                                this.streamVideo = value;
-                              });
+                              this.intervention.futureMission.streamVideo = value;
+                              this.interventionService.updateIntervention(intervention);
                             },
                           ),
                         ],
@@ -92,6 +87,7 @@ class MissionFormPageState extends State<MissionFormPage> {
                             fontWeight: FontWeight.bold),
                       ),
                       TextFormField(
+                        initialValue: intervention.futureMission.name,
                         decoration: const InputDecoration(
                           icon: Icon(Icons.wysiwyg_outlined),
                           hintText: 'Donner un nom à la mission du drone',
@@ -102,8 +98,16 @@ class MissionFormPageState extends State<MissionFormPage> {
                             return 'Veillez saisir le nom de la mission';
                           }
                         },
+                        onChanged: (value) {
+                          intervention.futureMission.name = value;
+                        },
+                        onFieldSubmitted: (value) {
+                          intervention.futureMission.name = value;
+                          this.interventionService.updateIntervention(intervention);
+                        },
                         onSaved: (value) {
-                          nameMission = value;
+                          intervention.futureMission.name = value;
+                          this.interventionService.updateIntervention(intervention);
                         },
                       ),
                       Row(
@@ -116,7 +120,6 @@ class MissionFormPageState extends State<MissionFormPage> {
                                 this.intervention.futureMission.segment = ! value;
                                 print (this.intervention.futureMission.segment);
                                 this.interventionService.updateIntervention(intervention);
-                                setState(() {});
                               },
                               inactiveTrackColor:
                               Colors.lightGreenAccent,
@@ -137,8 +140,6 @@ class MissionFormPageState extends State<MissionFormPage> {
                           final formState = _formKey.currentState;
                           if (formState.validate()) {
                             formState.save();
-                            this.intervention.futureMission.name = nameMission;
-                            this.intervention.futureMission.streamVideo = streamVideo;
                             if (this.intervention.futureMission.interestPoints.isNotEmpty) {
                               Mission mission = this.intervention.futureMission;
                               bool missionAdded = await MissionService.addMission(this.intervention);
