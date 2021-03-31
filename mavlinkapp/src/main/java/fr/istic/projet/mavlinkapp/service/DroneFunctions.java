@@ -23,7 +23,6 @@ import java.util.concurrent.CountDownLatch;
 
 public class DroneFunctions {
     public System drone;
-    private CurrentPosition posCourante = new CurrentPosition();
     private static final Logger logger = LoggerFactory.getLogger(DroneFunctions.class);
     public DroneFunctions(){
         drone = new System();
@@ -47,7 +46,8 @@ public class DroneFunctions {
         drone.getTelemetry().setRatePosition(1000.0);
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
-                    java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
+                    CurrentPosition posCourante = new CurrentPosition();
+                    //java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
                     posCourante.setId(idIntervention);
                     posCourante.setLatitude(position.getLatitudeDeg());
                     posCourante.setLongitude(position.getLongitudeDeg());
@@ -91,6 +91,7 @@ public class DroneFunctions {
         ObjectMapper mapper = new ObjectMapper();
         try {
             jsonRes = mapper.writeValueAsString(toSend);
+            java.lang.System.out.println("---jsonPosition : " + jsonRes);
             StringEntity se = new StringEntity(jsonRes);
             se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             post.setEntity(se);
