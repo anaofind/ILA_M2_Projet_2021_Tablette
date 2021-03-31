@@ -41,7 +41,7 @@ public class DroneFunctions {
                 .andThen(drone.getAction().arm())
                 .andThen(drone.getMission().startMission().doOnComplete(() -> logger.debug("Mission started")))
                 .subscribe();
-
+/*
         drone.getTelemetry().setRateDistanceSensor(10000000.0).subscribe(
                 () -> java.lang.System.out.println("rate")
         );
@@ -51,7 +51,7 @@ public class DroneFunctions {
         drone.getTelemetry().setRateAttitude(10000000.0).subscribe(
                 () -> java.lang.System.out.println("att")
         );
-
+*/
         drone.getTelemetry().getPosition()
                 .subscribe(
                 position -> {
