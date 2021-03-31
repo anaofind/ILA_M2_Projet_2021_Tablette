@@ -2,6 +2,7 @@ package fr.istic.projet.mavlinkapp.model;
 
 public class StateMission {
     private String idMission;
+    private String etat;
 
     public StateMission(String ident, String valEtat) {
         this.idMission = ident;
@@ -14,9 +15,6 @@ public class StateMission {
     public void setEtat(String etat) {
         this.etat = etat;
     }
-
-    private String etat;
-
     public String getIdMission() {
         return idMission;
     }

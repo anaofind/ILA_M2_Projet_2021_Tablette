@@ -12,8 +12,6 @@ import io.mavsdk.mission.Mission.MissionItem;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,9 +26,16 @@ public class MissionController {
 
     @PostMapping
     public MissionDrone sendMissionCoordonates(@Validated @RequestBody MissionDrone mission) {
-        java.lang.System.out.println("submit ip");
-
         laMission = mission;
+
+        java.lang.System.out.println(laMission.getId());
+        java.lang.System.out.println(laMission.getIdIntervention());
+        java.lang.System.out.println(laMission.getInterestPoints().get(0).getLatitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(0).getLongitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(1).getLatitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(1).getLongitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(2).getLatitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(2).getLongitude());
 
         MyRunnable myRunnable = new MyRunnable(drone);
         service.submit(myRunnable);
@@ -53,11 +58,17 @@ public class MissionController {
             // code in the other thread, can reference "var" variable
             try {
                 StateMission debut = new StateMission(laMission.getId(), "StateMission.Running");
-                drone.sendEtatToWebservice(debut, "http://148.60.11.47:8080/api/updateMissionState");
-                drone.go(laMission.getIdIntervention(), laMission.getId(),laMission.getInterestPoints());
-                Thread.sleep(500);
-                StateMission fin = new StateMission(laMission.getId(), "StateMission.Ending");
-                drone.sendEtatToWebservice(fin, "http://148.60.11.47:8080/api/updateMissionState");
+                if(drone.sendEtatToWebservice(debut, "http://148.60.11.47:8080/api/updateMissionState")) {
+                    drone.go(laMission.getIdIntervention(), laMission.getId(), laMission.getInterestPoints());
+                    Thread.sleep(500);
+                    StateMission fin = new StateMission(laMission.getId(), "StateMission.Ending");
+                    if(drone.sendEtatToWebservice(fin, "http://148.60.11.47:8080/api/updateMissionState")) {
+                        java.lang.System.out.println("Mission finished");
+                    }
+                } else {
+                    java.lang.System.out.println("Error");
+                }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

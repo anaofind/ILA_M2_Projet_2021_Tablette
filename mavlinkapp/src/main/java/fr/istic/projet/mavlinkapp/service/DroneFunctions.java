@@ -110,6 +110,7 @@ public class DroneFunctions {
         try {
             jsonRes = mapper.writeValueAsString(toSend);
             StringEntity se = new StringEntity(jsonRes);
+            java.lang.System.out.println("---jsonEtat : " + jsonRes);
             se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             post.setEntity(se);
             client.execute(post);
