@@ -43,9 +43,7 @@ public class DroneFunctions {
                 .andThen(drone.getMission().startMission().doOnComplete(() -> logger.debug("Mission started")))
                 .subscribe();
 
-        drone.getTelemetry().setRateGpsInfo(1500.0).subscribe(
-                () -> java.lang.System.out.println("rate")
-        );
+
 
         int[] cmp = {0};
         drone.getTelemetry().getPosition()
