@@ -50,18 +50,7 @@ public class DroneFunctions {
                     posCourante.setLatitude(position.getLatitudeDeg());
                     posCourante.setLongitude(position.getLongitudeDeg());
                     String jsonRes = "";
-                    HttpClient client = new DefaultHttpClient();
-                    HttpPost post = new HttpPost("http://localhost:8080/api/updateDronePosition");
-                    ObjectMapper mapper = new ObjectMapper();
-                    try {
-                        jsonRes = mapper.writeValueAsString(posCourante);
-                        StringEntity se = new StringEntity(jsonRes);
-                        se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-                        post.setEntity(se);
-                        client.execute(post);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    sendToWebservice(posCourante, "http://148.60.11.47/api/mission");
                 }
         );
 
@@ -93,5 +82,23 @@ public class DroneFunctions {
         drone.getMission().cancelMissionDownload();
         drone.getMission().cancelMissionUpload();
         drone.getMission().clearMission();
+    }
+
+    public boolean sendToWebservice(Object toSend, String urlWS) {
+        String jsonRes = "";
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(urlWS);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            jsonRes = mapper.writeValueAsString(toSend);
+            StringEntity se = new StringEntity(jsonRes);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(se);
+            client.execute(post);
+            return  true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  false;
     }
 }

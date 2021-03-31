@@ -12,6 +12,7 @@ public class MissionDrone {
     String video;
     boolean segment = true;
     boolean streamVideo = false;
+    String state;
 
     public String getId() {
         return id;
@@ -75,5 +76,17 @@ public class MissionDrone {
 
     public void setIdIntervention(String idIntervention) {
         this.idIntervention = idIntervention;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

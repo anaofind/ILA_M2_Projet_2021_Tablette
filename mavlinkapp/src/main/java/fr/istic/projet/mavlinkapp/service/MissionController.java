@@ -1,6 +1,7 @@
 package fr.istic.projet.mavlinkapp.service;
 
 import fr.istic.projet.mavlinkapp.model.MissionDrone;
+import fr.istic.projet.mavlinkapp.model.StateMission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.annotation.Validated;
@@ -13,6 +14,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/api/mission")
@@ -21,14 +24,17 @@ public class MissionController {
     DroneFunctions drone = new DroneFunctions();
 
     MissionDrone laMission = new MissionDrone();
+    ExecutorService service = Executors.newFixedThreadPool(1);
+
     @PostMapping
     public MissionDrone sendMissionCoordonates(@Validated @RequestBody MissionDrone mission) {
         java.lang.System.out.println("submit ip");
 
         laMission = mission;
+
         MyRunnable myRunnable = new MyRunnable(drone);
-        Thread t = new Thread(myRunnable);
-        t.start();
+        service.submit(myRunnable);
+
         //Thread.sleep(500);
 
         //send images took by drone in rest's meth to app java which will store image in firebase*/
@@ -46,8 +52,12 @@ public class MissionController {
         public void run() {
             // code in the other thread, can reference "var" variable
             try {
+                StateMission debut = new StateMission(laMission.getId(), "StateMission.Running");
+                drone.sendToWebservice(debut, "http://148.60.11.47:8080/api/updateMissionState");
                 drone.go(laMission.getIdIntervention(), laMission.getInterestPoints());
                 Thread.sleep(500);
+                StateMission fin = new StateMission(laMission.getId(), "StateMission.Ending");
+                drone.sendToWebservice(fin, "http://148.60.11.47:8080/api/updateMissionState");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
