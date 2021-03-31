@@ -3,6 +3,7 @@ package fr.istic.projet.mavlinkapp.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.istic.projet.mavlinkapp.model.CurrentPosition;
 import fr.istic.projet.mavlinkapp.model.InterestPoint;
+import fr.istic.projet.mavlinkapp.model.StateMission;
 import io.mavsdk.System;
 import io.mavsdk.mission.Mission;
 import org.apache.http.client.HttpClient;
@@ -21,13 +22,12 @@ import java.util.concurrent.CountDownLatch;
 
 public class DroneFunctions {
     public System drone;
-    private CurrentPosition posCourante = new CurrentPosition();
     private static final Logger logger = LoggerFactory.getLogger(DroneFunctions.class);
     public DroneFunctions(){
         drone = new System();
     }
 
-    public void go(String idIntervention, List<InterestPoint> ListPosition) {
+    public void go(String idIntervention, String idMission,List<InterestPoint> ListPosition) {
         List<Mission.MissionItem> missionItems = new ArrayList<>();
         for (InterestPoint pos:
                 ListPosition) {
@@ -41,41 +41,30 @@ public class DroneFunctions {
                 .andThen(drone.getAction().arm())
                 .andThen(drone.getMission().startMission().doOnComplete(() -> logger.debug("Mission started")))
                 .subscribe();
+
         drone.getTelemetry().setRatePosition(1000.0);
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
-                    java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
+                    CurrentPosition posCourante = new CurrentPosition();
+                    //java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
                     posCourante.setId(idIntervention);
                     posCourante.setLatitude(position.getLatitudeDeg());
                     posCourante.setLongitude(position.getLongitudeDeg());
                     String jsonRes = "";
-                    HttpClient client = new DefaultHttpClient();
-                    HttpPost post = new HttpPost("http://localhost:8080/api/updateDronePosition");
-                    ObjectMapper mapper = new ObjectMapper();
-                    try {
-                        jsonRes = mapper.writeValueAsString(posCourante);
-                        StringEntity se = new StringEntity(jsonRes);
-                        se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-                        post.setEntity(se);
-                        client.execute(post);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    sendPostitionToWebservice(posCourante, "http://148.60.11.47/api/mission");
                 }
         );
 
         /*
                 updateDronePosition chaque 1sec sur localhost:8080
                 uploadFile
-                drone.getMission().getMissionProgress()
-                .subscribe(onNext -> publishImages(drone, missionmessage, missionItems.get(onNext.getCurrent())));
         */
+
 
         CountDownLatch latch = new CountDownLatch(1);
         drone.getMission()
                 .getMissionProgress()
                 .filter(progress -> progress.getCurrent() == progress.getTotal())
-                .take(1)
                 .subscribe(ignored -> latch.countDown());
         try {
             latch.await();
@@ -92,5 +81,43 @@ public class DroneFunctions {
         drone.getMission().cancelMissionDownload();
         drone.getMission().cancelMissionUpload();
         drone.getMission().clearMission();
+    }
+
+    public boolean sendPostitionToWebservice(CurrentPosition toSend, String urlWS) {
+        String jsonRes = "";
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(urlWS);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            jsonRes = mapper.writeValueAsString(toSend);
+            java.lang.System.out.println("---jsonPosition : " + jsonRes);
+            StringEntity se = new StringEntity(jsonRes);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(se);
+            client.execute(post);
+            return  true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  false;
+    }
+
+    public boolean sendEtatToWebservice(StateMission toSend, String urlWS) {
+        String jsonRes = "";
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(urlWS);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            jsonRes = mapper.writeValueAsString(toSend);
+            StringEntity se = new StringEntity(jsonRes);
+            java.lang.System.out.println("---jsonEtat : " + jsonRes);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(se);
+            client.execute(post);
+            return  true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  false;
     }
 }

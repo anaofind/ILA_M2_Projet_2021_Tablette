@@ -1,6 +1,7 @@
 package fr.istic.projet.mavlinkapp.service;
 
 import fr.istic.projet.mavlinkapp.model.MissionDrone;
+import fr.istic.projet.mavlinkapp.model.StateMission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.annotation.Validated;
@@ -11,8 +12,8 @@ import io.mavsdk.mission.Mission.MissionItem;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/api/mission")
@@ -21,14 +22,24 @@ public class MissionController {
     DroneFunctions drone = new DroneFunctions();
 
     MissionDrone laMission = new MissionDrone();
+    ExecutorService service = Executors.newFixedThreadPool(1);
+
     @PostMapping
     public MissionDrone sendMissionCoordonates(@Validated @RequestBody MissionDrone mission) {
-        java.lang.System.out.println("submit ip");
-
         laMission = mission;
+
+        java.lang.System.out.println(laMission.getId());
+        java.lang.System.out.println(laMission.getIdIntervention());
+        java.lang.System.out.println(laMission.getInterestPoints().get(0).getLatitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(0).getLongitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(1).getLatitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(1).getLongitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(2).getLatitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(2).getLongitude());
+
         MyRunnable myRunnable = new MyRunnable(drone);
-        Thread t = new Thread(myRunnable);
-        t.start();
+        service.submit(myRunnable);
+
         //Thread.sleep(500);
 
         //send images took by drone in rest's meth to app java which will store image in firebase*/
@@ -46,8 +57,18 @@ public class MissionController {
         public void run() {
             // code in the other thread, can reference "var" variable
             try {
-                drone.go(laMission.getIdIntervention(), laMission.getInterestPoints());
-                Thread.sleep(500);
+                StateMission debut = new StateMission(laMission.getId(), "StateMission.Running");
+                if(drone.sendEtatToWebservice(debut, "http://148.60.11.47:8080/api/updateMissionState")) {
+                    drone.go(laMission.getIdIntervention(), laMission.getId(), laMission.getInterestPoints());
+                    Thread.sleep(500);
+                    StateMission fin = new StateMission(laMission.getId(), "StateMission.Ending");
+                    if(drone.sendEtatToWebservice(fin, "http://148.60.11.47:8080/api/updateMissionState")) {
+                        java.lang.System.out.println("Mission finished");
+                    }
+                } else {
+                    java.lang.System.out.println("Error");
+                }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
