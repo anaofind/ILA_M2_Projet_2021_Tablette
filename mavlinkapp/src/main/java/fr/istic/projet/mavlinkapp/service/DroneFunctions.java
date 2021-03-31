@@ -69,7 +69,11 @@ public class DroneFunctions {
         drone.getMission()
                 .getMissionProgress()
                 .filter(progress -> progress.getCurrent() == progress.getTotal())
-                .subscribe(ignored -> latch.countDown());
+                .subscribe(ignored ->
+                {
+                    drone.getAction().disarm();
+                    latch.countDown();
+                });
         try {
             latch.await();
         } catch (InterruptedException ignored) {
