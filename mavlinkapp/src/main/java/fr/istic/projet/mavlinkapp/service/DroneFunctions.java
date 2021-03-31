@@ -43,8 +43,10 @@ public class DroneFunctions {
                 .subscribe();
 
         drone.getTelemetry().setRateDistanceSensor(10000000.0);
+        drone.getTelemetry().setRatePosition(10000000.0);
+        drone.getTelemetry().setRateAttitude(10000000.0);
+
         drone.getTelemetry().getPosition()
-                .take(3)
                 .subscribe(
                 position -> {
 
