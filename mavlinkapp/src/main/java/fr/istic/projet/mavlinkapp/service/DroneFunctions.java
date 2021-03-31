@@ -46,28 +46,27 @@ public class DroneFunctions {
 
 
         int[] cmp = {0};
-        drone.getTelemetry().getPosition()
-                .subscribe(
+        drone.getTelemetry().getPosition().subscribe(
                 position -> {
-
                     if (cmp[0] == 150) {
                         java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
                         cmp[0] = 0;
+                        CurrentPosition posCourante = new CurrentPosition();
+                        posCourante.setId(idIntervention);
+                        posCourante.setLatitude(position.getLatitudeDeg());
+                        posCourante.setLongitude(position.getLongitudeDeg());
+                        if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
+                            java.lang.System.out.println("envoi position courante : ok");
+                        } else {
+                            java.lang.System.out.println("echec envoi position courante");
+
+                        }
                     } else {
                         cmp[0]++;
                     }
 
-                    /*
-                    CurrentPosition posCourante = new CurrentPosition();
-                    posCourante.setId(idIntervention);
-                    posCourante.setLatitude(position.getLatitudeDeg());
-                    posCourante.setLongitude(position.getLongitudeDeg());
-                    if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
-                        java.lang.System.out.println("envoi position courante : ok");
-                    } else {
-                        java.lang.System.out.println("echec envoi position courante");
 
-                    }*/
+
                 }
         );
 
