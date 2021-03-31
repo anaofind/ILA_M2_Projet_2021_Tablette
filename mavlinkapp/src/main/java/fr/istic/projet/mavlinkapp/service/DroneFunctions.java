@@ -44,27 +44,29 @@ public class DroneFunctions {
                 .andThen(drone.getMission().startMission().doOnComplete(() -> logger.debug("Mission started")))
                 .subscribe();
 
-        drone.getMission().getMissionProgress().subscribe(
+        /*drone.getMission().getMissionProgress().subscribe(
                param -> {
                        //drone.getTelemetry().setRatePosition(100.0).subscribe();
-                       drone.getTelemetry().getPosition().subscribe(
-                               position -> {
-                                   CurrentPosition posCourante = new CurrentPosition();
-                                   //java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
-                                   posCourante.setId(idIntervention);
-                                   posCourante.setLatitude(position.getLatitudeDeg());
-                                   posCourante.setLongitude(position.getLongitudeDeg());
-                                   if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
-                                       java.lang.System.out.println("envoi position courante : ok");
-                                   } else {
-                                       java.lang.System.out.println("echec envoi position courante");
 
-                                   }
-                                 sendVid(idMission, posCourante);
-                               }
-                       );
                }
 
+        );*/
+
+        drone.getTelemetry().getPosition().subscribe(
+                position -> {
+                    CurrentPosition posCourante = new CurrentPosition();
+                    //java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
+                    posCourante.setId(idIntervention);
+                    posCourante.setLatitude(position.getLatitudeDeg());
+                    posCourante.setLongitude(position.getLongitudeDeg());
+                    if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
+                        java.lang.System.out.println("envoi position courante : ok");
+                    } else {
+                        java.lang.System.out.println("echec envoi position courante");
+
+                    }
+                    sendVid(idMission, posCourante);
+                }
         );
 
         /*
