@@ -500,7 +500,7 @@ class _ListMoyenInterventionPage extends State<ListMoyenInterventionPage> {
             width: 60,
           ),
           ElevatedButton(
-            child: Text('Ajouter des moyens'),
+            child: Text('Demander des moyens'),
             onPressed: () {
               selectionMoyen();
             },
