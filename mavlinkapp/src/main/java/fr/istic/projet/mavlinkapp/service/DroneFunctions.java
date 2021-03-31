@@ -46,7 +46,7 @@ public class DroneFunctions {
 
         drone.getMission().getMissionProgress().subscribe(
                param -> {
-                       drone.getTelemetry().setRatePosition(1000000.0).subscribe();
+                       //drone.getTelemetry().setRatePosition(100.0).subscribe();
                        drone.getTelemetry().getPosition().subscribe(
                                position -> {
                                    CurrentPosition posCourante = new CurrentPosition();
