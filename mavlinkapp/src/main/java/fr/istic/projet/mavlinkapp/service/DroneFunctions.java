@@ -1,8 +1,10 @@
 package fr.istic.projet.mavlinkapp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.istic.projet.mavlinkapp.model.CurrentPicture;
 import fr.istic.projet.mavlinkapp.model.CurrentPosition;
 import fr.istic.projet.mavlinkapp.model.InterestPoint;
+import fr.istic.projet.mavlinkapp.model.StateMission;
 import io.mavsdk.System;
 import io.mavsdk.mission.Mission;
 import org.apache.http.client.HttpClient;
@@ -50,17 +52,14 @@ public class DroneFunctions {
                     posCourante.setLatitude(position.getLatitudeDeg());
                     posCourante.setLongitude(position.getLongitudeDeg());
                     String jsonRes = "";
-                    sendToWebservice(posCourante, "http://148.60.11.47/api/mission");
-                    sendVid(idMission, posCourante);
+                    sendPostitionToWebservice(posCourante, "http://148.60.11.47/api/mission");
                 }
         );
 
         /*
                 updateDronePosition chaque 1sec sur localhost:8080
                 uploadFile
-        */        
-                drone.getMission().getMissionProgress()
-                .subscribe(onNext -> sendPic(idMission, posCourante));
+        */
      
 
         CountDownLatch latch = new CountDownLatch(1);
@@ -85,7 +84,7 @@ public class DroneFunctions {
         drone.getMission().clearMission();
     }
 
-    public boolean sendToWebservice(Object toSend, String urlWS) {
+    public boolean sendPostitionToWebservice(CurrentPosition toSend, String urlWS) {
         String jsonRes = "";
         HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(urlWS);
@@ -102,24 +101,22 @@ public class DroneFunctions {
         }
         return  false;
     }
-    
-      public void sendPic(String idMission, CurrentPosition position) throws IOException, InterruptedException {
-        CurrentPosition cp = new CurrentPosition();
-        cp.setId(idMission);
-        cp.setLatitude(position.getLatitude());
-        cp.setLongitude(position.getLongitude());
-        SeleniumGoogleEarth sge = new SeleniumGoogleEarth(position.getLatitude(),position.getLongitude());
-        CurrentPicture cpp = new CurrentPicture(cp, sge.takePic());
-        sendToWebservice(cpp,"http://148.60.11.47/api/uploadFile");
-    }
-    
-     public void sendVid(String idMission, CurrentPosition position) throws IOException, InterruptedException {
-        CurrentPosition cp = new CurrentPosition();
-        cp.setId(idMission);
-        cp.setLatitude(position.getLatitude());
-        cp.setLongitude(position.getLongitude());
-        SeleniumGoogleEarth sge = new SeleniumGoogleEarth(position.getLatitude(),position.getLongitude());
-        CurrentPicture cpp = new CurrentPicture(cp, sge.takePic());
-        sendToWebservice(cpp,"http://148.60.11.47/api/streamVideo");
+
+    public boolean sendEtatToWebservice(StateMission toSend, String urlWS) {
+        String jsonRes = "";
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(urlWS);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            jsonRes = mapper.writeValueAsString(toSend);
+            StringEntity se = new StringEntity(jsonRes);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(se);
+            client.execute(post);
+            return  true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  false;
     }
 }
