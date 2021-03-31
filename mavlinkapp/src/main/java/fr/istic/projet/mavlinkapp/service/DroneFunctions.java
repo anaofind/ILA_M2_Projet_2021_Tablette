@@ -62,15 +62,15 @@ public class DroneFunctions {
                 uploadFile
         */        
    
-                drone.getMission().getMissionProgress()
+               /* drone.getMission().getMissionProgress()
                 .subscribe(onNext ->
                 {
-                    InterestPoint ipt = ListPosition.get(onNext.getCurrent()-1);
+                    InterestPoint ipt = ListPosition.get(onNext.getCurrent());
                     if(ipt.isPhoto()){
                         sendPic(idMission, posCourante);
                     }
                 }
-                );
+                );*/
         
         CountDownLatch latch = new CountDownLatch(1);
         drone.getMission()
