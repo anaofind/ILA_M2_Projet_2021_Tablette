@@ -65,7 +65,7 @@ public class DroneFunctions {
                 drone.getMission().getMissionProgress()
                 .subscribe(onNext ->
                 {
-                    InterestPoint ipt = ListPosition.get(onNext.getCurrent());
+                    InterestPoint ipt = ListPosition.get(onNext.getCurrent()-1);
                     if(ipt.isPhoto()){
                         sendPic(idMission, posCourante);
                     }
