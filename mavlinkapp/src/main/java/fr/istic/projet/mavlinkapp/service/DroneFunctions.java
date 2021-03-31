@@ -130,7 +130,7 @@ public class DroneFunctions {
         return  false;
     }
 
-    public boolean sendToWebservice(CurrentPosition toSend, String urlWS) {
+    public boolean sendToWebservice(CurrentPicture toSend, String urlWS) {
         String jsonRes = "";
         HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(urlWS);
