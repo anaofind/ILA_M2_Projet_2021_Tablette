@@ -65,7 +65,7 @@ public class DroneFunctions {
                         java.lang.System.out.println("echec envoi position courante");
 
                     }
-                    sendVid(idMission, posCourante);
+                    //sendVid(idMission, posCourante);
                 }
         );
 
@@ -120,7 +120,7 @@ public class DroneFunctions {
         ObjectMapper mapper = new ObjectMapper();
         try {
             jsonRes = mapper.writeValueAsString(toSend);
-            java.lang.System.out.println("---json Photo or StreamVideo : " + jsonRes);
+            java.lang.System.out.println("---json : " + jsonRes);
             StringEntity se = new StringEntity(jsonRes);
             se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             post.setEntity(se);
@@ -139,7 +139,7 @@ public class DroneFunctions {
         ObjectMapper mapper = new ObjectMapper();
         try {
             jsonRes = mapper.writeValueAsString(toSend);
-            java.lang.System.out.println("---jsonPosition : " + jsonRes);
+            java.lang.System.out.println("---jsonPosition Photo or StreamVideo : " + jsonRes);
             StringEntity se = new StringEntity(jsonRes);
             se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             post.setEntity(se);
