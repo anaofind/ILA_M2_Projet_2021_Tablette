@@ -1,34 +1,16 @@
 package fr.istic.projet.mavlinkapp.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.istic.projet.mavlinkapp.model.CurrentPosition;
 import fr.istic.projet.mavlinkapp.model.MissionDrone;
-import fr.istic.projet.mavlinkapp.model.PositionDrone;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.validation.DefaultBindingErrorProcessor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.mavsdk.System;
-import io.mavsdk.mission.Mission;
 import io.mavsdk.mission.Mission.MissionItem;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 

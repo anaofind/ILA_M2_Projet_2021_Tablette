@@ -31,7 +31,7 @@ public class DroneFunctions {
         List<Mission.MissionItem> missionItems = new ArrayList<>();
         for (InterestPoint pos:
                 ListPosition) {
-            missionItems.add(generateMissionItem(pos.getPosition().getLatitude(),pos.getPosition().getLongitude()));
+            missionItems.add(generateMissionItem(pos.getLatitude(),pos.getLongitude()));
         }
         Mission.MissionPlan missionPlan = new Mission.MissionPlan(missionItems);
 
