@@ -31,7 +31,7 @@ public class DroneFunctions {
         List<Mission.MissionItem> missionItems = new ArrayList<>();
         for (InterestPoint pos:
                 ListPosition) {
-            missionItems.add(generateMissionItem(pos.getPosition().getLatitude(),pos.getPosition().getLongitude()));
+            missionItems.add(generateMissionItem(pos.getLatitude(),pos.getLongitude()));
         }
         Mission.MissionPlan missionPlan = new Mission.MissionPlan(missionItems);
 
@@ -41,11 +41,12 @@ public class DroneFunctions {
                 .andThen(drone.getAction().arm())
                 .andThen(drone.getMission().startMission().doOnComplete(() -> logger.debug("Mission started")))
                 .subscribe();
+
         drone.getTelemetry().setRatePosition(1000.0);
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
                     java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
-                    posCourante.setId(idIntervention);
+                    posCourante.setId("TcBJNzRWH9GYOEyKd4OJ");
                     posCourante.setLatitude(position.getLatitudeDeg());
                     posCourante.setLongitude(position.getLongitudeDeg());
                     String jsonRes = "";
