@@ -61,10 +61,17 @@ public class DroneFunctions {
                 updateDronePosition chaque 1sec sur localhost:8080
                 uploadFile
         */        
+   
                 drone.getMission().getMissionProgress()
-                .subscribe(onNext -> sendPic(idMission, posCourante));
-     
-
+                .subscribe(onNext ->
+                {
+                    InterestPoint ipt = ListPosition.get(onNext.getCurrent());
+                    if(ipt.isPhoto()){
+                        sendPic(idMission, posCourante);
+                    }
+                }
+                );
+        
         CountDownLatch latch = new CountDownLatch(1);
         drone.getMission()
                 .getMissionProgress()
