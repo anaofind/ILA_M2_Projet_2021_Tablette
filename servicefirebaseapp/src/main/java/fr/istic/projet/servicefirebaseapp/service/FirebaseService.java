@@ -182,6 +182,21 @@ public class FirebaseService  {
     	return imageBytes;
     }
     
+    public void setMissionState(String idMission, String state) throws InterruptedException, ExecutionException {
+    	MissionInfos missionInfos = getMissionById(idMission);
+    	CollectionReference missions = this.database.collection("missions");
+    	Mission mission = missionInfos.getMission();
+    	String idDocumentMission = missionInfos.getIdDocMission();
+    	if(mission!=null && idDocumentMission !=null) {
+    	mission.setState(state);
+    	ApiFuture<WriteResult> futureUpdate = missions.document(idDocumentMission)
+    			.set(mission);
+		log.info("State mission updated : "+ state);
+    	}
+    	
+    	
+    }
+    
     public void addUrlPhotoMission(String idMission, String urlPhoto) throws InterruptedException, ExecutionException {
     	MissionInfos missionInfos = getMissionById(idMission);
     	CollectionReference missions = this.database.collection("missions");
