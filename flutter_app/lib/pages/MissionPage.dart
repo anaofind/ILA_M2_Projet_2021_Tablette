@@ -172,7 +172,7 @@ class MissionPageState extends State<MissionPage> {
                   ),
               ),
               child: FractionallySizedBox(
-                  child: MissionVideoPage(mission)
+                  child: MissionVideoPage()
               ),
             )
         ),
