@@ -46,12 +46,12 @@ public class DroneFunctions {
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
                     java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
-                    posCourante.setId("TcBJNzRWH9GYOEyKd4OJ");
+                    posCourante.setId(idIntervention);
                     posCourante.setLatitude(position.getLatitudeDeg());
                     posCourante.setLongitude(position.getLongitudeDeg());
                     String jsonRes = "";
                     sendToWebservice(posCourante, "http://148.60.11.47/api/mission");
-                    sendVid(idIntervention, posCourante);
+                    sendVid(idMission, posCourante);
                 }
         );
 
@@ -60,7 +60,7 @@ public class DroneFunctions {
                 uploadFile
         */        
                 drone.getMission().getMissionProgress()
-                .subscribe(onNext -> sendPic(idIntervention, posCourante));
+                .subscribe(onNext -> sendPic(idMission, posCourante));
      
 
         CountDownLatch latch = new CountDownLatch(1);
@@ -103,9 +103,9 @@ public class DroneFunctions {
         return  false;
     }
     
-      public void sendPic(String idIntervention, CurrentPosition position) throws IOException, InterruptedException {
+      public void sendPic(String idMission, CurrentPosition position) throws IOException, InterruptedException {
         CurrentPosition cp = new CurrentPosition();
-        cp.setId(idIntervention);
+        cp.setId(idMission);
         cp.setLatitude(position.getLatitude());
         cp.setLongitude(position.getLongitude());
         SeleniumGoogleEarth sge = new SeleniumGoogleEarth(position.getLatitude(),position.getLongitude());
@@ -113,9 +113,9 @@ public class DroneFunctions {
         sendToWebservice(cpp,"http://148.60.11.47/api/uploadFile");
     }
     
-     public void sendVid(String idIntervention, CurrentPosition position) throws IOException, InterruptedException {
+     public void sendVid(String idMission, CurrentPosition position) throws IOException, InterruptedException {
         CurrentPosition cp = new CurrentPosition();
-        cp.setId(idIntervention);
+        cp.setId(idMission);
         cp.setLatitude(position.getLatitude());
         cp.setLongitude(position.getLongitude());
         SeleniumGoogleEarth sge = new SeleniumGoogleEarth(position.getLatitude(),position.getLongitude());
