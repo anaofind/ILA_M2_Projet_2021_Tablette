@@ -63,7 +63,7 @@ class MissionPageState extends State<MissionPage> {
                           ),
                         ),
                         Flexible(
-                          flex: 2,
+                          flex: 1,
                           child: Center(
                             child: Container(
                               margin: EdgeInsets.only(
