@@ -2,9 +2,9 @@ package fr.istic.projet.servicefirebaseapp.model;
 
 public class InterestPoint {
     private boolean photo = false;
-    private String latitude;
-    private String longitude;
-    public InterestPoint(boolean photo, String latitude, String longitude) {
+    private double latitude;
+    private double longitude;
+    public InterestPoint(boolean photo, double latitude, double longitude) {
 		super();
 		this.photo = photo;
 		this.latitude = latitude;
@@ -28,25 +28,25 @@ public class InterestPoint {
 
 
 
-	public String getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
 
 
-	public void setLatitude(String latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 
 
 
-	public String getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
 
 
-	public void setLongitude(String longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 }
