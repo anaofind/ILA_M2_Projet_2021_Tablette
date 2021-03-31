@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import fr.istic.projet.servicefirebaseapp.model.DroneInfosBody;
 import fr.istic.projet.servicefirebaseapp.model.FileDTO;
 import fr.istic.projet.servicefirebaseapp.model.MissionBody;
+import fr.istic.projet.servicefirebaseapp.model.StateMission;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -58,6 +59,13 @@ public class FirebaseController {
      firebaseService.updateDronePositionIntervention(droneInfos.getId(), 
     		droneInfos.getLatitude(), droneInfos.getLongitude());
     return new ResponseEntity<>(droneInfos, null, HttpStatus.OK);
+}
+    
+    @PostMapping("/updateMissionState")
+	  public ResponseEntity<StateMission> updateMissionState(@Validated @RequestBody StateMission missionState) throws Exception {
+	  log.info("REST request to update mission state");
+ firebaseService.setMissionState(missionState.getIdMission(), missionState.getState());
+return new ResponseEntity<>(missionState, null, HttpStatus.OK);
 }
 
 
