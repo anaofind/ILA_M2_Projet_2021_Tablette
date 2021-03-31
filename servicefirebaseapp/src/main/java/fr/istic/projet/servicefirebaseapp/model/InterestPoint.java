@@ -1,25 +1,36 @@
 package fr.istic.projet.servicefirebaseapp.model;
 
 public class InterestPoint {
-    private Position position;
-    private boolean photo = false;
-
-    public InterestPoint() {
-    }
-    
-    public InterestPoint(Position position, boolean photo) {
+	private String latitude;
+	private String longitude;
+    public InterestPoint(String latitude, String longitude, boolean photo) {
 		super();
-		this.position = position;
+		this.latitude = latitude;
+		this.longitude = longitude;
 		this.photo = photo;
 	}
 
-	public Position getPosition() {
-        return position;
-    }
+	private boolean photo = false;
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+	public InterestPoint() {
     }
+    
 
     public boolean isPhoto() {
         return photo;
