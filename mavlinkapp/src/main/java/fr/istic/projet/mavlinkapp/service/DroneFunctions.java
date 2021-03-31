@@ -42,8 +42,10 @@ public class DroneFunctions {
                 .andThen(drone.getMission().startMission().doOnComplete(() -> logger.debug("Mission started")))
                 .subscribe();
 
-        drone.getTelemetry().setRatePosition(1000000.0);
-        drone.getTelemetry().getPosition().subscribe(
+        drone.getTelemetry().setRateDistanceSensor(10000000.0);
+        drone.getTelemetry().getPosition()
+                .take(3)
+                .subscribe(
                 position -> {
 
                     java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
@@ -72,6 +74,7 @@ public class DroneFunctions {
         drone.getMission()
                 .getMissionProgress()
                 .filter(progress -> progress.getCurrent() == progress.getTotal())
+                .take(1)
                 .subscribe(ignored ->
                 {
                     drone.getAction().disarm();
