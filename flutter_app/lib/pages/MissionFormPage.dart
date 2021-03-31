@@ -99,7 +99,7 @@ class MissionFormPageState extends State<MissionFormPage> {
                         ),
                         validator: (String value) {
                           if (value.isEmpty) {
-                            return 'Veillez saisir le nom de l\'intervention';
+                            return 'Veillez saisir le nom de la mission';
                           }
                         },
                         onSaved: (value) {
@@ -140,10 +140,10 @@ class MissionFormPageState extends State<MissionFormPage> {
                             this.intervention.futureMission.name = nameMission;
                             this.intervention.futureMission.streamVideo = streamVideo;
                             if (this.intervention.futureMission.interestPoints.isNotEmpty) {
-                              String idMission = this.intervention.futureMission.id;
+                              Mission mission = this.intervention.futureMission;
                               bool missionAdded = await MissionService.addMission(this.intervention);
                               if (missionAdded) {
-                                SelectorIntervention.idMissionSelected = idMission;
+                                SelectorIntervention.missionSelected = mission;
                                 NavigatorPage.navigateTo(3);
                               }
                             }

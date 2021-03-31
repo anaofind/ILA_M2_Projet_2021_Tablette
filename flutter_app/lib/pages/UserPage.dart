@@ -16,42 +16,85 @@ class UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: AccountService.loadCurrentUser(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
-          return Center(
-            child: CircularProgressIndicator(),
+        stream: AccountService.loadCurrentUser(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          UserData userData = UserData.fromSnapshot(snapshot.data.docs[0]);
+          return Scaffold(
+              resizeToAvoidBottomPadding: false,
+              appBar: AppBar(
+                title: Text('Utilisateur'),
+              ),
+              body: Row(
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: Container(
+                                child : Icon(
+                                    Icons.account_box,
+                                    size: 120,
+                                    color: Colors.blueGrey
+                                )
+                            ),
+                          ),
+                          Flexible(
+                              flex: 3,
+                              child: Container()
+                          )
+                        ],
+                      ),
+                      color: Colors.green
+                    ),
+                  ),
+                  Flexible(
+                      flex: 3,
+                      child: Container(
+                        color: Colors.red,
+                      )
+                  )
+                ],
+              )
           );
         }
-        UserData userData = UserData.fromSnapshot(snapshot.data.docs[0]);
-        return Scaffold(
-            resizeToAvoidBottomPadding: false,
-            appBar: AppBar(
-              title: Text('Utilisateur'),
+    );
+  }
+
+
+  Widget getOneInfoWidget(String title, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+            margin: EdgeInsets.only(
+                right: 15,
+                left: 15
             ),
-            body: Center(
-              child: Column(
-                children: [
-                  Text(
-                      userData.email
-                  ),
-                  Text(
-                      userData.login
-                  ),
-                  Text(
-                      userData.name
-                  ),
-                  Text(
-                      userData.firstName
-                  ),
-                  Text(
-                      userData.role.toString()
-                  ),
-                ],
-              ),
+            child : Text(
+                title,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontStyle: FontStyle.italic
+                )
             )
-        );
-      }
+        ),
+        Container(
+            child : Text(
+                value,
+                style: TextStyle(
+                  fontSize: 25,
+                )
+            )
+        )
+      ],
     );
   }
 }

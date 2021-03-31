@@ -93,51 +93,51 @@ class DronePageState extends State<DronePage> {
                       itemCount: this.intervention.missions.length,
                       itemBuilder: (context, index) {
                         String idMission = this.intervention.missions[index];
-                        return GestureDetector(
-                          child: Container(
-                              padding: new EdgeInsets.symmetric(vertical: 40.0),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.black,
-                                  width: 1,
-                                ),
-                                color: (SelectorIntervention.idMissionSelected == idMission)? Colors.black12: Colors.white,
-                              ),
-                              child : Center(
-                                  child: StreamBuilder<QuerySnapshot>(
-                                      stream: MissionService.getMissionById(idMission),
-                                      builder: (context, snapshot) {
-                                        if (! snapshot.hasData) {
-                                          return CircularProgressIndicator();
-                                        }
-                                        if (snapshot.data.docs.isEmpty) {
-                                          return Center(
-                                            child: Text('Mission introuvable'),
-                                          );
-                                        }
-                                        Mission mission = Mission.fromSnapshot(snapshot.data.docs[0]);
-                                        return Column(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              mission.name,
-                                              style: TextStyle(
-                                                fontSize: 30,
-                                              ),
-                                            ),
-                                            this.getIconState(mission),
-                                          ],
-                                        );
-                                      }
+                        return StreamBuilder<QuerySnapshot>(
+                          stream: MissionService.getMissionById(idMission),
+                          builder: (context, snapshot) {
+                            if (! snapshot.hasData) {
+                              return CircularProgressIndicator();
+                            }
+                            if (snapshot.data.docs.isEmpty) {
+                              return Center(
+                                child: Text('Mission introuvable'),
+                              );
+                            }
+                            Mission mission = Mission.fromSnapshot(snapshot.data.docs[0]);
+                            return GestureDetector(
+                              child: Container(
+                                  padding: new EdgeInsets.symmetric(vertical: 40.0),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black,
+                                      width: 1,
+                                    ),
+                                    color: (SelectorIntervention.missionSelected != null && SelectorIntervention.missionSelected.id == idMission)? Colors.black12: Colors.white,
+                                  ),
+                                  child : Center(
+                                      child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        mission.name,
+                                        style: TextStyle(
+                                          fontSize: 30,
+                                        ),
+                                      ),
+                                      this.getIconState(mission),
+                                    ],
                                   )
-                              )
-                          ),
-                          onTap: () {
-                            this.setState(() {
-                              SelectorIntervention.idMissionSelected = idMission;
-                              print(index);
-                            });
-                          },
+                                  )
+                              ),
+                              onTap: () {
+                                this.setState(() {
+                                  SelectorIntervention.missionSelected = mission;
+                                  print(index);
+                                });
+                              },
+                            );
+                          }
                         );
                       },
                     ),
@@ -147,7 +147,7 @@ class DronePageState extends State<DronePage> {
                     child : Center(
                         child: Container(
                           margin: EdgeInsets.all(15),
-                          child: (SelectorIntervention.idMissionSelected != null)? MissionPage() :
+                          child: (SelectorIntervention.missionSelected != null)? MissionPage() :
                           Center (
                             child: Text(
                               'Séléctionnez une mission',

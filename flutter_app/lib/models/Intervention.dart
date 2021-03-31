@@ -69,8 +69,8 @@ class Intervention {
         adresse = snapshot.data()['adresse'],
         codeSinistre = snapshot.data()['codeSinistre'],
         date = snapshot.data()['date'].toDate(),
-        moyens =new List<MoyenIntervention>.from(snapshot.data()['moyens'].map((s) => MoyenIntervention.fromMap(s)).toList()),
-        symbols =new List<SymbolIntervention>.from(snapshot.data()['symbols'].map((s) => SymbolIntervention.fromMap(s)).toList()),
+        moyens = (snapshot.data()['moyens'] != null)? new List<MoyenIntervention>.from(snapshot.data()['moyens'].map((s) => MoyenIntervention.fromMap(s)).toList()) : [],
+        symbols =(snapshot.data()['symbols'] != null)? new List<SymbolIntervention>.from(snapshot.data()['symbols'].map((s) => SymbolIntervention.fromMap(s)).toList()): [],
         missions = (snapshot.data()['missions'] != null)? new List<String>.from(snapshot.data()['missions'].map((s) => s['id']).toList()): [],
         drone = (snapshot.data()['latitudeDrone'] != null && snapshot.data()['longitudeDrone'] != null)? Drone(Position(snapshot.data()['latitudeDrone'],snapshot.data()['longitudeDrone'])): null,
         futureMission = (snapshot.data()['futureMission'] != null)? Mission.fromMap(snapshot.data()['futureMission']): Mission();

@@ -8,12 +8,14 @@ import 'package:flutter_app/models/Intervention.dart';
 import 'package:flutter_app/models/SymbolIntervention.dart';
 import 'package:flutter_app/models/Position.dart';
 import 'package:flutter_app/models/InterestPoint.dart';
+import 'package:flutter_app/models/Mission.dart';
 import 'package:flutter_app/models/MoyenIntervention.dart';
 import 'package:flutter_app/services/AddressService.dart';
 import 'package:flutter_app/services/HydrantService.dart';
 import 'package:flutter_app/services/InterventionService.dart';
 import 'package:flutter_app/services/SelectorMoyenSymbol.dart';
 import 'package:flutter_app/services/SelectorSitac.dart';
+import 'package:flutter_app/services/SelectorIntervention.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
@@ -258,6 +260,35 @@ class MapPageState extends State<MapPage> {
     this.markersDrone.add(dm);
   }
 
+  createMarkerInterestPointsCurrent(LatLng latLng, int num) {
+    DragMarker dm = DragMarker(
+        point: latLng,
+        width: 60.0,
+        height: 60.0,
+        offset: Offset(0.0, 0.0),
+        builder: (ctx) => Container(
+          decoration: new BoxDecoration(
+            color: Colors.red.withOpacity(0.5),
+            shape: BoxShape.circle,
+          ),
+          child: IconButton(
+              icon : Text(
+                "P"+ num.toString(),
+                style: TextStyle(
+                    color: Colors.white
+                ),
+              ),
+              iconSize: 60
+          ),
+        ),
+        onDragEnd: (details,point) {
+          this.setState(() {});
+        }
+    );
+
+    this.markersDrone.add(dm);
+  }
+
   createMarkerDrone(LatLng latLng) {
     DragMarker dm = DragMarker(
       point: latLng,
@@ -363,6 +394,14 @@ class MapPageState extends State<MapPage> {
       if (drone != null && drone.position != null && drone.position.longitude != null && drone.position.latitude != null) {
         LatLng position = LatLng(drone.position.latitude, drone.position.longitude);
         this.createMarkerDrone(position);
+      }
+      if (SelectorIntervention.missionSelected != null && SelectorIntervention.missionSelected.state == StateMission.Running) {
+        Mission mission = SelectorIntervention.missionSelected;
+        for (int i = 0; i<mission.interestPoints.length; i++) {
+          InterestPoint point = mission.interestPoints[i];
+          LatLng position = LatLng(point.position.latitude, point.position.longitude);
+          this.createMarkerInterestPointsCurrent(position, i+1);
+        }
       }
     }
   }

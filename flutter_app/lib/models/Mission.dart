@@ -86,6 +86,7 @@ class Mission {
       'streamVideo': this.streamVideo,
       'state' : this.state.toString(),
       'video' : this.video,
+      'idIntervention' : this.idIntervention
     };
   }
 

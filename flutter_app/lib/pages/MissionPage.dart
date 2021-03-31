@@ -6,6 +6,8 @@ import 'package:flutter_app/models/Position.dart';
 import 'package:flutter_app/pages/MissionPhotosPage.dart';
 import 'package:flutter_app/pages/MissionVideoPage.dart';
 import 'package:flutter_app/services/MissionService.dart';
+import 'package:flutter_app/services/NavigatorPage.dart';
+import 'package:flutter_app/services/SelectorSitac.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter_app/services/SelectorIntervention.dart';
@@ -22,7 +24,7 @@ class MissionPageState extends State<MissionPage> {
   Widget build(BuildContext context) {
     print ('REFRESH MISSION');
     return StreamBuilder<QuerySnapshot> (
-        stream: MissionService.getMissionById(SelectorIntervention.idMissionSelected),
+        stream: MissionService.getMissionById(SelectorIntervention.missionSelected.id),
         builder: (context, snapshot) {
           if (! snapshot.hasData) {
             return CircularProgressIndicator();
@@ -41,7 +43,7 @@ class MissionPageState extends State<MissionPage> {
                     child: this.getTitleWidget(mission),
                   ),
                   Flexible(
-                    flex: 5,
+                    flex: 6,
                     child: Row(
                       children: [
                         Flexible(
@@ -61,7 +63,7 @@ class MissionPageState extends State<MissionPage> {
                           ),
                         ),
                         Flexible(
-                          flex: 1,
+                          flex: 2,
                           child: Center(
                             child: Container(
                               margin: EdgeInsets.only(
@@ -128,14 +130,84 @@ class MissionPageState extends State<MissionPage> {
           ),
           color: Colors.white
       ),
-      child: Center(
-          child: Text(
-            mission.name,
-            style: TextStyle(
-              fontSize: 30,
-              fontStyle: FontStyle.italic,
+      child: Row(
+        children: [
+          Flexible(
+              flex: 2,
+              child: Container(
+                child: Center(
+                  child: Text(
+                    mission.name,
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ),
+              )
+          ),
+          Flexible (
+            flex: 1,
+            child : Container(
+              margin: EdgeInsets.only(
+                right: 15,
+              ),
+              child: FlatButton(
+                  child: Text(
+                      'Suivre sur la carte',
+                      style : TextStyle(color: Colors.white)
+                  ),
+                  onPressed: () {
+                    if (mission.state == StateMission.Running) {
+                      SelectorIntervention.missionSelected = mission;
+                      SelectorSitac.indexTabBar = 6;
+                      NavigatorPage.navigateTo(1);
+                    }
+                  },
+                  color: Colors.blue
+              ),
             ),
-          )
+          ),
+          Flexible (
+            flex: 1,
+            child : Container(
+              margin: EdgeInsets.only(
+                right: 15,
+              ),
+              child: FlatButton(
+                  child: Text(
+                      'Nouvelle Mission',
+                      style : TextStyle(color: Colors.white)
+                  ),
+                  onPressed: () {
+                    SelectorIntervention.missionSelected = null;
+                    SelectorSitac.indexTabBar = 6;
+                    NavigatorPage.navigateTo(1);
+                  },
+                  color: Colors.green
+              ),
+            ),
+          ),
+          Flexible (
+            flex: 1,
+            child : Container(
+              margin: EdgeInsets.only(
+                right: 15,
+              ),
+              child: FlatButton(
+                  child: Text(
+                      'Supprimer la mission',
+                      style : TextStyle(color: Colors.white)
+                  ),
+                  onPressed: () {
+                    SelectorIntervention.missionSelected = null;
+                    MissionService.removeMission(mission);
+                  },
+                  color: Colors.red
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
