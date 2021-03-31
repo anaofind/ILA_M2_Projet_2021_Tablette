@@ -44,6 +44,7 @@ public class DroneFunctions {
         drone.getTelemetry().setRatePosition(1000.0);
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
+                    java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
                     posCourante.setId(idIntervention);
                     posCourante.setLatitude(position.getLatitudeDeg());
                     posCourante.setLongitude(position.getLongitudeDeg());
