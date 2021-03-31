@@ -1,7 +1,7 @@
 package fr.istic.projet.mavlinkapp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.istic.projet.mavlinkapp.model.CurrentPicture
+import fr.istic.projet.mavlinkapp.model.CurrentPicture;
 import fr.istic.projet.mavlinkapp.model.CurrentPosition;
 import fr.istic.projet.mavlinkapp.model.InterestPoint;
 import google_earth_selenium.SeleniumGoogleEarth;
