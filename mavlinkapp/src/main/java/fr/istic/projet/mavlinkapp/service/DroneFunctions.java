@@ -42,11 +42,14 @@ public class DroneFunctions {
                 .andThen(drone.getMission().startMission().doOnComplete(() -> logger.debug("Mission started")))
                 .subscribe();
 
-        drone.getTelemetry().setRatePosition(1000.0);
+        drone.getTelemetry().setRatePosition(1000000.0);
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
+
+                    java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
+
+                    /*
                     CurrentPosition posCourante = new CurrentPosition();
-                    //java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
                     posCourante.setId(idIntervention);
                     posCourante.setLatitude(position.getLatitudeDeg());
                     posCourante.setLongitude(position.getLongitudeDeg());
@@ -55,7 +58,7 @@ public class DroneFunctions {
                     } else {
                         java.lang.System.out.println("echec envoi position courante");
 
-                    }
+                    }*/
                 }
         );
 

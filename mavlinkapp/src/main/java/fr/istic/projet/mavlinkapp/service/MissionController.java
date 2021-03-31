@@ -56,10 +56,11 @@ public class MissionController {
 
         public void run() {
             // code in the other thread, can reference "var" variable
-            try {
+            drone.go(laMission.getIdIntervention(), laMission.getId(), laMission.getInterestPoints());
+
+          /*  try {
                 StateMission debut = new StateMission(laMission.getId(), "StateMission.Running");
                 if(drone.sendEtatToWebservice(debut, "http://148.60.11.47:8080/api/updateMissionState")) {
-                    drone.go(laMission.getIdIntervention(), laMission.getId(), laMission.getInterestPoints());
                     Thread.sleep(500);
                     StateMission fin = new StateMission(laMission.getId(), "StateMission.Ending");
                     if(drone.sendEtatToWebservice(fin, "http://148.60.11.47:8080/api/updateMissionState")) {
@@ -68,10 +69,11 @@ public class MissionController {
                 } else {
                     java.lang.System.out.println("Error");
                 }
-
-            } catch (InterruptedException e) {
+                 } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
+
+
         }
 
 
