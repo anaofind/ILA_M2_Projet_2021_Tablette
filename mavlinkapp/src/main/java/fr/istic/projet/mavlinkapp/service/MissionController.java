@@ -18,7 +18,6 @@ import java.util.List;
 @RequestMapping("/api/mission")
 public class MissionController {
     private final Logger logger = LoggerFactory.getLogger(MissionController.class);
-    List<PositionDrone> points = new ArrayList<PositionDrone>();
     DroneFunctions drone = new DroneFunctions();
 
     MissionDrone laMission = new MissionDrone();
