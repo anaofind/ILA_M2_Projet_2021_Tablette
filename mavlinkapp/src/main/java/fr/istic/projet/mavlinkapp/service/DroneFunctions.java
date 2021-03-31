@@ -52,7 +52,7 @@ public class DroneFunctions {
                 .subscribe(
                 position -> {
 
-                    if (cmp[0] == 1000) {
+                    if (cmp[0] == 150) {
                         java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
                         cmp[0] = 0;
                     } else {
