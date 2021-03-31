@@ -7,6 +7,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -14,10 +21,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 public class SeleniumGoogleEarth {
+    double latitude;
+    double longitude;
 
-    public SeleniumGoogleEarth(){}
+    public SeleniumGoogleEarth(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
-    public byte[] takePic(double latitude, double longitude) throws InterruptedException, IOException {
+    public byte[] takePic() throws InterruptedException, IOException {
         byte[] pic;
         String baseUrl = "https://earth.google.com/web/@"+ latitude +","+longitude+",51.36728919a,193.00421567d,35y,64.91670241h,77.70282258t,0r";
         System.setProperty("webdriver.gecko.driver", "src/main/java/google_earth_selenium/resources/driver/geckodriver");
@@ -77,7 +89,22 @@ public class SeleniumGoogleEarth {
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        SeleniumGoogleEarth sge = new SeleniumGoogleEarth();
-        sge.takePic(48.0,-1.12);
+        SeleniumGoogleEarth sge = new SeleniumGoogleEarth(48.0,-1.12);
+        sge.takePic();
     }
 }
+
+
+/* String jsonRes = "";
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost("http://localhost:8080/api/uploadFile");
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            jsonRes = mapper.writeValueAsString(posCourante);
+            StringEntity se = new StringEntity(jsonRes);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(se);
+            client.execute(post);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
