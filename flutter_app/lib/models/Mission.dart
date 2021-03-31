@@ -84,8 +84,8 @@ class Mission {
       'photos' : this.photos,
       'segment': this.segment,
       'streamVideo': this.streamVideo,
-      'state' : this.state,
-      'video' : this.video
+      'state' : this.state.toString(),
+      'video' : this.video,
     };
   }
 

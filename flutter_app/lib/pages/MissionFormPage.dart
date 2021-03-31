@@ -141,9 +141,11 @@ class MissionFormPageState extends State<MissionFormPage> {
                             this.intervention.futureMission.streamVideo = streamVideo;
                             if (this.intervention.futureMission.interestPoints.isNotEmpty) {
                               String idMission = this.intervention.futureMission.id;
-                              await MissionService.addMission(this.intervention);
-                              SelectorIntervention.idMissionSelected = idMission;
-                              NavigatorPage.navigateTo(3);
+                              bool missionAdded = await MissionService.addMission(this.intervention);
+                              if (missionAdded) {
+                                SelectorIntervention.idMissionSelected = idMission;
+                                NavigatorPage.navigateTo(3);
+                              }
                             }
                           }
                         },

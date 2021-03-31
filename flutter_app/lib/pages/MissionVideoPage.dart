@@ -41,7 +41,7 @@ class MissionVideoPageState extends State<MissionVideoPage> {
   Widget getVideoWidget(Mission mission) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: Colors.black,
         image: DecorationImage(
           image: NetworkImage(
               mission.video

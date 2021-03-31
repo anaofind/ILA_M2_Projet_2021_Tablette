@@ -27,6 +27,11 @@ class MissionPageState extends State<MissionPage> {
           if (! snapshot.hasData) {
             return CircularProgressIndicator();
           }
+          if (snapshot.data.size == 0) {
+            return Center(
+              child: Text('Cette mission est introuvable')
+            );
+          }
           Mission mission = Mission.fromSnapshot(snapshot.data.docs[0]);
           return Scaffold(
               body: Column(
