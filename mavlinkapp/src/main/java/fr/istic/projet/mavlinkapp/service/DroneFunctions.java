@@ -118,6 +118,25 @@ public class DroneFunctions {
         ObjectMapper mapper = new ObjectMapper();
         try {
             jsonRes = mapper.writeValueAsString(toSend);
+            java.lang.System.out.println("---json Photo or StreamVideo : " + jsonRes);
+            StringEntity se = new StringEntity(jsonRes);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(se);
+            client.execute(post);
+            return  true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  false;
+    }
+
+    public boolean sendToWebservice(CurrentPosition toSend, String urlWS) {
+        String jsonRes = "";
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(urlWS);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            jsonRes = mapper.writeValueAsString(toSend);
             java.lang.System.out.println("---jsonPosition : " + jsonRes);
             StringEntity se = new StringEntity(jsonRes);
             se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
@@ -142,11 +161,12 @@ public class DroneFunctions {
             se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             post.setEntity(se);
             client.execute(post);
-            return  true;
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return  false;
+        return false;
+    }
 
       public void sendPic(String idMission, CurrentPosition position) throws IOException, InterruptedException {
         CurrentPosition cp = new CurrentPosition();
