@@ -28,21 +28,11 @@ public class MissionController {
     public MissionDrone sendMissionCoordonates(@Validated @RequestBody MissionDrone mission) {
         laMission = mission;
 
-        java.lang.System.out.println(laMission.getId());
-        java.lang.System.out.println(laMission.getIdIntervention());
-        java.lang.System.out.println(laMission.getInterestPoints().get(0).getLatitude());
-        java.lang.System.out.println(laMission.getInterestPoints().get(0).getLongitude());
-        java.lang.System.out.println(laMission.getInterestPoints().get(1).getLatitude());
-        java.lang.System.out.println(laMission.getInterestPoints().get(1).getLongitude());
-        java.lang.System.out.println(laMission.getInterestPoints().get(2).getLatitude());
-        java.lang.System.out.println(laMission.getInterestPoints().get(2).getLongitude());
-
         MyRunnable myRunnable = new MyRunnable(drone);
         service.submit(myRunnable);
 
         //Thread.sleep(500);
 
-        //send images took by drone in rest's meth to app java which will store image in firebase*/
         return laMission;
     }
 
@@ -61,10 +51,6 @@ public class MissionController {
                 if(drone.sendEtatToWebservice(debut, "http://148.60.11.47:8080/api/updateMissionState")) {
                     drone.go(laMission.getIdIntervention(), laMission.getId(), laMission.getInterestPoints());
                     Thread.sleep(500);
-                    StateMission fin = new StateMission(laMission.getId(), "StateMission.Ending");
-                    if(drone.sendEtatToWebservice(fin, "http://148.60.11.47:8080/api/updateMissionState")) {
-                        java.lang.System.out.println("Mission finished");
-                    }
                 } else {
                     java.lang.System.out.println("Error");
                 }

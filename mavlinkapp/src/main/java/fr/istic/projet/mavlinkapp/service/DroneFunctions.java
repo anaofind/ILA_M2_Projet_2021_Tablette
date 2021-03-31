@@ -67,10 +67,18 @@ public class DroneFunctions {
      
 
         CountDownLatch latch = new CountDownLatch(1);
+
         drone.getMission()
                 .getMissionProgress()
                 .filter(progress -> progress.getCurrent() == progress.getTotal())
-                .subscribe(ignored -> latch.countDown());
+                .subscribe(ignored -> {
+                    drone.getAction().disarm();
+                    StateMission fin = new StateMission(idMission, "StateMission.Ending");
+                    if(sendEtatToWebservice(fin, "http://148.60.11.47:8080/api/updateMissionState")) {
+                        java.lang.System.out.println("Mission finished");
+                    }
+                    latch.countDown();
+                });
         try {
             latch.await();
         } catch (InterruptedException ignored) {
