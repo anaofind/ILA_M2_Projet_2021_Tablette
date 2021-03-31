@@ -27,7 +27,7 @@ public class DroneFunctions {
         drone = new System();
     }
 
-    public void go(String idIntervention, List<InterestPoint> ListPosition) {
+    public void go(String idIntervention, String idMission,List<InterestPoint> ListPosition) {
         List<Mission.MissionItem> missionItems = new ArrayList<>();
         for (InterestPoint pos:
                 ListPosition) {
