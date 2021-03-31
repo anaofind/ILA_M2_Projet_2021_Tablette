@@ -43,8 +43,6 @@ public class DroneFunctions {
                 .andThen(drone.getMission().startMission().doOnComplete(() -> logger.debug("Mission started")))
                 .subscribe();
 
-
-
         int[] cmp = {0};
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
@@ -59,14 +57,10 @@ public class DroneFunctions {
                             java.lang.System.out.println("envoi position courante : ok");
                         } else {
                             java.lang.System.out.println("echec envoi position courante");
-
                         }
                     } else {
                         cmp[0]++;
                     }
-
-
-
                 }
         );
 
