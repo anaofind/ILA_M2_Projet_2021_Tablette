@@ -57,15 +57,15 @@ public class DroneFunctions {
         /*
                 updateDronePosition chaque 1sec sur localhost:8080
                 uploadFile
+        */        
                 drone.getMission().getMissionProgress()
-                .subscribe(onNext -> publishImages(drone, missionmessage, missionItems.get(onNext.getCurrent())));
-        */
+                .subscribe(onNext -> sendPic(idIntervention, posCourante));
+     
 
         CountDownLatch latch = new CountDownLatch(1);
         drone.getMission()
                 .getMissionProgress()
                 .filter(progress -> progress.getCurrent() == progress.getTotal())
-                .take(1)
                 .subscribe(ignored -> latch.countDown());
         try {
             latch.await();
@@ -100,5 +100,15 @@ public class DroneFunctions {
             e.printStackTrace();
         }
         return  false;
+    }
+    
+      public void sendPic(String idIntervention, CurrentPosition position) throws IOException, InterruptedException {
+        CurrentPosition cp = new CurrentPosition();
+        cp.setId(idIntervention);
+        cp.setLatitude(position.getLatitude());
+        cp.setLongitude(position.getLongitude());
+        SeleniumGoogleEarth sge = new SeleniumGoogleEarth(position.getLatitude(),position.getLongitude());
+        CurrentPicture cpp = new CurrentPicture(cp, sge.takePic());
+        sendToWebservice(cpp,"http://148.60.11.47/api/uploadFile");
     }
 }
