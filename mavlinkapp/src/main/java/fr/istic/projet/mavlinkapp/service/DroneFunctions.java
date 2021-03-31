@@ -1,6 +1,7 @@
 package fr.istic.projet.mavlinkapp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.istic.projet.mavlinkapp.google_earth_selenium.SeleniumGoogleEarth;
 import fr.istic.projet.mavlinkapp.model.CurrentPicture;
 import fr.istic.projet.mavlinkapp.model.CurrentPosition;
 import fr.istic.projet.mavlinkapp.model.InterestPoint;
@@ -59,17 +60,27 @@ public class DroneFunctions {
                                        java.lang.System.out.println("echec envoi position courante");
 
                                    }
+                                 sendVid(idMission, posCourante);
                                }
                        );
                }
+
         );
 
         /*
                 updateDronePosition chaque 1sec sur localhost:8080
                 uploadFile
-        */
-     
 
+               /* drone.getMission().getMissionProgress()
+                .subscribe(onNext ->
+                {
+                    InterestPoint ipt = ListPosition.get(onNext.getCurrent());
+                    if(ipt.isPhoto()){
+                        sendPic(idMission, posCourante);
+                    }
+                }
+                );*/
+        
         CountDownLatch latch = new CountDownLatch(1);
 
         drone.getMission()
@@ -136,5 +147,24 @@ public class DroneFunctions {
             e.printStackTrace();
         }
         return  false;
+
+      public void sendPic(String idMission, CurrentPosition position) throws IOException, InterruptedException {
+        CurrentPosition cp = new CurrentPosition();
+        cp.setId(idMission);
+        cp.setLatitude(position.getLatitude());
+        cp.setLongitude(position.getLongitude());
+        SeleniumGoogleEarth sge = new SeleniumGoogleEarth(position.getLatitude(),position.getLongitude());
+        CurrentPicture cpp = new CurrentPicture(cp, sge.takePic());
+        sendToWebservice(cpp,"http://148.60.11.47:8080/api/uploadFile");
+    }
+    
+     public void sendVid(String idMission, CurrentPosition position) throws IOException, InterruptedException {
+        CurrentPosition cp = new CurrentPosition();
+        cp.setId(idMission);
+        cp.setLatitude(position.getLatitude());
+        cp.setLongitude(position.getLongitude());
+        SeleniumGoogleEarth sge = new SeleniumGoogleEarth(position.getLatitude(),position.getLongitude());
+        CurrentPicture cpp = new CurrentPicture(cp, sge.takePic());
+        sendToWebservice(cpp,"http://148.60.11.47:8080/api/streamVideo");
     }
 }
