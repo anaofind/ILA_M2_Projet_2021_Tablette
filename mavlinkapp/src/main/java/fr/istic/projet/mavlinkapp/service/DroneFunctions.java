@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DroneFunctions {
     public System drone;
@@ -46,11 +47,17 @@ public class DroneFunctions {
                 () -> java.lang.System.out.println("rate")
         );
 
+        int[] cmp = {0};
         drone.getTelemetry().getPosition()
                 .subscribe(
                 position -> {
 
-                    java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
+                    if (cmp[0] == 1000) {
+                        java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
+                        cmp[0] = 0;
+                    } else {
+                        cmp[0]++;
+                    }
 
                     /*
                     CurrentPosition posCourante = new CurrentPosition();
