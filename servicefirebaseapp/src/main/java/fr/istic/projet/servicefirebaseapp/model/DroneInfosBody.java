@@ -13,6 +13,7 @@ public class DroneInfosBody {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		
+		
 	}
 	public double getLatitude() {
 		return latitude;
@@ -29,4 +30,5 @@ public class DroneInfosBody {
 	public String getId() {
 		return id;
 	}
+
 }

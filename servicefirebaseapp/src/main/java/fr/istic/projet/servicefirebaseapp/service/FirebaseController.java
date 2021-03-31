@@ -36,15 +36,24 @@ public class FirebaseController {
     
     @PostMapping("/uploadFile")
 	  public ResponseEntity<FileDTO> uploadFile(@Validated @RequestBody MissionBody missionInfos) throws Exception {
-	  log.info("REST request to upload file");
+	  log.info("REST request to upload file image");
       //upload file
-      FileDTO fileDTO = firebaseService.uploadFile(missionInfos.getId(), 
-    		  missionInfos.getLatitude(), missionInfos.getLongitude(), missionInfos.getBytes());
+      FileDTO fileDTO = firebaseService.uploadFileFromBytes(missionInfos.getId(), 
+    		  missionInfos.getLatitude(), missionInfos.getLongitude(), missionInfos.getBytes(), "images");
       return new ResponseEntity<>(fileDTO, null, HttpStatus.OK);
   }
     
+    @PostMapping("/streamVideo")
+	  public ResponseEntity<FileDTO> streamVideo(@Validated @RequestBody MissionBody missionInfos) throws Exception {
+	  log.info("REST request to upload file video");
+    //upload file
+    FileDTO fileDTO = firebaseService.uploadFileFromBytes(missionInfos.getId(), 
+  		  missionInfos.getLatitude(), missionInfos.getLongitude(), missionInfos.getBytes(), "videos");
+    return new ResponseEntity<>(fileDTO, null, HttpStatus.OK);
+}
+    
     @PostMapping("/updateDronePosition")
-	  public ResponseEntity<DroneInfosBody> updateDronePosition(@Validated @RequestBody DroneInfosBody droneInfos) throws Exception {
+	  public ResponseEntity<DroneInfosBody> updateDronePositionIntervention(@Validated @RequestBody DroneInfosBody droneInfos) throws Exception {
 	  log.info("REST request to update drone position");
      firebaseService.updateDronePositionIntervention(droneInfos.getId(), 
     		droneInfos.getLatitude(), droneInfos.getLongitude());

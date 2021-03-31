@@ -145,9 +145,9 @@ public class FirebaseService  {
     	String APIkey ="AIzaSyC35Y9W5C8Kmt09UsGOzp4nPucaJFraXIM";
     	String basePath = "https://maps.googleapis.com/maps/api/streetview?";
     	String size = "465";
-    	String heading = "30";
+    	String heading = "90";
     	String fov = "120";
-    	String pitch = "-60";
+    	String pitch = "-65";
     	String source = "outdoor";
     	
     	Map<String, String> parameters = new HashMap<>();
@@ -195,8 +195,55 @@ public class FirebaseService  {
     	}
     }
     
-    public FileDTO uploadFile(String idMission, double latitude, double longitude, byte[] bytes) throws IOException, InterruptedException, ExecutionException {
-    	//byte[] bytes = getImageForPosition(latitude, longitude); 
+
+    public void addUrlVideoMission(String idMission, String urlPhoto) throws InterruptedException, ExecutionException {
+    	MissionInfos missionInfos = getMissionById(idMission);
+    	CollectionReference missions = this.database.collection("missions");
+    	Mission mission = missionInfos.getMission();
+    	String idDocumentMission = missionInfos.getIdDocMission();
+    	if(mission!=null && idDocumentMission !=null) {
+    	mission.setVideo(urlPhoto);
+    	ApiFuture<WriteResult> futureUpdate = missions.document(idDocumentMission)
+    			.set(mission);
+		log.info("Update video mission");
+    	}
+    }
+    
+    public FileDTO uploadFileFromBytes(String idMission, double latitude, double longitude, byte[] bytes, String imagesOrVideos) throws IOException, InterruptedException, ExecutionException {
+    	String url ="";
+    	String nomPhoto= RandomStringUtils.randomAlphabetic(8)+".png";
+        String objectName = imagesOrVideos+"/"+idMission+"/"+nomPhoto;
+
+        Storage storage = storageOptions.getService();
+
+        BlobId blobId = BlobId.of(bucketName, objectName);
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("image/png")
+        		.build();
+        Blob blob = storage.create(blobInfo, bytes);
+        
+        log.info("File uploaded to bucket " + bucketName + " as " + objectName);
+        String token = generateToken();
+         //modifier la métadata après l'ajout du file
+        setObjectMetadata(blob, latitude, longitude, token);
+        
+        url="https://firebasestorage.googleapis.com/v0/b/projet-istic-ila.appspot.com/o/"+imagesOrVideos+"%2F"+
+        idMission+"%2F"+nomPhoto+
+        "?alt=media&token="+token;
+        if(imagesOrVideos.equals("images"))
+        {addUrlPhotoMission(idMission, url);}
+        else {addUrlVideoMission(idMission, url);}
+        
+        //update dans firestore lastUpdateStorageMission pour la mission
+        //updatelastUpdateStorageMission(idMission);
+        
+        FileDTO fileDTO =  new FileDTO(objectName, blob.getContentType(), url);
+        log.info(fileDTO.toString());
+        return fileDTO;
+
+    }
+    
+    public FileDTO uploadFileToImages(String idMission, double latitude, double longitude) throws IOException, InterruptedException, ExecutionException {
+    	byte[] bytes = getImageForPosition(latitude, longitude); 
     	String url ="";
         String nomPhoto= RandomStringUtils.randomAlphabetic(8)+".png";
         String objectName = "images/"+idMission+"/"+nomPhoto;
@@ -218,6 +265,39 @@ public class FirebaseService  {
         idMission+"%2F"+nomPhoto+
         "?alt=media&token="+token;
         addUrlPhotoMission(idMission, url);
+        
+        //update dans firestore lastUpdateStorageMission pour la mission
+        //updatelastUpdateStorageMission(idMission);
+        
+        FileDTO fileDTO =  new FileDTO(objectName, blob.getContentType(), url);
+        log.info(fileDTO.toString());
+        return fileDTO;
+
+    }
+    
+    public FileDTO uploadFileToVideos(String idMission, double latitude, double longitude) throws IOException, InterruptedException, ExecutionException {
+    	byte[] bytes = getImageForPosition(latitude, longitude); 
+    	String url ="";
+        String nomPhoto= RandomStringUtils.randomAlphabetic(8)+".png";
+        String objectName = "videos/"+idMission+"/"+nomPhoto;
+
+        Storage storage = storageOptions.getService();
+
+        BlobId blobId = BlobId.of(bucketName, objectName);
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("image/png")
+        		.build();
+        Blob blob = storage.create(blobInfo, bytes);
+        
+        log.info("File uploaded to bucket " + bucketName + " as " + objectName);
+        String token = generateToken();
+         //modifier la métadata après l'ajout du file
+        setObjectMetadata(blob, latitude, longitude, token);
+        
+        log.info("after setting metadata");
+        url="https://firebasestorage.googleapis.com/v0/b/projet-istic-ila.appspot.com/o/videos%2F"+
+        idMission+"%2F"+nomPhoto+
+        "?alt=media&token="+token;
+        addUrlVideoMission(idMission, url);
         
         //update dans firestore lastUpdateStorageMission pour la mission
         //updatelastUpdateStorageMission(idMission);

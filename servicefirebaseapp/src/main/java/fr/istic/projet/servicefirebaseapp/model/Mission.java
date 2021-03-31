@@ -17,12 +17,13 @@ public class Mission {
     boolean segment = true;
     boolean streamVideo = false;
     String state;
+    String idIntervention;
     
     public Mission(){};
     
  
     public Mission(String id, String name, List<InterestPoint> interestPoints, List<HashMap<String, String>> photos, 
-    		String video, boolean segment, boolean streamVideo, String state) {
+    		String video, boolean segment, boolean streamVideo, String state, String idIntervention) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -32,6 +33,7 @@ public class Mission {
 		this.segment = segment;
 		this.streamVideo = streamVideo;
 		this.state = state;
+		this.idIntervention = idIntervention;
 	}
 
 	public String getId() {
@@ -50,7 +52,17 @@ public class Mission {
         this.name = name;
     }
 
-    public List<InterestPoint> getInterestPoints() {
+    public String getIdIntervention() {
+		return idIntervention;
+	}
+
+
+	public void setIdIntervention(String idIntervention) {
+		this.idIntervention = idIntervention;
+	}
+
+
+	public List<InterestPoint> getInterestPoints() {
         return interestPoints;
     }
 
