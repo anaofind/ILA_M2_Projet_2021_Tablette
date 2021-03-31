@@ -1,5 +1,3 @@
-package google_earth_selenium;
-
 //import
 import java.io.ByteArrayOutputStream;
 import java.io.File;
