@@ -52,7 +52,7 @@ public class DroneFunctions {
                     posCourante.setLatitude(position.getLatitudeDeg());
                     posCourante.setLongitude(position.getLongitudeDeg());
                     String jsonRes = "";
-                    sendToWebservice(posCourante, "http://148.60.11.47/api/mission");
+                    //sendToWebservice(posCourante, "http://148.60.11.47/api/mission");
                     sendVid(idMission, posCourante);
                 }
         );
@@ -119,7 +119,7 @@ public class DroneFunctions {
         cp.setLongitude(position.getLongitude());
         SeleniumGoogleEarth sge = new SeleniumGoogleEarth(position.getLatitude(),position.getLongitude());
         CurrentPicture cpp = new CurrentPicture(cp, sge.takePic());
-        sendToWebservice(cpp,"http://148.60.11.47/api/uploadFile");
+        sendToWebservice(cpp,"http://148.60.11.47:8080/api/uploadFile");
     }
     
      public void sendVid(String idMission, CurrentPosition position) throws IOException, InterruptedException {
@@ -129,6 +129,6 @@ public class DroneFunctions {
         cp.setLongitude(position.getLongitude());
         SeleniumGoogleEarth sge = new SeleniumGoogleEarth(position.getLatitude(),position.getLongitude());
         CurrentPicture cpp = new CurrentPicture(cp, sge.takePic());
-        sendToWebservice(cpp,"http://148.60.11.47/api/streamVideo");
+        sendToWebservice(cpp,"http://148.60.11.47:8080/api/streamVideo");
     }
 }
