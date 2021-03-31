@@ -219,9 +219,9 @@ class InterventionService {
   }
   */
 
-  void updateIntervention(Intervention intervention) {
+  Future<void> updateIntervention(Intervention intervention) async{
     DocumentReference reference = interventions.doc(intervention.id);
-    reference.set(intervention.toMap());
+    await reference.set(intervention.toMap());
   }
 
   Stream<DocumentSnapshot> getInterventionById(String id) {

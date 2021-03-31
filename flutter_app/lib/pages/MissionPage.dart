@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/models/Mission.dart';
 import 'package:flutter_app/models/Position.dart';
 import 'package:flutter_app/pages/MissionPhotosPage.dart';
+import 'package:flutter_app/pages/MissionVideoPage.dart';
 import 'package:flutter_app/services/MissionService.dart';
 import 'package:intl/intl.dart';
 
@@ -25,6 +26,11 @@ class MissionPageState extends State<MissionPage> {
         builder: (context, snapshot) {
           if (! snapshot.hasData) {
             return CircularProgressIndicator();
+          }
+          if (snapshot.data.size == 0) {
+            return Center(
+              child: Text('Cette mission est introuvable')
+            );
           }
           Mission mission = Mission.fromSnapshot(snapshot.data.docs[0]);
           return Scaffold(
@@ -164,7 +170,9 @@ class MissionPageState extends State<MissionPage> {
                     color: Colors.black,
                     width: 1,
                   ),
-                  color: Colors.black
+              ),
+              child: FractionallySizedBox(
+                  child: MissionVideoPage()
               ),
             )
         ),
