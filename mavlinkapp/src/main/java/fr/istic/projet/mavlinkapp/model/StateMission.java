@@ -2,21 +2,19 @@ package fr.istic.projet.mavlinkapp.model;
 
 public class StateMission {
     private String idMission;
+    private String state;
 
     public StateMission(String ident, String valEtat) {
         this.idMission = ident;
-        this.etat = valEtat;
+        this.state = valEtat;
     }
-    public String getEtat() {
-        return etat;
-    }
-
-    public void setEtat(String etat) {
-        this.etat = etat;
+    public String getState() {
+        return state;
     }
 
-    private String etat;
-
+    public void setState(String etat) {
+        this.state = etat;
+    }
     public String getIdMission() {
         return idMission;
     }

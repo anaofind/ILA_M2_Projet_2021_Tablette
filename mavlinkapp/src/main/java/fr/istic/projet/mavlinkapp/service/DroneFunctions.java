@@ -5,6 +5,7 @@ import fr.istic.projet.mavlinkapp.google_earth_selenium.SeleniumGoogleEarth;
 import fr.istic.projet.mavlinkapp.model.CurrentPicture;
 import fr.istic.projet.mavlinkapp.model.CurrentPosition;
 import fr.istic.projet.mavlinkapp.model.InterestPoint;
+import fr.istic.projet.mavlinkapp.model.StateMission;
 import io.mavsdk.System;
 import io.mavsdk.mission.Mission;
 import org.apache.http.client.HttpClient;
@@ -23,7 +24,6 @@ import java.util.concurrent.CountDownLatch;
 
 public class DroneFunctions {
     public System drone;
-    private CurrentPosition posCourante = new CurrentPosition();
     private static final Logger logger = LoggerFactory.getLogger(DroneFunctions.class);
     public DroneFunctions(){
         drone = new System();
@@ -44,24 +44,33 @@ public class DroneFunctions {
                 .andThen(drone.getMission().startMission().doOnComplete(() -> logger.debug("Mission started")))
                 .subscribe();
 
-        drone.getTelemetry().setRatePosition(1000.0);
-        drone.getTelemetry().getPosition().subscribe(
-                position -> {
-                    java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
-                    posCourante.setId(idIntervention);
-                    posCourante.setLatitude(position.getLatitudeDeg());
-                    posCourante.setLongitude(position.getLongitudeDeg());
-                    String jsonRes = "";
-                    //sendToWebservice(posCourante, "http://148.60.11.47/api/mission");
-                    sendVid(idMission, posCourante);
-                }
+        drone.getMission().getMissionProgress().subscribe(
+               param -> {
+                       drone.getTelemetry().setRatePosition(1000000.0).subscribe();
+                       drone.getTelemetry().getPosition().subscribe(
+                               position -> {
+                                   CurrentPosition posCourante = new CurrentPosition();
+                                   //java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
+                                   posCourante.setId(idIntervention);
+                                   posCourante.setLatitude(position.getLatitudeDeg());
+                                   posCourante.setLongitude(position.getLongitudeDeg());
+                                   if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
+                                       java.lang.System.out.println("envoi position courante : ok");
+                                   } else {
+                                       java.lang.System.out.println("echec envoi position courante");
+
+                                   }
+                                 sendVid(idMission, posCourante);
+                               }
+                       );
+               }
+
         );
 
         /*
                 updateDronePosition chaque 1sec sur localhost:8080
                 uploadFile
-        */        
-   
+
                /* drone.getMission().getMissionProgress()
                 .subscribe(onNext ->
                 {
@@ -73,10 +82,18 @@ public class DroneFunctions {
                 );*/
         
         CountDownLatch latch = new CountDownLatch(1);
+
         drone.getMission()
                 .getMissionProgress()
                 .filter(progress -> progress.getCurrent() == progress.getTotal())
-                .subscribe(ignored -> latch.countDown());
+                .subscribe(ignored -> {
+                    drone.getAction().disarm().subscribe();
+                    StateMission fin = new StateMission(idMission, "StateMission.Ending");
+                    if(sendEtatToWebservice(fin, "http://148.60.11.47:8080/api/updateMissionState")) {
+                        java.lang.System.out.println("Mission finished");
+                    }
+                    latch.countDown();
+                });
         try {
             latch.await();
         } catch (InterruptedException ignored) {
@@ -94,13 +111,14 @@ public class DroneFunctions {
         drone.getMission().clearMission();
     }
 
-    public boolean sendToWebservice(Object toSend, String urlWS) {
+    public boolean sendPostitionToWebservice(CurrentPosition toSend, String urlWS) {
         String jsonRes = "";
         HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(urlWS);
         ObjectMapper mapper = new ObjectMapper();
         try {
             jsonRes = mapper.writeValueAsString(toSend);
+            java.lang.System.out.println("---jsonPosition : " + jsonRes);
             StringEntity se = new StringEntity(jsonRes);
             se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             post.setEntity(se);
@@ -111,7 +129,25 @@ public class DroneFunctions {
         }
         return  false;
     }
-    
+
+    public boolean sendEtatToWebservice(StateMission toSend, String urlWS) {
+        String jsonRes = "";
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(urlWS);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            jsonRes = mapper.writeValueAsString(toSend);
+            StringEntity se = new StringEntity(jsonRes);
+            java.lang.System.out.println("---jsonEtat : " + jsonRes);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(se);
+            client.execute(post);
+            return  true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  false;
+
       public void sendPic(String idMission, CurrentPosition position) throws IOException, InterruptedException {
         CurrentPosition cp = new CurrentPosition();
         cp.setId(idMission);

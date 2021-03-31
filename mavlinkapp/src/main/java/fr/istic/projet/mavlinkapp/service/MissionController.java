@@ -12,8 +12,6 @@ import io.mavsdk.mission.Mission.MissionItem;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,8 +26,6 @@ public class MissionController {
 
     @PostMapping
     public MissionDrone sendMissionCoordonates(@Validated @RequestBody MissionDrone mission) {
-        java.lang.System.out.println("submit ip");
-
         laMission = mission;
 
         MyRunnable myRunnable = new MyRunnable(drone);
@@ -37,7 +33,6 @@ public class MissionController {
 
         //Thread.sleep(500);
 
-        //send images took by drone in rest's meth to app java which will store image in firebase*/
         return laMission;
     }
 
@@ -53,11 +48,13 @@ public class MissionController {
             // code in the other thread, can reference "var" variable
             try {
                 StateMission debut = new StateMission(laMission.getId(), "StateMission.Running");
-                drone.sendToWebservice(debut, "http://148.60.11.47:8080/api/updateMissionState");
-                drone.go(laMission.getIdIntervention(), laMission.getId(),laMission.getInterestPoints());
-                Thread.sleep(500);
-                StateMission fin = new StateMission(laMission.getId(), "StateMission.Ending");
-                drone.sendToWebservice(fin, "http://148.60.11.47:8080/api/updateMissionState");
+                if(drone.sendEtatToWebservice(debut, "http://148.60.11.47:8080/api/updateMissionState")) {
+                    drone.go(laMission.getIdIntervention(), laMission.getId(), laMission.getInterestPoints());
+                    Thread.sleep(500);
+                } else {
+                    java.lang.System.out.println("Error");
+                }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
