@@ -50,7 +50,7 @@ public class MissionController {
 
     @PostMapping("/cancel")
     public ResponseEntity<StateMission> updateMissionState() throws Exception {
-        logger.info("REST request to update mission state");
+        logger.info("REST request to cancel Mission");
         drone.Cancel();
         return new ResponseEntity<>(null, null, HttpStatus.OK);
     }

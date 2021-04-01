@@ -161,12 +161,11 @@ public class DroneFunctions {
     }
 
     public void Cancel(){
-        java.lang.System.out.println("CANCEL");
         drone.getAction().returnToLaunch().subscribe();
         drone.getMission().cancelMissionDownload().subscribe();
         drone.getMission().cancelMissionUpload().subscribe();
         drone.getMission().clearMission().subscribe();
-
+        java.lang.System.out.println("CANCEL");
     }
 
     public boolean sendPostitionToWebservice(CurrentPosition toSend, String urlWS) {
