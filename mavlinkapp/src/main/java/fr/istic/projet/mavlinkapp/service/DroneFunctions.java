@@ -43,7 +43,7 @@ public class DroneFunctions {
                 .andThen(drone.getMission().startMission().doOnComplete(() -> logger.debug("Mission started")))
                 .subscribe();
 
-        int[] cmp = {0};
+        int[] cmp = {0, 0};
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
                     if (cmp[0] == 150) {
@@ -55,6 +55,10 @@ public class DroneFunctions {
                         posCourante.setLongitude(position.getLongitudeDeg());
                         if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
                             java.lang.System.out.println("envoi position courante : ok");
+                            if(ListPosition.get(cmp[1]).getLatitude() == position.getLatitudeDeg() && ListPosition.get(cmp[1]).getLongitude()==position.getLongitudeDeg()) {
+                                sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/uploadFile");
+                                cmp[1]++;
+                            }
                         } else {
                             java.lang.System.out.println("echec envoi position courante");
                         }
