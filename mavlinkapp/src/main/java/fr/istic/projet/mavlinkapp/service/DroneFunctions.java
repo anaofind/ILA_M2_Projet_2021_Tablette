@@ -61,6 +61,7 @@ public class DroneFunctions {
 
                     if (((currT.get() - epochPicture))>=1) {
                         epochPicture = currT.get();
+                        java.lang.System.out.println("CACAKKCAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT.get() -epochPicture)));
 
                         java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
                         CurrentPosition posCourante = new CurrentPosition();
