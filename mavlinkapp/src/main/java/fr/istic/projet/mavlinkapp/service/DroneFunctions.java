@@ -36,7 +36,7 @@ public class DroneFunctions {
         drone = new System();
     }
 
-    public void go(String idIntervention, String idMission,List<InterestPoint> ListPosition) {
+    public void go(String idIntervention, String idMission,List<InterestPoint> ListPosition) throws IOException {
 
         List<Mission.MissionItem> missionItems = new ArrayList<>();
         for (InterestPoint pos:
@@ -55,11 +55,8 @@ public class DroneFunctions {
 
         currT = Instant.now().getEpochSecond();
 
-        //drone.getMission()
-        //      .getMissionProgress()
-        //    .filter(progress -> progress.getCurrent() != progress.getTotal())
-        //  .subscribe(
-        //        progress -> {
+
+        int[] cmp = new int[0];
         drone.getTelemetry().getPosition()
                 .subscribe(
                         position -> {
@@ -79,13 +76,24 @@ public class DroneFunctions {
                                 if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
                                     java.lang.System.out.println("envoi position courante : ok");
 
+
+                                    if(ListPosition.get(cmp[1]).getLatitude() == position.getLatitudeDeg() && ListPosition.get(cmp[1]).getLongitude()==position.getLongitudeDeg()) {
+                                        CurrentPicture picture  = new CurrentPicture();
+                                        picture.setId(idIntervention);
+                                        picture.setLatitude(position.getLatitudeDeg());
+                                        picture.setLongitude(position.getLongitudeDeg());
+                                        picture.setBytes(null);
+                                        sendPic(picture, "http://148.60.11.47:8080/api/uploadFile");
+                                        cmp[1]++;
+                                    }
+
                                     CurrentPicture cpic = new CurrentPicture();
                                     cpic.setId(idMission);
                                     cpic.setLatitude(position.getLatitudeDeg());
                                     cpic.setLongitude(position.getLongitudeDeg());
                                     cpic.setBytes(new byte[100]);
                                     //  cpic.setAltitude(position.getAbsoluteAltitudeM());
-                                    if(sendPic(cpic,"http://148.60.11.47:8080/api/uploadFile")){
+                                    if(sendPic(cpic,"http://148.60.11.47:8080/api/streamVideo")){
                                         java.lang.System.out.println("envoi Picture : ok");
                                     }
                                 } else {
