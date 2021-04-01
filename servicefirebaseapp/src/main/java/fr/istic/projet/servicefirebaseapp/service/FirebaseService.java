@@ -76,8 +76,8 @@ public class FirebaseService  {
 
     @PostConstruct
     private void initializeFirebase() throws Exception {
-        bucketName = "projet-istic-ila.appspot.com";
-        projectId = "projet-istic-ila";
+        bucketName = "projet-ila-2.appspot.com";
+        projectId = "projet-ila-2";
         String serviceAccountKeyfile = "serviceAccountKey.json";
         String pathServiceAccountKeyFile="";
         ClassLoader classLoader = getClass().getClassLoader();
@@ -241,7 +241,7 @@ public class FirebaseService  {
          //modifier la métadata après l'ajout du file
         setObjectMetadata(blob, latitude, longitude, token);
         
-        url="https://firebasestorage.googleapis.com/v0/b/projet-istic-ila.appspot.com/o/"+imagesOrVideos+"%2F"+
+        url="https://firebasestorage.googleapis.com/v0/b/projet-ila-2.appspot.com/o/"+imagesOrVideos+"%2F"+
         idMission+"%2F"+nomPhoto+
         "?alt=media&token="+token;
         if(imagesOrVideos.equals("images"))
@@ -276,7 +276,7 @@ public class FirebaseService  {
         setObjectMetadata(blob, latitude, longitude, token);
         
         log.info("after setting metadata");
-        url="https://firebasestorage.googleapis.com/v0/b/projet-istic-ila.appspot.com/o/images%2F"+
+        url="https://firebasestorage.googleapis.com/v0/b/projet-ila-2.appspot.com/o/images%2F"+
         idMission+"%2F"+nomPhoto+
         "?alt=media&token="+token;
         addUrlPhotoMission(idMission, url);
@@ -309,7 +309,7 @@ public class FirebaseService  {
         setObjectMetadata(blob, latitude, longitude, token);
         
         log.info("after setting metadata");
-        url="https://firebasestorage.googleapis.com/v0/b/projet-istic-ila.appspot.com/o/videos%2F"+
+        url="https://firebasestorage.googleapis.com/v0/b/projet-ila-2.appspot.com/o/videos%2F"+
         idMission+"%2F"+nomPhoto+
         "?alt=media&token="+token;
         addUrlVideoMission(idMission, url);
