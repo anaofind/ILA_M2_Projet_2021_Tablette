@@ -78,7 +78,7 @@ public class MissionController {
                 } else {
                     java.lang.System.out.println("Error");
                 }
-                 } catch (InterruptedException e) {
+                 } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             }
 
