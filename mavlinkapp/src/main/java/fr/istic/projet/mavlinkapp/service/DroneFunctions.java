@@ -31,6 +31,7 @@ public class DroneFunctions {
     public System drone;
     private static final Logger logger = LoggerFactory.getLogger(DroneFunctions.class);
     private static long epochPicture = Instant.now().getEpochSecond();
+    private static long currT = Instant.now().getEpochSecond();
 
     public DroneFunctions(){
         drone = new System();
@@ -53,15 +54,16 @@ public class DroneFunctions {
                 .subscribe();
 
 
-        AtomicLong currT = new AtomicLong(Instant.now().getEpochSecond());
+        currT = Instant.now().getEpochSecond();
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
-                    currT.set(Instant.now().getEpochSecond());
-                    java.lang.System.out.println("BAHABAHABAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT.get() -epochPicture)));
+                    currT = Instant.now().getEpochSecond();
 
-                    if (((currT.get() - epochPicture))>=1) {
-                        epochPicture = currT.get();
-                        java.lang.System.out.println("CACAKKCAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT.get() -epochPicture)));
+                    java.lang.System.out.println("BAHABAHABAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
+
+                    if (((currT - epochPicture))>=1) {
+                        epochPicture = currT;
+                        java.lang.System.out.println("CACAKKCAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
 
                         java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
                         CurrentPosition posCourante = new CurrentPosition();
@@ -83,7 +85,7 @@ public class DroneFunctions {
                             java.lang.System.out.println("echec envoi Picture : nok");
                         }
                     } else {
-                        java.lang.System.out.println("AHAHAHAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT.get() -epochPicture)));
+                        java.lang.System.out.println("AHAHAHAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
                     }
                 }
         );
@@ -127,6 +129,7 @@ public class DroneFunctions {
         con.setDoOutput(true);
 
         int status = con.getResponseCode();
+        java.lang.System.out.println("SEND PIC!!!!");
         return  true;
     }
 
