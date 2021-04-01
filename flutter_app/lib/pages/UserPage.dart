@@ -100,7 +100,6 @@ class UserPageState extends State<UserPage> {
                                 Flexible(
                                   flex: 1,
                                   child: Container(
-                                    color: Colors.white,
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
