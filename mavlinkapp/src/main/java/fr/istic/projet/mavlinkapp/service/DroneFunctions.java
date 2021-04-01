@@ -126,7 +126,7 @@ public class DroneFunctions {
         con.setDoOutput(true);
 
         int status = con.getResponseCode();
-        return  false;
+        return  true;
     }
 
 
