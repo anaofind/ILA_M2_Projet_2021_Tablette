@@ -74,9 +74,9 @@ class MissionFormPageState extends State<MissionFormPage> {
                           ),
                           Checkbox(
                             value: this.intervention.futureMission.streamVideo,
-                            onChanged: (value) {
+                            onChanged: (value) async{
                               this.intervention.futureMission.streamVideo = value;
-                              this.interventionService.updateIntervention(intervention);
+                              await this.interventionService.updateIntervention(intervention);
                             },
                           ),
                         ],
@@ -98,16 +98,13 @@ class MissionFormPageState extends State<MissionFormPage> {
                             return 'Veillez saisir le nom de la mission';
                           }
                         },
-                        onChanged: (value) {
+                        onFieldSubmitted: (value) async{
                           intervention.futureMission.name = value;
+                          await this.interventionService.updateIntervention(intervention);
                         },
-                        onFieldSubmitted: (value) {
+                        onSaved: (value) async{
                           intervention.futureMission.name = value;
-                          this.interventionService.updateIntervention(intervention);
-                        },
-                        onSaved: (value) {
-                          intervention.futureMission.name = value;
-                          this.interventionService.updateIntervention(intervention);
+                          await this.interventionService.updateIntervention(intervention);
                         },
                       ),
                       Row(
@@ -116,10 +113,10 @@ class MissionFormPageState extends State<MissionFormPage> {
                             Text("Segment"),
                             Switch(
                               value: ! this.intervention.futureMission.segment,
-                              onChanged: (value) {
+                              onChanged: (value) async{
                                 this.intervention.futureMission.segment = ! value;
                                 print (this.intervention.futureMission.segment);
-                                this.interventionService.updateIntervention(intervention);
+                                await this.interventionService.updateIntervention(intervention);
                               },
                               inactiveTrackColor:
                               Colors.lightGreenAccent,
@@ -155,9 +152,9 @@ class MissionFormPageState extends State<MissionFormPage> {
                         child: Text('Annuler', style: TextStyle(fontSize: 20.0),),
                         color: Colors.redAccent,
                         textColor: Colors.white,
-                        onPressed: () {
+                        onPressed: () async{
                           this.intervention.futureMission = Mission();
-                          InterventionService().updateIntervention(this.intervention);
+                          await this.interventionService.updateIntervention(this.intervention);
                         },
                       ),
                     ]),

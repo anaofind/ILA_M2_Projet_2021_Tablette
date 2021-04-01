@@ -17,7 +17,7 @@ class Mission {
 
   Mission({this.idIntervention, this.name, this.interestPoints, this.segment, this.streamVideo}):id = Uuid().v4() {
     if (this.name == null) {
-      this.name = this.id;
+      this.name = '';
     }
     if (this.interestPoints == null) {
       this.interestPoints = [];
