@@ -17,19 +17,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class DroneFunctions {
     public System drone;
     private static final Logger logger = LoggerFactory.getLogger(DroneFunctions.class);
+    private static long epochPicture = Instant.now().getEpochSecond();
+
     public DroneFunctions(){
         drone = new System();
     }
 
     public void go(String idIntervention, String idMission,List<InterestPoint> ListPosition) {
+
         List<Mission.MissionItem> missionItems = new ArrayList<>();
         for (InterestPoint pos:
                 ListPosition) {
@@ -44,12 +47,13 @@ public class DroneFunctions {
                 .andThen(drone.getMission().startMission().doOnComplete(() -> logger.debug("Mission started")))
                 .subscribe();
 
-        int[] cmp = {0};
+
+        long currT = Instant.now().getEpochSecond();
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
-                    if (cmp[0] == 2) {
+                    if (((currT-epochPicture)/1000)>=1) {
+                        epochPicture = currT;
                         java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
-                        cmp[0] = 0;
                         CurrentPosition posCourante = new CurrentPosition();
                         posCourante.setId(idIntervention);
                         posCourante.setLatitude(position.getLatitudeDeg());
@@ -68,7 +72,7 @@ public class DroneFunctions {
                             java.lang.System.out.println("echec envoi Picture : nok");
                         }
                     } else {
-                        cmp[0]++;
+
                     }
                 }
         );
