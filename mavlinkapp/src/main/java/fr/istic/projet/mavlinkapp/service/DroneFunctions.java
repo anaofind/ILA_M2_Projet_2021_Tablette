@@ -54,7 +54,13 @@ public class DroneFunctions {
 
 
         currT = Instant.now().getEpochSecond();
-        drone.getTelemetry().getPosition().subscribe(
+
+        drone.getMission()
+                .getMissionProgress()
+                .filter(progress -> progress.getCurrent() == progress.getTotal())
+                .subscribe(
+                        onNext -> {
+    drone.getTelemetry().getPosition().subscribe(
                 position -> {
                     currT = Instant.now().getEpochSecond();
 
@@ -88,6 +94,7 @@ public class DroneFunctions {
                         java.lang.System.out.println("AHAHAHAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
                     }*/
                 }
+        );}
         );
 
         /*
