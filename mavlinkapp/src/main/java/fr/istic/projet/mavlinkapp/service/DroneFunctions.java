@@ -59,8 +59,10 @@ public class DroneFunctions {
                 .getMissionProgress()
                 .filter(progress -> progress.getCurrent() != progress.getTotal())
                 .subscribe(
-                        onNext -> {
-    drone.getTelemetry().getPosition().subscribe(
+                        progress -> {
+    drone.getTelemetry().getPosition().
+            take(1)
+                        .subscribe(
                 position -> {
                     currT = Instant.now().getEpochSecond();
 
