@@ -8,7 +8,6 @@ import fr.istic.projet.mavlinkapp.model.StateMission;
 import io.mavsdk.System;
 import io.mavsdk.mission.Mission;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -26,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class DroneFunctions {
     public System drone;
@@ -53,11 +53,13 @@ public class DroneFunctions {
                 .subscribe();
 
 
-        long currT = Instant.now().getEpochSecond();
+        AtomicLong currT = new AtomicLong(Instant.now().getEpochSecond());
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
-                    if (((currT-epochPicture)/1000)>=1) {
-                        epochPicture = currT;
+                    currT.set(Instant.now().getEpochSecond());
+                    if (((currT.get() - epochPicture)/1000)>=1) {
+                        epochPicture = currT.get();
+
                         java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
                         CurrentPosition posCourante = new CurrentPosition();
                         posCourante.setId(idIntervention);
@@ -77,7 +79,7 @@ public class DroneFunctions {
                             java.lang.System.out.println("echec envoi Picture : nok");
                         }
                     } else {
-                        java.lang.System.out.println("AHAHAHAH"+ epochPicture+" TTT "+ currT + "R=>" + (double) ((currT-epochPicture)/1000));
+                        java.lang.System.out.println("AHAHAHAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT.get() -epochPicture)/1000));
                     }
                 }
         );
