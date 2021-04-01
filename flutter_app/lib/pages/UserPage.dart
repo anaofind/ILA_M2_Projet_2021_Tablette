@@ -88,7 +88,7 @@ class UserPageState extends State<UserPage> {
                       ),
                     ),
                     Flexible(
-                        flex: 2,
+                        flex: 1,
                         child: Container(
                           child: Center(
                             child: Column (
