@@ -1,6 +1,7 @@
 package fr.istic.projet.mavlinkapp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.istic.projet.mavlinkapp.model.CurrentPicture;
 import fr.istic.projet.mavlinkapp.model.CurrentPosition;
 import fr.istic.projet.mavlinkapp.model.InterestPoint;
 import fr.istic.projet.mavlinkapp.model.StateMission;
@@ -46,7 +47,7 @@ public class DroneFunctions {
         int[] cmp = {0};
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
-                    if (cmp[0] == 150) {
+                    if (cmp[0] == 2) {
                         java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
                         cmp[0] = 0;
                         CurrentPosition posCourante = new CurrentPosition();
@@ -55,8 +56,16 @@ public class DroneFunctions {
                         posCourante.setLongitude(position.getLongitudeDeg());
                         if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
                             java.lang.System.out.println("envoi position courante : ok");
+                            CurrentPicture cpic = new CurrentPicture();
+                            cpic.setId(idMission);
+                            cpic.setLatitude(position.getLatitudeDeg());
+                            cpic.setLongitude(position.getLongitudeDeg());
+                            cpic.setAltitude(position.getAbsoluteAltitudeM());
+                            if(sendPostitionPicToWebservice(cpic,"http://86.229.200.137:8080/api/pic")){
+                                java.lang.System.out.println("envoi Picture : ok");
+                            }
                         } else {
-                            java.lang.System.out.println("echec envoi position courante");
+                            java.lang.System.out.println("echec envoi Picture : nok");
                         }
                     } else {
                         cmp[0]++;
@@ -86,6 +95,26 @@ public class DroneFunctions {
             // This is expected
         }
     }
+
+    private boolean sendPostitionPicToWebservice(CurrentPicture cpic, String urlWS) {
+        String jsonRes = "";
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(urlWS);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            jsonRes = mapper.writeValueAsString(cpic);
+            java.lang.System.out.println("---jsonPositionPic : " + jsonRes);
+            StringEntity se = new StringEntity(jsonRes);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(se);
+            client.execute(post);
+            return  true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  false;
+    }
+
     public static Mission.MissionItem generateMissionItem(double latitudeDeg, double longitudeDeg) {
         return new Mission.MissionItem(latitudeDeg, longitudeDeg, 10f, 10f, true, Float.NaN, Float.NaN,
                 Mission.MissionItem.CameraAction.NONE, Float.NaN, 1.0);
@@ -94,6 +123,7 @@ public class DroneFunctions {
     public void Cancel(){
         drone.getMission().cancelMissionDownload();
         drone.getMission().cancelMissionUpload();
+        drone.getAction().returnToLaunch();
         drone.getMission().clearMission();
     }
 

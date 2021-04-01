@@ -80,14 +80,49 @@ public class MissionController {
     }
 
 
-    public static void publishImages(System drone, MissionDrone mission, MissionItem missionItem) {
-        //right code to take photo here
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(new File("res/chat.jpg"));
-        } catch (IOException e) {
+    @RequestMapping("/api/cancel")
+    public class CancelMission {
+        private final Logger logger = LoggerFactory.getLogger(fr.istic.projet.mavlinkapp.service.MissionController.class);
+        DroneFunctions drone = new DroneFunctions();
+        MissionDrone laMission = new MissionDrone();
+        ExecutorService service = Executors.newFixedThreadPool(1);
+
+        @PostMapping
+        public MissionDrone sendMissionCoordonates(@Validated @RequestBody MissionDrone mission) {
+            laMission = mission;
+
+            java.lang.System.out.println(laMission.getId());
+            java.lang.System.out.println(laMission.getIdIntervention());
+
+            fr.istic.projet.mavlinkapp.service.MissionController.MyRunnable myRunnable = new fr.istic.projet.mavlinkapp.service.MissionController.MyRunnable(drone);
+            service.submit(myRunnable);
+
+            //send images took by drone in rest's meth to app java which will store image in firebase*/
+            return laMission;
         }
-        mission.addPhoto("path/to/img/");
-        mission.getInterestPoints().get(mission.getPhotos().size()-1).setPhoto(true);
+
+        public class MyRunnable implements Runnable {
+
+            private DroneFunctions drone;
+
+            public MyRunnable(DroneFunctions drone) {
+                this.drone = drone;
+            }
+
+            public void run() {
+                // code in the other thread, can reference "var" variable
+
+                try {
+                    Thread.sleep(500);
+                    drone.Cancel();
+                    StateMission fin = new StateMission(laMission.getId(), "StateMission.Ending");
+                    if (drone.sendEtatToWebservice(fin, "http://148.60.11.47:8080/api/updateMissionState")) {
+                        java.lang.System.out.println("Mission finished");
+                    }
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+            }
+        }
     }
 }
