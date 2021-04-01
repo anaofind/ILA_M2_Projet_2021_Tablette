@@ -55,6 +55,22 @@ public class DroneFunctions {
 
         currT = Instant.now().getEpochSecond();
 
+        drone.getMission()
+                .getMissionProgress()
+                .filter(progress -> progress.getCurrent() != progress.getTotal())
+                .subscribe(
+                        progress -> {
+                           Mission.MissionItem mi = missionItems.get(progress.getCurrent());
+                            java.lang.System.out.println(progress.getCurrent());
+                            CurrentPicture picture  = new CurrentPicture();
+                            picture.setId(idMission);
+                            picture.setLatitude(mi.getLatitudeDeg());
+                            picture.setLongitude(mi.getLongitudeDeg());
+                            picture.setBytes(new byte[0]);
+                            sendPic(picture, "http://148.60.11.47:8080/api/uploadFile");
+                        }
+                );
+
 
         //int[] cmp = new int[0];
         drone.getTelemetry().getPosition()
@@ -80,13 +96,7 @@ public class DroneFunctions {
                                     if(ListPosition.contains(posCourante)getLatitude() == position.getLatitudeDeg() && ListPosition.get(cmp[1]).getLongitude()==position.getLongitudeDeg()) {
                                      */
 
-                                        CurrentPicture picture  = new CurrentPicture();
-                                        picture.setId(idMission);
-                                        picture.setLatitude(position.getLatitudeDeg());
-                                        picture.setLongitude(position.getLongitudeDeg());
-                                        picture.setBytes(new byte[0]);
 
-                                        sendPic(picture, "http://148.60.11.47:8080/api/uploadFile");
                                      /*   cmp[1]++;
                                     }*/
 
