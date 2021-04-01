@@ -27,12 +27,9 @@ class MissionFormPageState extends State<MissionFormPage> {
 
   MissionFormPageState(this.intervention);
 
-
-  String nameMission;
-  bool segment = false;
-  bool streamVideo = false;
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool streamVideo = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +40,6 @@ class MissionFormPageState extends State<MissionFormPage> {
             return CircularProgressIndicator();
           }
           this.intervention = Intervention.fromSnapshot(snapshot.data);
-
           return ListView(
             //TODO : SHERVIN SOUFIANE
             padding: const EdgeInsets.all(8),
@@ -77,11 +73,10 @@ class MissionFormPageState extends State<MissionFormPage> {
                             ),
                           ),
                           Checkbox(
-                            value: this.streamVideo,
-                            onChanged: (value) {
-                              this.setState(() {
-                                this.streamVideo = value;
-                              });
+                            value: this.intervention.futureMission.streamVideo,
+                            onChanged: (value) async{
+                              this.intervention.futureMission.streamVideo = value;
+                              await this.interventionService.updateIntervention(intervention);
                             },
                           ),
                         ],
@@ -92,6 +87,7 @@ class MissionFormPageState extends State<MissionFormPage> {
                             fontWeight: FontWeight.bold),
                       ),
                       TextFormField(
+                        initialValue: intervention.futureMission.name,
                         decoration: const InputDecoration(
                           icon: Icon(Icons.wysiwyg_outlined),
                           hintText: 'Donner un nom à la mission du drone',
@@ -99,11 +95,16 @@ class MissionFormPageState extends State<MissionFormPage> {
                         ),
                         validator: (String value) {
                           if (value.isEmpty) {
-                            return 'Veillez saisir le nom de l\'intervention';
+                            return 'Veillez saisir le nom de la mission';
                           }
                         },
-                        onSaved: (value) {
-                          nameMission = value;
+                        onFieldSubmitted: (value) async{
+                          intervention.futureMission.name = value;
+                          await this.interventionService.updateIntervention(intervention);
+                        },
+                        onSaved: (value) async{
+                          intervention.futureMission.name = value;
+                          await this.interventionService.updateIntervention(intervention);
                         },
                       ),
                       Row(
@@ -112,11 +113,10 @@ class MissionFormPageState extends State<MissionFormPage> {
                             Text("Segment"),
                             Switch(
                               value: ! this.intervention.futureMission.segment,
-                              onChanged: (value) {
+                              onChanged: (value) async{
                                 this.intervention.futureMission.segment = ! value;
                                 print (this.intervention.futureMission.segment);
-                                this.interventionService.updateIntervention(intervention);
-                                setState(() {});
+                                await this.interventionService.updateIntervention(intervention);
                               },
                               inactiveTrackColor:
                               Colors.lightGreenAccent,
@@ -137,13 +137,11 @@ class MissionFormPageState extends State<MissionFormPage> {
                           final formState = _formKey.currentState;
                           if (formState.validate()) {
                             formState.save();
-                            this.intervention.futureMission.name = nameMission;
-                            this.intervention.futureMission.streamVideo = streamVideo;
                             if (this.intervention.futureMission.interestPoints.isNotEmpty) {
-                              String idMission = this.intervention.futureMission.id;
+                              Mission mission = this.intervention.futureMission;
                               bool missionAdded = await MissionService.addMission(this.intervention);
                               if (missionAdded) {
-                                SelectorIntervention.idMissionSelected = idMission;
+                                SelectorIntervention.missionSelected = mission;
                                 NavigatorPage.navigateTo(3);
                               }
                             }
@@ -154,9 +152,9 @@ class MissionFormPageState extends State<MissionFormPage> {
                         child: Text('Annuler', style: TextStyle(fontSize: 20.0),),
                         color: Colors.redAccent,
                         textColor: Colors.white,
-                        onPressed: () {
+                        onPressed: () async{
                           this.intervention.futureMission = Mission();
-                          InterventionService().updateIntervention(this.intervention);
+                          await this.interventionService.updateIntervention(this.intervention);
                         },
                       ),
                     ]),

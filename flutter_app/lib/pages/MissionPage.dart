@@ -2,10 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/Mission.dart';
+import 'package:flutter_app/models/Intervention.dart';
 import 'package:flutter_app/models/Position.dart';
 import 'package:flutter_app/pages/MissionPhotosPage.dart';
 import 'package:flutter_app/pages/MissionVideoPage.dart';
 import 'package:flutter_app/services/MissionService.dart';
+import 'package:flutter_app/services/NavigatorPage.dart';
+import 'package:flutter_app/services/SelectorSitac.dart';
+import 'package:flutter_app/services/InterventionService.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter_app/services/SelectorIntervention.dart';
@@ -22,7 +26,7 @@ class MissionPageState extends State<MissionPage> {
   Widget build(BuildContext context) {
     print ('REFRESH MISSION');
     return StreamBuilder<QuerySnapshot> (
-        stream: MissionService.getMissionById(SelectorIntervention.idMissionSelected),
+        stream: MissionService.getMissionById(SelectorIntervention.missionSelected.id),
         builder: (context, snapshot) {
           if (! snapshot.hasData) {
             return CircularProgressIndicator();
@@ -41,7 +45,7 @@ class MissionPageState extends State<MissionPage> {
                     child: this.getTitleWidget(mission),
                   ),
                   Flexible(
-                    flex: 5,
+                    flex: 6,
                     child: Row(
                       children: [
                         Flexible(
@@ -128,14 +132,109 @@ class MissionPageState extends State<MissionPage> {
           ),
           color: Colors.white
       ),
-      child: Center(
-          child: Text(
-            mission.name,
-            style: TextStyle(
-              fontSize: 30,
-              fontStyle: FontStyle.italic,
+      child: Row(
+        children: [
+          Flexible(
+              flex: 1,
+              child: Center(
+                child: Text(
+                  mission.name,
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              )
+          ),
+          Flexible (
+            flex: 1,
+            child : Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(
+                    right: 10,
+                  ),
+                  child: FlatButton(
+                      child: Text(
+                          'Suivre',
+                          style : TextStyle(color: Colors.white)
+                      ),
+                      onPressed: () {
+                        if (mission.state == StateMission.Running) {
+                          SelectorIntervention.missionSelected = mission;
+                          SelectorSitac.indexTabBar = 6;
+                          NavigatorPage.navigateTo(1);
+                        }
+                      },
+                      color: Colors.blue
+                  ),
+                ),
+              ],
             ),
-          )
+          ),
+          Flexible (
+            flex: 2,
+            child : Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(
+                    right: 5,
+                  ),
+                  child: FlatButton(
+                      child: Text(
+                          'Nouvelle',
+                          style : TextStyle(color: Colors.white)
+                      ),
+                      onPressed: () {
+                        SelectorIntervention.missionSelected = null;
+                        SelectorSitac.indexTabBar = 6;
+                        NavigatorPage.navigateTo(1);
+                      },
+                      color: Colors.green
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    right: 5,
+                  ),
+                  child: FlatButton(
+                    child: Text(
+                        'Dupliquer',
+                        style : TextStyle(color: Colors.white)
+                    ),
+                    onPressed: () async{
+                      DocumentSnapshot doc = await InterventionService().getInterventionById(mission.idIntervention).first;
+                      if (doc.exists) {
+                        Intervention intervention = Intervention.fromSnapshot(doc);
+                        intervention.futureMission = mission.duplicate();
+                        await InterventionService().updateIntervention(intervention);
+                        SelectorSitac.indexTabBar = 6;
+                        NavigatorPage.navigateTo(1);
+                      }
+                    },
+                    color: Colors.deepPurpleAccent,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    right: 5,
+                  ),
+                  child: FlatButton(
+                      child: Text(
+                          'Supprimer',
+                          style : TextStyle(color: Colors.white)
+                      ),
+                      onPressed: () async {
+                        SelectorIntervention.missionSelected = null;
+                        await MissionService.removeMission(mission);
+                      },
+                      color: Colors.red
+                  ),
+                ),
+              ],
+            )
+          ),
+        ],
       ),
     );
   }

@@ -9,7 +9,6 @@ class HydrantService {
   static String queryBase = 'https://data.opendatasoft.com/api/records/1.0/search/?dataset=osm-fr-fire-hydrant%40babel&facet=fire_hydrant_type&facet=fire_hydrant_position&facet=fire_hydrant_pressure';
 
   static List<HydrantData> hydrants = [];
-  static int nbHydrantByBloc = 100;
   static bool finished = false;
 
   static Future<void> createHydrantsData(LatLng latLng) async {
@@ -17,6 +16,7 @@ class HydrantService {
     hydrants.clear();
     String query = queryBase;
     query = addGeofilter(query, latLng, 1000);
+    query = addRowsFilter(query, 0, 100);
     var url = Uri.parse(query);
     var response = await http.get(url);
     if (response.statusCode == 200) {
@@ -42,5 +42,8 @@ class HydrantService {
 
   static String addGeofilter(String query, LatLng latLng, int distance) {
     return query + '&geofilter.distance=${latLng.latitude}%2C${latLng.longitude}%2C${distance}';
+  }
+  static String addRowsFilter(String query, int currentRow, int nbRow) {
+    return query + '&rows=${nbRow}&start${currentRow}';
   }
 }

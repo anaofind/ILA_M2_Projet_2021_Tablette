@@ -11,13 +11,13 @@ class Mission {
   String video;
   bool segment = true;
   bool streamVideo = false;
-  StateMission state;
+  StateMission state = StateMission.Waiting;
   String idIntervention;
 
 
   Mission({this.idIntervention, this.name, this.interestPoints, this.segment, this.streamVideo}):id = Uuid().v4() {
     if (this.name == null) {
-      this.name = this.id;
+      this.name = '';
     }
     if (this.interestPoints == null) {
       this.interestPoints = [];
@@ -30,6 +30,16 @@ class Mission {
     }
   }
 
+  Mission duplicate() {
+    Mission mission = Mission(
+      idIntervention: this.idIntervention,
+      name: this.name,
+      segment: this.segment,
+      streamVideo: this.streamVideo,
+      interestPoints: this.interestPoints.toList(),
+    );
+    return mission;
+  }
 
   static List<InterestPoint> convertInterestPointsToList(List<dynamic> listMap) {
     if (listMap == null) {
@@ -86,6 +96,7 @@ class Mission {
       'streamVideo': this.streamVideo,
       'state' : this.state.toString(),
       'video' : this.video,
+      'idIntervention' : this.idIntervention
     };
   }
 

@@ -1,12 +1,15 @@
 import 'package:flutter_app/models/Intervention.dart';
+import 'package:flutter_app/models/InterestPoint.dart';
+import 'package:flutter_app/models/Mission.dart';
+
 
 class SelectorIntervention {
   static Function selectInterventionFunction;
 
-  static String idMissionSelected;
+  static Mission missionSelected;
 
   static selectIntervention(Intervention intervention) {
-    idMissionSelected = null;
+    missionSelected = null;
     selectInterventionFunction(intervention);
   }
 
