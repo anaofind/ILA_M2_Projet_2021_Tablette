@@ -60,14 +60,16 @@ public class DroneFunctions {
                 .filter(progress -> progress.getCurrent() != progress.getTotal())
                 .subscribe(
                         progress -> {
-                           Mission.MissionItem mi = missionItems.get(progress.getCurrent());
-                            java.lang.System.out.println(progress.getCurrent());
-                            CurrentPicture picture  = new CurrentPicture();
-                            picture.setId(idMission);
-                            picture.setLatitude(mi.getLatitudeDeg());
-                            picture.setLongitude(mi.getLongitudeDeg());
-                            picture.setBytes(new byte[0]);
-                            sendPic(picture, "http://148.60.11.47:8080/api/uploadFile");
+                            //Mission.MissionItem mi = missionItems.get(progress.getCurrent());
+                            if(ListPosition.get(progress.getCurrent()).isPhoto()){
+                                java.lang.System.out.println(progress.getCurrent());
+                                CurrentPicture picture  = new CurrentPicture();
+                                picture.setId(idMission);
+                                picture.setLatitude(ListPosition.get(progress.getCurrent()).getLatitude());
+                                picture.setLongitude(ListPosition.get(progress.getCurrent()).getLongitude());
+                                picture.setBytes(new byte[0]);
+                                sendPic(picture, "http://148.60.11.47:8080/api/uploadFile");
+                            }
                         }
                 );
 
