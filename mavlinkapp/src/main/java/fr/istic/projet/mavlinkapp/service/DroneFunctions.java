@@ -60,7 +60,7 @@ public class DroneFunctions {
                         posCourante.setLongitude(position.getLongitudeDeg());
                         if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
                             java.lang.System.out.println("envoi position courante : ok");
-                            //sendVid(idMission,posCourante.getLatitude(),posCourante.getLongitude());
+                            sendVid(idMission,posCourante.getLatitude(),posCourante.getLongitude());
                         } else {
                             java.lang.System.out.println("echec envoi position courante");
                         }
