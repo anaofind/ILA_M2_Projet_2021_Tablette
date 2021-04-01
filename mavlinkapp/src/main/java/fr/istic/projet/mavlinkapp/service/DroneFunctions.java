@@ -57,6 +57,8 @@ public class DroneFunctions {
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
                     currT.set(Instant.now().getEpochSecond());
+                    java.lang.System.out.println("BAHABAHABAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT.get() -epochPicture)));
+
                     if (((currT.get() - epochPicture))>=1) {
                         epochPicture = currT.get();
 
@@ -67,6 +69,7 @@ public class DroneFunctions {
                         posCourante.setLongitude(position.getLongitudeDeg());
                         if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
                             java.lang.System.out.println("envoi position courante : ok");
+
                             CurrentPicture cpic = new CurrentPicture();
                             cpic.setId(idMission);
                             cpic.setLatitude(position.getLatitudeDeg());
