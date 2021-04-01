@@ -77,7 +77,7 @@ public class DroneFunctions {
                             java.lang.System.out.println("echec envoi Picture : nok");
                         }
                     } else {
-                        java.lang.System.out.println("AHAHAHAH"+ epochPicture+" TTT "+ currT + "R=>" + ((currT-epochPicture)/1000));
+                        java.lang.System.out.println("AHAHAHAH"+ epochPicture+" TTT "+ currT + "R=>" + (double) ((currT-epochPicture)/1000));
                     }
                 }
         );
