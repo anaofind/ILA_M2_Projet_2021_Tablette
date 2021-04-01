@@ -23,7 +23,7 @@ public class SeleniumGoogleEarth {
     public byte[] takePic() throws InterruptedException, IOException {
         byte[] pic;
         String baseUrl = "https://earth.google.com/web/@"+ latitude +","+longitude+",51.36728919a,193.00421567d,35y,64.91670241h,77.70282258t,0r";
-        System.setProperty("webdriver.gecko.driver", "src/main/java/google_earth_selenium/resources/driver/geckodriver");
+        System.setProperty("webdriver.gecko.driver", "src/main/java/google_earth_selenium/fr/istic/projet/mavlinkapp/resources/driver/geckodriver");
 
         // Initiating your driver
         WebDriver driver = new FirefoxDriver();
@@ -43,7 +43,7 @@ public class SeleniumGoogleEarth {
         File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 
         try {
-            com.google.common.io.Files.copy(scrFile, new File("src/main/java/google_earth_selenium/resources/screen/screen.png"));
+            com.google.common.io.Files.copy(scrFile, new File("src/main/java/fr/istic/projet/mavlinkapp/google_earth_selenium/resources/screen/screen.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
