@@ -55,13 +55,12 @@ public class DroneFunctions {
 
         currT = Instant.now().getEpochSecond();
 
-        drone.getMission()
-                .getMissionProgress()
-                .filter(progress -> progress.getCurrent() != progress.getTotal())
-                .subscribe(
-                        progress -> {
-    drone.getTelemetry().getPosition().
-            take(1)
+        //drone.getMission()
+          //      .getMissionProgress()
+            //    .filter(progress -> progress.getCurrent() != progress.getTotal())
+              //  .subscribe(
+                //        progress -> {
+    drone.getTelemetry().getPosition()
                         .subscribe(
                 position -> {
                     currT = Instant.now().getEpochSecond();
@@ -96,8 +95,9 @@ public class DroneFunctions {
                         java.lang.System.out.println("AHAHAHAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
                     }*/
                 }
-        );}
         );
+    //}
+        //);
 
         /*
                 updateDronePosition chaque 1sec sur localhost:8080
