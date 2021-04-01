@@ -84,7 +84,7 @@ public class DroneFunctions {
                                         picture.setId(idMission);
                                         picture.setLatitude(position.getLatitudeDeg());
                                         picture.setLongitude(position.getLongitudeDeg());
-                                        picture.setBytes(null);
+                                        picture.setBytes(new byte[0]);
 
                                         sendPic(picture, "http://148.60.11.47:8080/api/uploadFile");
                                      /*   cmp[1]++;
