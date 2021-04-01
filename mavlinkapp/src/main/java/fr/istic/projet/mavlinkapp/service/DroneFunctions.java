@@ -57,7 +57,7 @@ public class DroneFunctions {
 
         drone.getMission()
                 .getMissionProgress()
-                .filter(progress -> progress.getCurrent() == progress.getTotal())
+                .filter(progress -> progress.getCurrent() != progress.getTotal())
                 .subscribe(
                         onNext -> {
     drone.getTelemetry().getPosition().subscribe(
