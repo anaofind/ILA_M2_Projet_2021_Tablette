@@ -1,6 +1,7 @@
 package fr.istic.projet.mavlinkapp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.istic.projet.mavlinkapp.model.CurrentPicture;
 import fr.istic.projet.mavlinkapp.model.CurrentPosition;
 import fr.istic.projet.mavlinkapp.model.InterestPoint;
 import fr.istic.projet.mavlinkapp.model.StateMission;
@@ -56,7 +57,12 @@ public class DroneFunctions {
                         if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
                             java.lang.System.out.println("envoi position courante : ok");
                             if(ListPosition.get(cmp[1]).getLatitude() == position.getLatitudeDeg() && ListPosition.get(cmp[1]).getLongitude()==position.getLongitudeDeg()) {
-                                sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/uploadFile");
+                                CurrentPicture picture  = new CurrentPicture();
+                                picture.setId(idIntervention);
+                                picture.setLatitude(position.getLatitudeDeg());
+                                picture.setLongitude(position.getLongitudeDeg());
+                                picture.setBytes(null);
+                                sendPictureToWebservice(picture, "http://148.60.11.47:8080/api/uploadFile");
                                 cmp[1]++;
                             }
                         } else {
@@ -109,6 +115,25 @@ public class DroneFunctions {
         try {
             jsonRes = mapper.writeValueAsString(toSend);
             java.lang.System.out.println("---jsonPosition : " + jsonRes);
+            StringEntity se = new StringEntity(jsonRes);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(se);
+            client.execute(post);
+            return  true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  false;
+    }
+
+    public boolean sendPictureToWebservice(CurrentPicture toSend, String urlWS) {
+        String jsonRes = "";
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(urlWS);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            jsonRes = mapper.writeValueAsString(toSend);
+            java.lang.System.out.println("---jsonPicture : " + jsonRes);
             StringEntity se = new StringEntity(jsonRes);
             se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             post.setEntity(se);
