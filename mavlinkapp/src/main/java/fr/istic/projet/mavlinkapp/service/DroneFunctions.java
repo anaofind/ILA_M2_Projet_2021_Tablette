@@ -121,7 +121,7 @@ public class DroneFunctions {
         parameters.put("lat", "" + String.valueOf(cpic.getLatitude()));
         parameters.put("lng", "" + cpic.getLongitude());
         parameters.put("ele", "" + cpic.getAltitude());
-        parameters.put("idm", cpic.getId());
+        parameters.put("idm", "" + cpic.getId());
 
         URL url = new URL(urlWS+ getParamsString(parameters));
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
