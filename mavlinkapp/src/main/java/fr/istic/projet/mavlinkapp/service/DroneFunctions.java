@@ -19,13 +19,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.*;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class DroneFunctions {
     public System drone;
@@ -130,7 +128,7 @@ public class DroneFunctions {
         con.setDoOutput(true);
 
         int status = con.getResponseCode();
-        java.lang.System.out.println("SEND PIC!!!!");
+//        java.lang.System.out.println("SEND PIC!!!!");
         return  true;
     }
 
@@ -161,9 +159,9 @@ public class DroneFunctions {
     }
 
     public void Cancel(){
+        drone.getAction().returnToLaunch();
         drone.getMission().cancelMissionDownload();
         drone.getMission().cancelMissionUpload();
-        drone.getAction().returnToLaunch();
         drone.getMission().clearMission();
     }
 
