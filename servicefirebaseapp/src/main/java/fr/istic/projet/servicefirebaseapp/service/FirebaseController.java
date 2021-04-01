@@ -39,9 +39,9 @@ public class FirebaseController {
 	  public ResponseEntity<FileDTO> uploadFile(@Validated @RequestBody MissionBody missionInfos) throws Exception {
 	  log.info("REST request to upload file image");
       //upload file
-	  FileDTO fileDTO = null;
-//      FileDTO fileDTO = firebaseService.uploadFileFromBytes(missionInfos.getId(), 
-//    		  missionInfos.getLatitude(), missionInfos.getLongitude(), missionInfos.getBytes(), "images");
+	  
+      FileDTO fileDTO = firebaseService.uploadFileFromBytes(missionInfos.getId(), 
+    		  missionInfos.getLatitude(), missionInfos.getLongitude(), missionInfos.getBytes(), "images");
       return new ResponseEntity<>(fileDTO, null, HttpStatus.OK);
   }
     
@@ -49,24 +49,24 @@ public class FirebaseController {
 	  public ResponseEntity<FileDTO> streamVideo(@Validated @RequestBody MissionBody missionInfos) throws Exception {
 	  log.info("REST request to upload file video");
     //upload file
-	  FileDTO fileDTO = null;
-//    FileDTO fileDTO = firebaseService.uploadFileFromBytes(missionInfos.getId(), 
-//  		  missionInfos.getLatitude(), missionInfos.getLongitude(), missionInfos.getBytes(), "videos");
+	 
+    FileDTO fileDTO = firebaseService.uploadFileFromBytes(missionInfos.getId(), 
+  		  missionInfos.getLatitude(), missionInfos.getLongitude(), missionInfos.getBytes(), "videos");
     return new ResponseEntity<>(fileDTO, null, HttpStatus.OK);
 }
     
     @PostMapping("/updateDronePosition")
 	  public ResponseEntity<DroneInfosBody> updateDronePositionIntervention(@Validated @RequestBody DroneInfosBody droneInfos) throws Exception {
 	  log.info("REST request to update drone position");
-//     firebaseService.updateDronePositionIntervention(droneInfos.getId(), 
-//    		droneInfos.getLatitude(), droneInfos.getLongitude());
+     firebaseService.updateDronePositionIntervention(droneInfos.getId(), 
+    		droneInfos.getLatitude(), droneInfos.getLongitude());
     return new ResponseEntity<>(droneInfos, null, HttpStatus.OK);
 }
     
     @PostMapping("/updateMissionState")
 	  public ResponseEntity<StateMission> updateMissionState(@Validated @RequestBody StateMission missionState) throws Exception {
 	  log.info("REST request to update mission state");
-//   firebaseService.setMissionState(missionState.getIdMission(), missionState.getState());
+   firebaseService.setMissionState(missionState.getIdMission(), missionState.getState());
   return new ResponseEntity<>(missionState, null, HttpStatus.OK);
 }
 
