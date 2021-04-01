@@ -4,6 +4,8 @@ import fr.istic.projet.mavlinkapp.model.MissionDrone;
 import fr.istic.projet.mavlinkapp.model.StateMission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.mavsdk.System;
@@ -46,6 +48,13 @@ public class MissionController {
         return laMission;
     }
 
+    @PostMapping("/cancel")
+    public ResponseEntity<StateMission> updateMissionState() throws Exception {
+        logger.info("REST request to update mission state");
+        drone.Cancel();
+        return new ResponseEntity<>(null, null, HttpStatus.OK);
+    }
+
     public class MyRunnable implements Runnable {
 
         private DroneFunctions drone;
@@ -77,52 +86,9 @@ public class MissionController {
         }
 
 
-    }
 
 
-    @RequestMapping("/api/cancel")
-    public class CancelMission {
-        private final Logger logger = LoggerFactory.getLogger(fr.istic.projet.mavlinkapp.service.MissionController.class);
-        DroneFunctions drone = new DroneFunctions();
-        MissionDrone laMission = new MissionDrone();
-        ExecutorService service = Executors.newFixedThreadPool(1);
-
-        @PostMapping
-        public MissionDrone sendMissionCoordonates(@Validated @RequestBody MissionDrone mission) {
-            laMission = mission;
-
-            java.lang.System.out.println(laMission.getId());
-            java.lang.System.out.println(laMission.getIdIntervention());
-
-            fr.istic.projet.mavlinkapp.service.MissionController.MyRunnable myRunnable = new fr.istic.projet.mavlinkapp.service.MissionController.MyRunnable(drone);
-            service.submit(myRunnable);
-
-            //send images took by drone in rest's meth to app java which will store image in firebase*/
-            return laMission;
         }
 
-        public class MyRunnable implements Runnable {
 
-            private DroneFunctions drone;
-
-            public MyRunnable(DroneFunctions drone) {
-                this.drone = drone;
-            }
-
-            public void run() {
-                // code in the other thread, can reference "var" variable
-
-                try {
-                    Thread.sleep(500);
-                    drone.Cancel();
-                    StateMission fin = new StateMission(laMission.getId(), "StateMission.Ending");
-                    if (drone.sendEtatToWebservice(fin, "http://148.60.11.47:8080/api/updateMissionState")) {
-                        java.lang.System.out.println("Mission finished");
-                    }
-                } catch (InterruptedException interruptedException) {
-                    interruptedException.printStackTrace();
-                }
-            }
-        }
-    }
 }
