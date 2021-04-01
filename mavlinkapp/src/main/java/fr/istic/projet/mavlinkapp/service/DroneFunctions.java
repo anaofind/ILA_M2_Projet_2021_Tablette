@@ -79,8 +79,9 @@ public class DroneFunctions {
 /*
                                     if(ListPosition.contains(posCourante)getLatitude() == position.getLatitudeDeg() && ListPosition.get(cmp[1]).getLongitude()==position.getLongitudeDeg()) {
                                      */
+
                                         CurrentPicture picture  = new CurrentPicture();
-                                        picture.setId(idIntervention);
+                                        picture.setId(idMission);
                                         picture.setLatitude(position.getLatitudeDeg());
                                         picture.setLongitude(position.getLongitudeDeg());
                                         picture.setBytes(null);
