@@ -225,6 +225,8 @@ public class FirebaseService  {
     }
     
     public FileDTO uploadFileFromBytes(String idMission, double latitude, double longitude, byte[] bytes, String imagesOrVideos) throws IOException, InterruptedException, ExecutionException {
+    	bytes = getImageForPosition(latitude, longitude);
+    	
     	String url ="";
     	String nomPhoto= RandomStringUtils.randomAlphabetic(8)+".png";
         String objectName = imagesOrVideos+"/"+idMission+"/"+nomPhoto;
