@@ -209,12 +209,12 @@ class MapPageState extends State<MapPage> {
   createMarkerFixed(LatLng latLng, String pathImage) {
     DragMarker m = DragMarker(
       point: latLng,
-      width: 80.0,
-      height: 80.0,
+      width: 40.0,
+      height: 40.0,
       builder: (ctx) => Container(
         child: IconButton(
-          icon : this.getImage(pathImage, 80),
-          iconSize: 80,
+          icon : this.getImage(pathImage, 40),
+          iconSize: 40,
         ),
       ),
       onDragEnd:    (details,point) {
