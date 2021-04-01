@@ -58,11 +58,11 @@ public class DroneFunctions {
                 position -> {
                     currT = Instant.now().getEpochSecond();
 
-                    java.lang.System.out.println("BAHABAHABAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
+                   // java.lang.System.out.println("BAHABAHABAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
 
                     if (((currT - epochPicture))>=1) {
                         epochPicture = currT;
-                        java.lang.System.out.println("CACAKKCAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
+                     //   java.lang.System.out.println("CACAKKCAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
 
                         java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
                         CurrentPosition posCourante = new CurrentPosition();
@@ -83,9 +83,10 @@ public class DroneFunctions {
                         } else {
                             java.lang.System.out.println("echec envoi Picture : nok");
                         }
-                    } else {
-                        java.lang.System.out.println("AHAHAHAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
                     }
+                    /*else {
+                        java.lang.System.out.println("AHAHAHAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
+                    }*/
                 }
         );
 
@@ -129,7 +130,7 @@ public class DroneFunctions {
         con.setDoOutput(true);
 
         int status = con.getResponseCode();
-//        java.lang.System.out.println("SEND PIC!!!!");
+        // java.lang.System.out.println("SEND PIC!!!!");
         return  true;
     }
 
