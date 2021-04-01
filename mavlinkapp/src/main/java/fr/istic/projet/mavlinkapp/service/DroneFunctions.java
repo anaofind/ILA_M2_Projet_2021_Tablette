@@ -51,7 +51,7 @@ public class DroneFunctions {
         int[] cmp = {0};
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
-                    if (cmp[0] == 10) {
+                    if (cmp[0] == 150) {
                         java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
                         cmp[0] = 0;
                         CurrentPosition posCourante = new CurrentPosition();
@@ -168,7 +168,7 @@ public class DroneFunctions {
             try {
                 jsonRes = mapper.writeValueAsString(toSend);
                 StringEntity se = new StringEntity(jsonRes);
-                java.lang.System.out.println("---jsonEtat : " + jsonRes);
+                //java.lang.System.out.println("---jsonEtat : " + jsonRes);
                 se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
                 post.setEntity(se);
                 client.execute(post);
