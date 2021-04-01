@@ -1,6 +1,8 @@
 package fr.istic.projet.mavlinkapp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.istic.projet.mavlinkapp.google_earth_selenium.SeleniumGoogleEarth;
+import fr.istic.projet.mavlinkapp.model.CurrentPicture;
 import fr.istic.projet.mavlinkapp.model.CurrentPosition;
 import fr.istic.projet.mavlinkapp.model.InterestPoint;
 import fr.istic.projet.mavlinkapp.model.StateMission;
@@ -55,6 +57,15 @@ public class DroneFunctions {
                         posCourante.setLongitude(position.getLongitudeDeg());
                         if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
                             java.lang.System.out.println("envoi position courante : ok");
+
+                            if(sendVid(idMission,posCourante)){
+                                java.lang.System.out.println("envoi stream : ok");
+
+                            }else{
+                                java.lang.System.out.println("echec envoi stream : nok");
+
+                            }
+
                         } else {
                             java.lang.System.out.println("echec envoi position courante");
                         }
@@ -133,5 +144,45 @@ public class DroneFunctions {
             e.printStackTrace();
         }
         return  false;
+    }
+
+    public boolean sendPicorStreamToWebservice(CurrentPicture toSend, String urlWS) {
+        String jsonRes = "";
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(urlWS);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            jsonRes = mapper.writeValueAsString(toSend);
+            StringEntity se = new StringEntity(jsonRes);
+            java.lang.System.out.println("---jsonPictureorStream : " + jsonRes);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(se);
+            client.execute(post);
+            return  true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  false;
+    }
+    //---------Pictures---------
+    
+        public boolean sendPic(String idMission, CurrentPosition position) throws IOException, InterruptedException {
+        CurrentPosition cp = new CurrentPosition();
+        cp.setId(idMission);
+        cp.setLatitude(position.getLatitude());
+        cp.setLongitude(position.getLongitude());
+        SeleniumGoogleEarth sge = new SeleniumGoogleEarth(position.getLatitude(),position.getLongitude());
+        CurrentPicture cpp = new CurrentPicture(cp, sge.takePic());
+        return sendPicorStreamToWebservice(cpp,"http://148.60.11.47/api/uploadFile");
+    }
+    
+     public boolean sendVid(String idMission, CurrentPosition position) throws IOException, InterruptedException {
+        CurrentPosition cp = new CurrentPosition();
+        cp.setId(idMission);
+        cp.setLatitude(position.getLatitude());
+        cp.setLongitude(position.getLongitude());
+        SeleniumGoogleEarth sge = new SeleniumGoogleEarth(position.getLatitude(),position.getLongitude());
+        CurrentPicture cpp = new CurrentPicture(cp, sge.takePic());
+        return sendPicorStreamToWebservice(cpp,"http://148.60.11.47/api/streamVideo");
     }
 }
