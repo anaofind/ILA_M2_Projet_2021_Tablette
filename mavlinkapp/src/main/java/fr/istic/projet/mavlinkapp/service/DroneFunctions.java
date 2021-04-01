@@ -1,6 +1,7 @@
 package fr.istic.projet.mavlinkapp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.istic.projet.mavlinkapp.model.CurrentPicture;
 import fr.istic.projet.mavlinkapp.model.CurrentPosition;
 import fr.istic.projet.mavlinkapp.model.InterestPoint;
 import fr.istic.projet.mavlinkapp.model.StateMission;
@@ -16,6 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -23,6 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class DroneFunctions {
     public System drone;
+    private int i = 1;
     private static final Logger logger = LoggerFactory.getLogger(DroneFunctions.class);
     public DroneFunctions(){
         drone = new System();
@@ -55,6 +60,7 @@ public class DroneFunctions {
                         posCourante.setLongitude(position.getLongitudeDeg());
                         if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
                             java.lang.System.out.println("envoi position courante : ok");
+                            sendVid(idMission,posCourante.getLatitude(),posCourante.getLongitude());
                         } else {
                             java.lang.System.out.println("echec envoi position courante");
                         }
@@ -68,7 +74,10 @@ public class DroneFunctions {
                 updateDronePosition chaque 1sec sur localhost:8080
                 uploadFile
         */
-
+       /* drone.getMission()
+                .getMissionProgress().subscribe(
+                        onNext -> sendPic();
+        );*/
 
         CountDownLatch latch = new CountDownLatch(1);
         drone.getMission()
@@ -134,4 +143,55 @@ public class DroneFunctions {
         }
         return  false;
     }
+    //---------Pictures---------
+
+    public boolean sendPic(String idMission, double latitude, double longitude) throws IOException, InterruptedException {
+        byte[] bb = Files.readAllBytes(Paths.get("./pic"+i));
+        if(i==3){
+            i=1;
+        }else{
+            i++;
+        }
+        CurrentPicture cpp = new CurrentPicture();
+        cpp.setId(idMission);
+        cpp.setLatitude(latitude);
+        cpp.setLongitude(longitude);
+        cpp.setBytes(bb);
+        return sendPicorStreamToWebservice(cpp,"http://148.60.11.47:8080/api/uploadFile");
+    }
+
+    private boolean sendPicorStreamToWebservice(CurrentPicture toSend, String urlWS) {
+            String jsonRes = "";
+            HttpClient client = new DefaultHttpClient();
+            HttpPost post = new HttpPost(urlWS);
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                jsonRes = mapper.writeValueAsString(toSend);
+                StringEntity se = new StringEntity(jsonRes);
+                java.lang.System.out.println("---jsonEtat : " + jsonRes);
+                se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                post.setEntity(se);
+                client.execute(post);
+                return  true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return  false;
+        }
+
+    public boolean sendVid(String idMission, double latitude, double longitude) throws IOException, InterruptedException {
+        byte[] bb = Files.readAllBytes(Paths.get("./pic"+i));
+        if(i==3){
+            i=1;
+        }else{
+            i++;
+        }
+        CurrentPicture cpp = new CurrentPicture();
+        cpp.setId(idMission);
+        cpp.setLatitude(latitude);
+        cpp.setLongitude(longitude);
+        cpp.setBytes(bb);
+        return sendPicorStreamToWebservice(cpp,"http://148.60.11.47:8080/api/streamVideo");
+    }
+
 }
