@@ -56,47 +56,48 @@ public class DroneFunctions {
         currT = Instant.now().getEpochSecond();
 
         //drone.getMission()
-          //      .getMissionProgress()
-            //    .filter(progress -> progress.getCurrent() != progress.getTotal())
-              //  .subscribe(
-                //        progress -> {
-    drone.getTelemetry().getPosition()
-                        .subscribe(
-                position -> {
-                    currT = Instant.now().getEpochSecond();
+        //      .getMissionProgress()
+        //    .filter(progress -> progress.getCurrent() != progress.getTotal())
+        //  .subscribe(
+        //        progress -> {
+        drone.getTelemetry().getPosition()
+                .subscribe(
+                        position -> {
+                            currT = Instant.now().getEpochSecond();
 
-                   // java.lang.System.out.println("BAHABAHABAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
+                            // java.lang.System.out.println("BAHABAHABAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
 
-                    if (((currT - epochPicture))>=1) {
-                        epochPicture = currT;
-                     //   java.lang.System.out.println("CACAKKCAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
+                            if (((currT - epochPicture))>=1) {
+                                epochPicture = currT;
+                                //   java.lang.System.out.println("CACAKKCAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
 
-                        java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
-                        CurrentPosition posCourante = new CurrentPosition();
-                        posCourante.setId(idIntervention);
-                        posCourante.setLatitude(position.getLatitudeDeg());
-                        posCourante.setLongitude(position.getLongitudeDeg());
-                        if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
-                            java.lang.System.out.println("envoi position courante : ok");
+                                java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
+                                CurrentPosition posCourante = new CurrentPosition();
+                                posCourante.setId(idIntervention);
+                                posCourante.setLatitude(position.getLatitudeDeg());
+                                posCourante.setLongitude(position.getLongitudeDeg());
+                                if(sendPostitionToWebservice(posCourante, "http://148.60.11.47:8080/api/updateDronePosition")) {
+                                    java.lang.System.out.println("envoi position courante : ok");
 
-                            CurrentPicture cpic = new CurrentPicture();
-                            cpic.setId(idMission);
-                            cpic.setLatitude(position.getLatitudeDeg());
-                            cpic.setLongitude(position.getLongitudeDeg());
-                            cpic.setAltitude(position.getAbsoluteAltitudeM());
-                            if(sendPostitionPicToWebservice(cpic,"http://86.229.200.137:8888/")){
-                                java.lang.System.out.println("envoi Picture : ok");
+                                    CurrentPicture cpic = new CurrentPicture();
+                                    cpic.setId(idMission);
+                                    cpic.setLatitude(position.getLatitudeDeg());
+                                    cpic.setLongitude(position.getLongitudeDeg());
+                                    cpic.setBytes(new byte[100]);
+                                    //  cpic.setAltitude(position.getAbsoluteAltitudeM());
+                                    if(sendPic(cpic,"148.60.11.47:8080/API/")){
+                                        java.lang.System.out.println("envoi Picture : ok");
+                                    }
+                                } else {
+                                    java.lang.System.out.println("echec envoi Picture : nok");
+                                }
                             }
-                        } else {
-                            java.lang.System.out.println("echec envoi Picture : nok");
-                        }
-                    }
                     /*else {
                         java.lang.System.out.println("AHAHAHAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT -epochPicture)));
                     }*/
-                }
-        );
-    //}
+                        }
+                );
+        //}
         //);
 
         /*
@@ -124,23 +125,24 @@ public class DroneFunctions {
 
     //http://86.229.200.137:8888/?lat=654,lng=31,ele=332,idm=qsdqd
     //http://86.229.200.137:8888?lat=654&lng=31&ele=332&idm=qsdqd
-    private boolean sendPostitionPicToWebservice(CurrentPicture cpic, String urlWS) throws IOException {
+    private boolean sendPic(CurrentPicture cpic, String urlWS) throws IOException {
 
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("lat", "" + String.valueOf(cpic.getLatitude()));
-        parameters.put("lng", "" + cpic.getLongitude());
-        parameters.put("ele", "" + cpic.getAltitude());
-        parameters.put("idm", "" + cpic.getId());
-
-        URL url = new URL(urlWS+ getParamsString(parameters));
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-
-        con.setDoOutput(true);
-
-        int status = con.getResponseCode();
-        // java.lang.System.out.println("SEND PIC!!!!");
-        return  true;
+        String jsonRes = "";
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(urlWS);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            jsonRes = mapper.writeValueAsString(cpic);
+            java.lang.System.out.println("---jsonPic : " + jsonRes);
+            StringEntity se = new StringEntity(jsonRes);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(se);
+            client.execute(post);
+            return  true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  false;
     }
 
 
@@ -214,4 +216,5 @@ public class DroneFunctions {
         }
         return  false;
     }
+
 }

@@ -4,7 +4,8 @@ public class CurrentPicture {
     String id;
     double latitude;
     double longitude;
-    private Float absoluteAltitudeM;
+    byte[] bytes;
+    //private Float absoluteAltitudeM;
 
     public String getId() {
         return id;
@@ -25,10 +26,17 @@ public class CurrentPicture {
         this.longitude = longitude;
     }
 
-    public void setAltitude(Float absoluteAltitudeM) {
+    public byte[] getBytes() {
+        return bytes;
+    }
+
+    public void setBytes(byte[] bytes) {
+        this.bytes = bytes;
+    }
+/*public void setAltitude(Float absoluteAltitudeM) {
         this.absoluteAltitudeM = absoluteAltitudeM;
     }
     public float getAltitude() {
         return absoluteAltitudeM;
-    }
+    }*/
 }
