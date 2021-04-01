@@ -8,6 +8,7 @@ import fr.istic.projet.mavlinkapp.model.StateMission;
 import io.mavsdk.System;
 import io.mavsdk.mission.Mission;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -17,9 +18,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.*;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 public class DroneFunctions {
@@ -65,7 +70,7 @@ public class DroneFunctions {
                             cpic.setLatitude(position.getLatitudeDeg());
                             cpic.setLongitude(position.getLongitudeDeg());
                             cpic.setAltitude(position.getAbsoluteAltitudeM());
-                            if(sendPostitionPicToWebservice(cpic,"http://86.229.200.137:8080/api/pic")){
+                            if(sendPostitionPicToWebservice(cpic,"http://86.229.200.137:8888/")){
                                 java.lang.System.out.println("envoi Picture : ok");
                             }
                         } else {
@@ -100,23 +105,44 @@ public class DroneFunctions {
         }
     }
 
-    private boolean sendPostitionPicToWebservice(CurrentPicture cpic, String urlWS) {
-        String jsonRes = "";
-        HttpClient client = new DefaultHttpClient();
-        HttpPost post = new HttpPost(urlWS);
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            jsonRes = mapper.writeValueAsString(cpic);
-            java.lang.System.out.println("---jsonPositionPic : " + jsonRes);
-            StringEntity se = new StringEntity(jsonRes);
-            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-            post.setEntity(se);
-            client.execute(post);
-            return  true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    //http://86.229.200.137:8888/?lat=654,lng=31,ele=332,idm=qsdqd
+    private boolean sendPostitionPicToWebservice(CurrentPicture cpic, String urlWS) throws IOException {
+
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("lat", "" + String.valueOf(cpic.getLatitude()));
+        parameters.put("lng", "" + cpic.getLongitude());
+        parameters.put("ele", "" + cpic.getAltitude());
+        parameters.put("idm", cpic.getId());
+
+        URL url = new URL(urlWS+ getParamsString(parameters));
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+
+        con.setDoOutput(true);
+
+        int status = con.getResponseCode();
         return  false;
+    }
+
+
+    String getParamsString(Map<String, String> params)
+            throws UnsupportedEncodingException {
+        StringBuilder result = new StringBuilder();
+
+
+        result.append("?");
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+            result.append("&");
+        }
+
+
+        String resultString = result.toString();
+        return resultString.length() > 0
+                ? resultString.substring(0, resultString.length() - 1)
+                : resultString;
     }
 
     public static Mission.MissionItem generateMissionItem(double latitudeDeg, double longitudeDeg) {

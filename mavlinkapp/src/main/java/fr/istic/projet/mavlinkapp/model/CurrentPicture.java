@@ -28,4 +28,7 @@ public class CurrentPicture {
     public void setAltitude(Float absoluteAltitudeM) {
         this.absoluteAltitudeM = absoluteAltitudeM;
     }
+    public float getAltitude() {
+        return absoluteAltitudeM;
+    }
 }
