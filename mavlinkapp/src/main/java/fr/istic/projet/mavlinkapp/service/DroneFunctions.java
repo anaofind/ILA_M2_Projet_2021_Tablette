@@ -85,7 +85,7 @@ public class DroneFunctions {
                                     cpic.setLongitude(position.getLongitudeDeg());
                                     cpic.setBytes(new byte[100]);
                                     //  cpic.setAltitude(position.getAbsoluteAltitudeM());
-                                    if(sendPic(cpic,"148.60.11.47:8080/api/uploadFile")){
+                                    if(sendPic(cpic,"http://148.60.11.47:8080/api/uploadFile")){
                                         java.lang.System.out.println("envoi Picture : ok");
                                     }
                                 } else {
