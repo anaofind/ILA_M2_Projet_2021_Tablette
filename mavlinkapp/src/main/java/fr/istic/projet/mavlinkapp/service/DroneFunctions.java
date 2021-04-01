@@ -57,7 +57,7 @@ public class DroneFunctions {
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
                     currT.set(Instant.now().getEpochSecond());
-                    if (((currT.get() - epochPicture)/1000)>=1) {
+                    if (((currT.get() - epochPicture))>=1) {
                         epochPicture = currT.get();
 
                         java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
@@ -79,7 +79,7 @@ public class DroneFunctions {
                             java.lang.System.out.println("echec envoi Picture : nok");
                         }
                     } else {
-                        java.lang.System.out.println("AHAHAHAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT.get() -epochPicture)/1000));
+                        java.lang.System.out.println("AHAHAHAH"+ epochPicture+" TTT "+ currT + "R=>" + (long) ((currT.get() -epochPicture)));
                     }
                 }
         );
