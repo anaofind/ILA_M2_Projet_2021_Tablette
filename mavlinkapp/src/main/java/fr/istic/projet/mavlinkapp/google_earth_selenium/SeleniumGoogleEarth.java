@@ -23,8 +23,71 @@ public class SeleniumGoogleEarth {
     public byte[] takePic() throws InterruptedException, IOException {
         byte[] pic;
         String baseUrl = "https://earth.google.com/web/@"+ latitude +","+longitude+",51.36728919a,193.00421567d,35y,64.91670241h,77.70282258t,0r";
-        System.setProperty("webdriver.gecko.driver", "src/main/java/fr/istic/projet/mavlinkapp/google_earth_selenium/resources/driver/geckodriver");
+        System.setProperty("webdriver.gecko.driver", "./geckodriver");
 
+/*
+*
+
+String serviceAccountKeyfile = "serviceAccountKey.json";
+
+
+
+
+
+String pathServiceAccountKeyFile="";
+
+
+
+
+
+ClassLoader classLoader = getClass().getClassLoader();
+
+
+
+
+
+
+
+
+
+
+
+File file = new File(classLoader.getResource(serviceAccountKeyfile).getFile());
+
+
+
+
+
+if(file.exists()) {
+
+
+
+
+
+pathServiceAccountKeyFile = file.getAbsolutePath();
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+FileInputStream serviceAccount =
+
+
+
+new FileInputStream(pathServiceAccountKeyFile);
+* */
         // Initiating your driver
         WebDriver driver = new FirefoxDriver();
 
@@ -34,11 +97,11 @@ public class SeleniumGoogleEarth {
         driver.manage().window().maximize();
         driver.manage().window().fullscreen();
         driver.get(baseUrl);
-
+        System.out.println("AVVV");
         waitForPageToLoad(driver);
         Thread.sleep(30000);
         waitForPageToLoad(driver);
-
+        System.out.println("APPP");
         // ScreenShot
         File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 
