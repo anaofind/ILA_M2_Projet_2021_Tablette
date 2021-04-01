@@ -107,7 +107,7 @@ class AppHomePageState extends State<AppHomePage> {
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.warning),
-              label: 'Interventions'
+              label: 'Interventions',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.map),

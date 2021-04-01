@@ -203,24 +203,21 @@ class UserPageState extends State<UserPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Flexible(
-                  flex: 1,
-                  child: ListTile(
-                    title: const Text('Opérateur'),
-                    leading: Container(
-                      child: Radio(
-                        value: Role.Operator,
-                        groupValue: userData.role,
-                        onChanged: (Role value) {
-                          userData.role = value;
-                          AccountService.updateUser(userData);
-                        },
-                      ),
+                ListTile(
+                  title: const Text('Opérateur'),
+                  leading: Container(
+                    child: Radio(
+                      value: Role.Operator,
+                      groupValue: userData.role,
+                      onChanged: (Role value) {
+                        userData.role = value;
+                        AccountService.updateUser(userData);
+                      },
                     ),
                   ),
                 ),
-                Flexible(
-                  flex: 1,
+                Container(
+                  margin: EdgeInsets.only(top: 20),
                   child: ListTile(
                     title: const Text('Intervenant'),
                     leading: Container(
