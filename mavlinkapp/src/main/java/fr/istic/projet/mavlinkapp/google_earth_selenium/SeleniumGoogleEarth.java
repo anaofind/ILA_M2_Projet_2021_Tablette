@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -88,14 +89,21 @@ FileInputStream serviceAccount =
 
 new FileInputStream(pathServiceAccountKeyFile);
 * */
+        System.out.println("Start");
+
+        FirefoxOptions op = new FirefoxOptions();
+        //pass true to headless mode
+        op.setHeadless(true);
         // Initiating your driver
-        WebDriver driver = new FirefoxDriver();
+        WebDriver driver = new FirefoxDriver(op);
+        System.out.println("INITllml");
 
         // Applied wait time
         driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
         // maximize window
         driver.manage().window().maximize();
         driver.manage().window().fullscreen();
+
         driver.get(baseUrl);
         System.out.println("AVVV");
         waitForPageToLoad(driver);
