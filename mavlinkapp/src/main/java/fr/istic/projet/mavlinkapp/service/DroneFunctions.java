@@ -137,6 +137,7 @@ public class DroneFunctions {
                 .subscribe(ignored ->
                 {
                     drone.getAction().disarm();
+                    this.Cancel();
                     latch.countDown();
                 });
         try {
