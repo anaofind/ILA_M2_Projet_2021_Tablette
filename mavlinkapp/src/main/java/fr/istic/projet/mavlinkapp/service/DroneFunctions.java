@@ -51,7 +51,7 @@ public class DroneFunctions {
         int[] cmp = {0};
         drone.getTelemetry().getPosition().subscribe(
                 position -> {
-                    if (cmp[0] == 150) {
+                    if (cmp[0] == 10) {
                         java.lang.System.out.println(position.getLatitudeDeg() + "---" + position.getLongitudeDeg());
                         cmp[0] = 0;
                         CurrentPosition posCourante = new CurrentPosition();
@@ -146,7 +146,7 @@ public class DroneFunctions {
     //---------Pictures---------
 
     public boolean sendPic(String idMission, double latitude, double longitude) throws IOException, InterruptedException {
-        byte[] bb = Files.readAllBytes(Paths.get("./pic"+i));
+        byte[] bb = Files.readAllBytes(Paths.get("./pic"+i+".png"));
         if(i==3){
             i=1;
         }else{
@@ -180,7 +180,7 @@ public class DroneFunctions {
         }
 
     public boolean sendVid(String idMission, double latitude, double longitude) throws IOException, InterruptedException {
-        byte[] bb = Files.readAllBytes(Paths.get("./pic"+i));
+        byte[] bb = Files.readAllBytes(Paths.get("./pic"+i+".png"));
         if(i==3){
             i=1;
         }else{
