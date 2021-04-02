@@ -68,7 +68,7 @@ class UserPageState extends State<UserPage> {
                                           ),
                                           Flexible(
                                               flex:1,
-                                              child: getOneInfoWidget('Login', userData.name)
+                                              child: getOneInfoWidget('Nom', userData.name)
                                           ),
                                           Flexible(
                                               flex:1,
