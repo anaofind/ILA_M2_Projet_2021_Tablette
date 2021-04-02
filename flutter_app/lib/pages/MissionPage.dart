@@ -159,8 +159,14 @@ class MissionPageState extends State<MissionPage> {
                           'Suivre',
                           style : TextStyle(color: Colors.white)
                       ),
-                      onPressed: () {
+                      onPressed: () async{
                         if (mission.state == StateMission.Running) {
+                          DocumentSnapshot doc = await InterventionService().getInterventionById(mission.idIntervention).first;
+                          if (doc.exists) {
+                            Intervention intervention = Intervention.fromSnapshot(doc);
+                            intervention.futureMission = Mission();
+                            await InterventionService().updateIntervention(intervention);
+                          }
                           SelectorIntervention.missionSelected = mission;
                           SelectorSitac.indexTabBar = 6;
                           NavigatorPage.navigateTo(1);
@@ -210,6 +216,7 @@ class MissionPageState extends State<MissionPage> {
                     ),
                     onPressed: () async{
                       DocumentSnapshot doc = await InterventionService().getInterventionById(mission.idIntervention).first;
+                      SelectorIntervention.missionSelected = null;
                       if (doc.exists) {
                         Intervention intervention = Intervention.fromSnapshot(doc);
                         intervention.futureMission = mission.duplicate();

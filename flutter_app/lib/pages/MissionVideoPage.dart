@@ -29,7 +29,7 @@ class MissionVideoPageState extends State<MissionVideoPage> {
         }
         Mission mission = Mission.fromSnapshot(snapshot.data.docs[0]);
         return Scaffold(
-          body: (mission.video != null)? this.getVideoWidget(mission): this.getEmptyWidget()
+          body: (mission.state == StateMission.Running && mission.video != null)? this.getVideoWidget(mission): this.getEmptyWidget()
         );
       }
     );
