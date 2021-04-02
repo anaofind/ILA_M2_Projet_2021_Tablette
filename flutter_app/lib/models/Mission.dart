@@ -23,7 +23,7 @@ class Mission {
       this.interestPoints = [];
     }
     if (this.segment == null) {
-      this.segment = false;
+      this.segment = true;
     }
     if (this.streamVideo == null) {
       this.streamVideo = false;

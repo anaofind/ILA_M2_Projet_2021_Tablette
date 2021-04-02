@@ -185,8 +185,14 @@ class MissionPageState extends State<MissionPage> {
                           'Nouvelle',
                           style : TextStyle(color: Colors.white)
                       ),
-                      onPressed: () {
+                      onPressed: () async{
                         SelectorIntervention.missionSelected = null;
+                        DocumentSnapshot doc = await InterventionService().getInterventionById(mission.idIntervention).first;
+                        if (doc.exists) {
+                          Intervention intervention = Intervention.fromSnapshot(doc);
+                          intervention.futureMission = Mission();
+                          await InterventionService().updateIntervention(intervention);
+                        }
                         SelectorSitac.indexTabBar = 6;
                         NavigatorPage.navigateTo(1);
                       },
