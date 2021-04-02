@@ -8,7 +8,7 @@ class Position {
 
   @override
   String toString() {
-    return '( $latitude , $longitude )';
+    return '( ${latitude.toStringAsFixed(6)} , ${longitude.toStringAsFixed(6)} )';
   }
 
 }

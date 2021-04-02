@@ -107,14 +107,14 @@ class AppHomePageState extends State<AppHomePage> {
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.warning),
-              label: 'Interventions'
+              label: 'Interventions',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.map),
               label: 'SITAC'
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.article),
+              icon: Icon(Icons.bus_alert),
               label: 'Moyens'
           ),
           BottomNavigationBarItem(
@@ -131,14 +131,6 @@ class AppHomePageState extends State<AppHomePage> {
         unselectedItemColor: Colors.grey,
         selectedItemColor: Colors.blueGrey,
       ),
-      floatingActionButton : FloatingActionButton (
-        onPressed: () {
-          AccountService().signOut();
-        },
-        child: Icon(Icons.logout),
-        backgroundColor: Colors.black,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
   }
 }

@@ -113,7 +113,7 @@ class MissionPhotosPageState extends State<MissionPhotosPage> {
                             Spacer(),
                             getOneInfoWidget('Coordonnées', infoPhoto.position.toString()),
                             Spacer(),
-                            getOneInfoWidget('Taille', (infoPhoto.size / 1000).toString() + ' Mo'),
+                            getOneInfoWidget('Taille', (infoPhoto.size / 1000).toString() + ' Ko'),
                             Spacer(),
                           ],
                         ),
