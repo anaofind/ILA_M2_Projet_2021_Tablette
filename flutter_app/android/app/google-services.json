@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "663298752274",
-    "project_id": "projet-ila-2",
-    "storage_bucket": "projet-ila-2.appspot.com"
+    "project_number": "795102939822",
+    "project_id": "projet-istic-ila",
+    "storage_bucket": "projet-istic-ila.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:663298752274:android:7d999504dbdaac5dc93dcb",
+        "mobilesdk_app_id": "1:795102939822:android:61e1f1e14938fd7dfffb3f",
         "android_client_info": {
           "package_name": "com.anaofind.flutter_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "663298752274-1b0en30rp3lt94kk0me1mss8sqp7lcpo.apps.googleusercontent.com",
+          "client_id": "795102939822-mm9phq0q2r5d11debj33h50sr7rih07j.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDaAwBhRnY0jm7ZGTpj2nhwJdyM3_syXOg"
+          "current_key": "AIzaSyDT-EsUu0yxR638b5XbPNYs4VI4UZYk3Uw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "663298752274-1b0en30rp3lt94kk0me1mss8sqp7lcpo.apps.googleusercontent.com",
+              "client_id": "795102939822-mm9phq0q2r5d11debj33h50sr7rih07j.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
