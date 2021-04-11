@@ -1,17 +1,23 @@
 package fr.istic.projet.mavlinkapp.model;
 
-import javax.swing.text.Position;
-
 public class InterestPoint {
-    Position position;
     boolean photo = false;
+    double latitude, longitude;
 
-    public Position getPosition() {
-        return position;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longititude) {
+        this.longitude = longititude;
     }
 
     public boolean isPhoto() {

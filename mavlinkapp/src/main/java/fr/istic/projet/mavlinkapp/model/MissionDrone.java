@@ -5,12 +5,14 @@ import java.util.List;
 
 public class MissionDrone {
     String id;
+    String idIntervention;
     String name;
     List<InterestPoint> interestPoints = new ArrayList<>();
     List<String> photos = new ArrayList<>();
     String video;
     boolean segment = true;
     boolean streamVideo = false;
+    String state;
 
     public String getId() {
         return id;
@@ -66,5 +68,25 @@ public class MissionDrone {
 
     public void setStreamVideo(boolean streamVideo) {
         this.streamVideo = streamVideo;
+    }
+
+    public String getIdIntervention() {
+        return idIntervention;
+    }
+
+    public void setIdIntervention(String idIntervention) {
+        this.idIntervention = idIntervention;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

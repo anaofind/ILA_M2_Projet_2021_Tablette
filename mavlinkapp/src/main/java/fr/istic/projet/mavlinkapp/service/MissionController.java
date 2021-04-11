@@ -1,77 +1,94 @@
 package fr.istic.projet.mavlinkapp.service;
 
-import fr.istic.projet.mavlinkapp.model.InterestPoint;
 import fr.istic.projet.mavlinkapp.model.MissionDrone;
-import fr.istic.projet.mavlinkapp.model.PositionDrone;
+import fr.istic.projet.mavlinkapp.model.StateMission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.mavsdk.System;
-import io.mavsdk.mission.Mission;
 import io.mavsdk.mission.Mission.MissionItem;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/api/mission")
 public class MissionController {
     private final Logger logger = LoggerFactory.getLogger(MissionController.class);
-    List<PositionDrone> points = new ArrayList<PositionDrone>();
-    private System drone = new System();
+    DroneFunctions drone = new DroneFunctions();
+
     MissionDrone laMission = new MissionDrone();
+    ExecutorService service = Executors.newFixedThreadPool(1);
+
     @PostMapping
     public MissionDrone sendMissionCoordonates(@Validated @RequestBody MissionDrone mission) {
         laMission = mission;
-        //launch drone to explore mission's intersts point
-        this.missionGo(mission.getInterestPoints());
-        //send images took by drone in rest's meth to app java which will store image in firebase
-        return mission;
+
+        java.lang.System.out.println(laMission.getId());
+        java.lang.System.out.println(laMission.getIdIntervention());
+        java.lang.System.out.println(laMission.getInterestPoints().get(0).getLatitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(0).getLongitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(1).getLatitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(1).getLongitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(2).getLatitude());
+        java.lang.System.out.println(laMission.getInterestPoints().get(2).getLongitude());
+
+        MyRunnable myRunnable = new MyRunnable(drone);
+        service.submit(myRunnable);
+
+        //Thread.sleep(500);
+
+        //send images took by drone in rest's meth to app java which will store image in firebase*/
+        return laMission;
     }
 
-    @GetMapping
-    public List<Mission> findAllMission() {
-        return new ArrayList<>();
+    @PostMapping("/cancel")
+    public ResponseEntity<StateMission> updateMissionState() throws Exception {
+        logger.info("REST request to cancel Mission");
+        drone.Cancel();
+        return new ResponseEntity<>(null, null, HttpStatus.OK);
     }
 
-    private void missionGo(List<InterestPoint> mission) {
+    public class MyRunnable implements Runnable {
 
-        List<Mission.MissionItem> missionItems = new ArrayList<>();
-        for (InterestPoint val : mission) {
-            missionItems.add(generateMissionItem(((PositionDrone) val.getPosition()).getLatitude(), ((PositionDrone) val.getPosition()).getLongitude()));
+        private DroneFunctions drone;
+
+        public MyRunnable(DroneFunctions drone) {
+            this.drone = drone;
         }
-        Mission.MissionPlan missionPlan = new Mission.MissionPlan(missionItems);
 
-        drone.getMission().getMissionProgress()
-                .subscribe(onNext -> publishImages(drone, laMission, missionItems.get(onNext.getCurrent())));
+        public void run() {
+            // code in the other thread, can reference "var" variable
 
-        drone.getMission().setReturnToLaunchAfterMission(true)
-                .andThen(drone.getMission().uploadMission(missionPlan)
-                        .doOnComplete(() -> logger.debug("Upload succeeded")))
-                .andThen(drone.getAction().arm())
-                .andThen(drone.getMission().startMission().doOnComplete(() -> logger.debug("Mission started")))
-                .subscribe();
+          try {
+                StateMission debut = new StateMission(laMission.getId(), "StateMission.Running");
+                if(drone.sendEtatToWebservice(debut, "http://148.60.11.47:8080/api/updateMissionState")) {
+                    Thread.sleep(500);
+                    drone.go(laMission.getIdIntervention(), laMission.getId(), laMission.getInterestPoints());
+                    StateMission fin = new StateMission(laMission.getId(), "StateMission.Ending");
+                    if(drone.sendEtatToWebservice(fin, "http://148.60.11.47:8080/api/updateMissionState")) {
+                        java.lang.System.out.println("Mission finished");
+                    }
+                } else {
+                    java.lang.System.out.println("Error");
+                }
+                 } catch (InterruptedException | IOException e) {
+                e.printStackTrace();
+            }
 
-    }
 
-    public static Mission.MissionItem generateMissionItem(double latitudeDeg, double longitudeDeg) {
-        return new Mission.MissionItem(latitudeDeg, longitudeDeg, 10f, 10f, true, Float.NaN, Float.NaN,
-                Mission.MissionItem.CameraAction.NONE, Float.NaN, 1.0);
-    }
-
-    public static void publishImages(System drone, MissionDrone mission, MissionItem missionItem) {
-        //right code to take photo here
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(new File("res/chat.jpg"));
-        } catch (IOException e) {
         }
-        mission.addPhoto("path/to/img/");
-        mission.getInterestPoints().get(mission.getPhotos().size()-1).setPhoto(true);
-    }
+
+
+
+
+        }
+
+
 }
