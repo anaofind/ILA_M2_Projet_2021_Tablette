@@ -126,20 +126,6 @@ public class FirebaseService  {
     	return new MissionInfos(idDocumentMission, mission);
     }	
     
-//    public void updatelastUpdateStorageMission(String idMission) throws InterruptedException, ExecutionException {
-//    	MissionInfos missionInfos = getMissionById(idMission);
-//    	CollectionReference missions = this.database.collection("missions");
-//    	Mission mission = missionInfos.getMission();
-//    	String idDocumentMission = missionInfos.getIdDocMission();
-//    	if(mission!=null && idDocumentMission !=null) {
-//    	mission.setLastUpdateStorage(Timestamp.now());
-//    	ApiFuture<WriteResult> futureUpdate = missions.document(idDocumentMission)
-//    			.set(mission);
-//		 // block on response if required
-//		log.info("Update lastUpdateStorage");
-//    	}
-//    }
-    
     public byte[] getImageForPosition(double latitude, double longitude) throws IOException {
     	byte[] imageBytes = null;
     	String APIkey ="AIzaSyC35Y9W5C8Kmt09UsGOzp4nPucaJFraXIM";
@@ -324,104 +310,7 @@ public class FirebaseService  {
         return fileDTO;
 
     }
-
-    public void downloadFile(String objectName, String destFilePath) {
-
-    	    Storage storage = storageOptions.getService();
-
-    	    Blob blob = storage.get(BlobId.of(bucketName, objectName));
-    	    if(blob!=null)
-    	    {
-    	    blob.downloadTo(Paths.get(destFilePath));
-    	    log.info(
-    	        "Downloaded object "
-    	            + objectName
-    	            + " from bucket name "
-    	            + bucketName
-    	            + " to "
-    	            + destFilePath);}
-    	    else{
-	    	log.info(
-	    	        "Object "
-	    	            + objectName
-	    	            + " from bucket name "
-	    	            + bucketName
-	    	            + " was not found ");
-    	    }
-    	  }
-
-
-    public ResponseEntity<Object> downloadFileWithHttp(String fileName, HttpServletRequest request) throws Exception {
-        Storage storage = storageOptions.getService();
-
-        Blob blob = storage.get(BlobId.of(bucketName, fileName));
-        ReadChannel reader = blob.reader();
-        InputStream inputStream = Channels.newInputStream(reader);
-
-        byte[] content = null;
-        log.info("File downloaded successfully.");
-
-        content = IOUtils.toByteArray(inputStream);
-
-        final ByteArrayResource byteArrayResource = new ByteArrayResource(content);
-
-        return ResponseEntity
-                .ok()
-                .contentLength(content.length)
-                .header("Content-type", "application/octet-stream")
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
-                .body(byteArrayResource);
-
-    }
     
-    public void getObjectMetadata(String bucketName, String blobName)
-    	      throws StorageException {
-
-    	    Storage storage = storageOptions.getService();
-
-    	    // Select all fields
-    	    // Fields can be selected individually e.g. Storage.BlobField.CACHE_CONTROL
-    	    Blob blob =
-    	        storage.get(bucketName, blobName, Storage.BlobGetOption.fields(Storage.BlobField.values()));
-
-    	    // Print blob metadata
-    	    log.info("Bucket: " + blob.getBucket());
-    	    log.info("CacheControl: " + blob.getCacheControl());
-    	    log.info("ComponentCount: " + blob.getComponentCount());
-    	    log.info("ContentDisposition: " + blob.getContentDisposition());
-    	    log.info("ContentEncoding: " + blob.getContentEncoding());
-    	    log.info("ContentLanguage: " + blob.getContentLanguage());
-    	    log.info("ContentType: " + blob.getContentType());
-    	    log.info("Crc32c: " + blob.getCrc32c());
-    	    log.info("Crc32cHexString: " + blob.getCrc32cToHexString());
-    	    log.info("ETag: " + blob.getEtag());
-    	    log.info("Generation: " + blob.getGeneration());
-    	    log.info("Id: " + blob.getBlobId());
-    	    log.info("KmsKeyName: " + blob.getKmsKeyName());
-    	    log.info("Md5Hash: " + blob.getMd5());
-    	    log.info("Md5HexString: " + blob.getMd5ToHexString());
-    	    log.info("MediaLink: " + blob.getMediaLink());
-    	    log.info("Metageneration: " + blob.getMetageneration());
-    	    log.info("Name: " + blob.getName());
-    	    log.info("Size: " + blob.getSize());
-    	    log.info("StorageClass: " + blob.getStorageClass());
-    	    log.info("TimeCreated: " + new Date(blob.getCreateTime()));
-    	    log.info("Last Metadata Update: " + new Date(blob.getUpdateTime()));
-    	    Boolean temporaryHoldIsEnabled = (blob.getTemporaryHold() != null && blob.getTemporaryHold());
-    	    log.info("temporaryHold: " + (temporaryHoldIsEnabled ? "enabled" : "disabled"));
-    	    Boolean eventBasedHoldIsEnabled =
-    	        (blob.getEventBasedHold() != null && blob.getEventBasedHold());
-    	    log.info("eventBasedHold: " + (eventBasedHoldIsEnabled ? "enabled" : "disabled"));
-    	    if (blob.getRetentionExpirationTime() != null) {
-    	      log.info("retentionExpirationTime: " + new Date(blob.getRetentionExpirationTime()));
-    	    }
-    	    if (blob.getMetadata() != null) {
-    	    	log.info("\n\n\nUser metadata:");
-    	      for (Map.Entry<String, String> userMetadata : blob.getMetadata().entrySet()) {
-    	    	  log.info(userMetadata.getKey() + "=" + userMetadata.getValue());
-    	      }
-    	    }
-    	  }
 
     public String generateToken() {
     	String token ="";
@@ -459,21 +348,7 @@ public class FirebaseService  {
 	} else {
 	 log.info("document not found");
 	}
-//	ApiFuture<DocumentSnapshot> future = docRef.get();
-//	DocumentSnapshot document = future.get();
-//	Intervention intervention= null;
-//	if (document.exists()) {
-//	  intervention = document.toObject(Intervention.class);
-//	  intervention.setLatitudeDrone(latitude);
-//	  intervention.setLongitudeDrone(longitude);
-//
-//	  ApiFuture<WriteResult> futureUpdate = interventions.document(idIntervention)
-//				.set(intervention);
-//		log.info("Position drone updated");
-//	} else {
-//	 log.info("document not found");
-//	}
-	
+
 }
 
 }
