@@ -100,8 +100,12 @@ class MissionPageState extends State<MissionPage> {
         FullMetadata metadata = await reference.getMetadata();
         DateTime date = convertToDateLocal(metadata.timeCreated);
         String name = metadata.name;
-        double longitude = double.parse(metadata.customMetadata['longitude']);
-        double latitude = double.parse(metadata.customMetadata['latitude']);
+        double longitude = 0;
+        double latitude = 0;
+        if (metadata.customMetadata['longitude'] != null && metadata.customMetadata['latitude'] != null) {
+          double longitude = double.parse(metadata.customMetadata['longitude']);
+          double latitude = double.parse(metadata.customMetadata['latitude']);
+        }
         Position position = Position(latitude, longitude);
         int size = metadata.size;
         InfoPhoto info = InfoPhoto (
