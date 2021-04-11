@@ -24,21 +24,12 @@ public class FirebaseController {
     public FirebaseController(FirebaseService firebaseService) {
         this.firebaseService = firebaseService;
     }
-
-
-//    @PostMapping("/uploadFile/{idMission}")
-//    public ResponseEntity<FileDTO> uploadFile(@PathVariable(value = "idMission") String idMission) throws Exception {
-//    //uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
-//        log.info("REST request to upload file");
-//        //upload files
-//        FileDTO fileDTO = firebaseService.uploadFile(idMission);//(file);
-//        return new ResponseEntity<>(fileDTO, null, HttpStatus.OK);
-//    }
     
     @PostMapping("/uploadFile")
 	  public ResponseEntity<FileDTO> uploadFile(@Validated @RequestBody MissionBody missionInfos) throws Exception {
 	  log.info("REST request to upload file image");
       //upload file
+	  
       FileDTO fileDTO = firebaseService.uploadFileFromBytes(missionInfos.getId(), 
     		  missionInfos.getLatitude(), missionInfos.getLongitude(), missionInfos.getBytes(), "images");
       return new ResponseEntity<>(fileDTO, null, HttpStatus.OK);
@@ -48,6 +39,7 @@ public class FirebaseController {
 	  public ResponseEntity<FileDTO> streamVideo(@Validated @RequestBody MissionBody missionInfos) throws Exception {
 	  log.info("REST request to upload file video");
     //upload file
+	 
     FileDTO fileDTO = firebaseService.uploadFileFromBytes(missionInfos.getId(), 
   		  missionInfos.getLatitude(), missionInfos.getLongitude(), missionInfos.getBytes(), "videos");
     return new ResponseEntity<>(fileDTO, null, HttpStatus.OK);
@@ -68,13 +60,4 @@ public class FirebaseController {
   return new ResponseEntity<>(missionState, null, HttpStatus.OK);
 }
 
-
-//    @GetMapping("/downloadFile/{fileName}/{destination}")
-//    public ResponseEntity<Object> downloadFile(@PathVariable(value = "fileName") String fileName, 
-//    		@PathVariable(value = "destination") String destinationFile) throws Exception {
-//    	fileName = "images/5bb10da0-c9e5-4334-95b1-97a012f75f1d/"+fileName;
-//    	destinationFile = "/home/abdelkarim/Documents/photo.png";
-//        firebaseService.downloadFile(fileName, destinationFile);
-//        return ResponseEntity .ok().body(destinationFile);
-//    }
 }
