@@ -40,9 +40,9 @@ class MissionPageState extends State<MissionPage> {
           return Scaffold(
               body: Column(
                 children: [
-                  Flexible(
-                    flex: 1,
-                    child: this.getTitleWidget(mission),
+                  Container(
+                      height: 80,
+                      child: this.getTitleWidget(mission)
                   ),
                   Flexible(
                     flex: 6,
@@ -259,38 +259,37 @@ class MissionPageState extends State<MissionPage> {
   Widget getVideoWidget(Mission mission) {
     return Column (
       children: [
-        Flexible(
-          flex: 1,
-          child: Container(
-              margin: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 1,
-                  ),
-                  color: Colors.white
-              ),
-              child: Center(child: Text('Vidéo'))
-          ),
+        Container(
+            margin: EdgeInsets.all(15),
+            height: 60,
+            decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                color: Colors.white
+            ),
+            child: Center(child: Text('Vidéo'))
         ),
         Flexible(
-            flex: 4,
-            child: Container(
-              margin: EdgeInsets.only(
-                  bottom: 15,
-                  right: 15,
-                  left: 15
-              ),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 1,
-                  ),
-              ),
-              child: FractionallySizedBox(
-                  child: MissionVideoPage()
-              ),
-            )
+          flex: 4,
+          child: Container(
+            height: 450,
+            margin: EdgeInsets.only(
+                bottom: 15,
+                right: 15,
+                left: 15
+            ),
+            decoration: BoxDecoration (
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1,
+                ),
+            ),
+            child: FractionallySizedBox(
+                child: MissionVideoPage()
+            ),
+          ),
         ),
       ],
     );
@@ -299,42 +298,72 @@ class MissionPageState extends State<MissionPage> {
   Widget getPhotosWidget(Mission mission) {
     return Column(
       children: [
-        Flexible(
-          flex: 1,
-          child: Container(
-              margin: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 1,
-                  ),
-                  color: Colors.white
-              ),
-              child: Center(child: Text('Nombre de photos : ${mission.photos.length}'))
-          ),
+        Container(
+            margin: EdgeInsets.all(15),
+            height: 60,
+            decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                color: Colors.white
+            ),
+            child: Center(child: Text('Nombre de photos : ${mission.photos.length}'))
         ),
         Flexible(
-            flex: 4,
-            child: FutureBuilder (
-                future: this.searchInfoPhotos(mission),
-                builder: (context, snapshot) {
-                  if (! snapshot.hasData) {
-                    return CircularProgressIndicator();
-                  }
-                  List<InfoPhoto> infoPhotos = snapshot.data;
-                  return ListView.builder (
-                      shrinkWrap: true,
-                      itemCount: infoPhotos.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        InfoPhoto infoPhoto = infoPhotos[index];
-                        return Row(
-                          children: [
-                            Flexible (
-                              flex: 1,
-                              child: Container(
+          flex: 4,
+          child: FutureBuilder (
+              future: this.searchInfoPhotos(mission),
+              builder: (context, snapshot) {
+                if (! snapshot.hasData) {
+                  return CircularProgressIndicator();
+                }
+                List<InfoPhoto> infoPhotos = snapshot.data;
+                return ListView.builder (
+                    shrinkWrap: true,
+                    itemCount: infoPhotos.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      InfoPhoto infoPhoto = infoPhotos[index];
+                      return Row(
+                        children: [
+                          Flexible (
+                            flex: 1,
+                            child: Container(
+                              margin: new EdgeInsets.only(
+                                bottom: 15,
+                                left: 15,
+                              ),
+                              height: 160,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.black,
+                                    width: 1,
+                                  ),
+                                  color: Colors.white
+                              ),
+                              child: Center(
+                                child: GestureDetector(
+                                  child: Image.network(
+                                    infoPhoto.link,
+                                    width: 160,
+                                    height: 160,
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) => MissionPhotosPage(infoPhotos, index))
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: Container(
                                 margin: new EdgeInsets.only(
-                                  bottom: 15,
-                                  left: 15,
+                                    bottom: 15,
+                                    left: 15,
+                                    right: 15
                                 ),
                                 height: 160,
                                 decoration: BoxDecoration(
@@ -344,54 +373,22 @@ class MissionPageState extends State<MissionPage> {
                                     ),
                                     color: Colors.white
                                 ),
-                                child: Center(
-                                  child: GestureDetector(
-                                    child: Image.network(
-                                      infoPhoto.link,
-                                      width: 160,
-                                      height: 160,
-                                    ),
-                                    onTap: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) => MissionPhotosPage(infoPhotos, index))
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
+                                child: Column (
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(child: Text(infoPhoto.name.toString())),
+                                    Center(child: Text(infoPhoto.date.toString())),
+                                    Center(child: Text(infoPhoto.position.toString())),
+                                  ],
+                                )
                             ),
-                            Flexible(
-                              flex: 1,
-                              child: Container(
-                                  margin: new EdgeInsets.only(
-                                      bottom: 15,
-                                      left: 15,
-                                      right: 15
-                                  ),
-                                  height: 160,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.black,
-                                        width: 1,
-                                      ),
-                                      color: Colors.white
-                                  ),
-                                  child: Column (
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(child: Text(infoPhoto.name.toString())),
-                                      Center(child: Text(infoPhoto.date.toString())),
-                                      Center(child: Text(infoPhoto.position.toString())),
-                                    ],
-                                  )
-                              ),
-                            ),
-                          ],
-                        );
-                      }
-                  );
-                }
-            )
+                          ),
+                        ],
+                      );
+                    }
+                );
+              }
+          ),
         ),
       ],
     );
